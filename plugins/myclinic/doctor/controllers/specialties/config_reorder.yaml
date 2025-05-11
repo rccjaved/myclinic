@@ -1,0 +1,4 @@
+title: Specialties
+modelClass: MyClinic\Doctor\Models\Speciality
+toolbar:
+    buttons: reorder_toolbar

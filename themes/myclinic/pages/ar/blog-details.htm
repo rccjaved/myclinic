@@ -1,0 +1,67 @@
+url = "/ar/blog-details/:id"
+layout = "master-ar"
+title = "Blog Detail"
+==
+<?php
+use MyClinic\Setting\Models\Blog;
+
+function onStart()
+{
+
+    $blogId = $this->param('id'); // Get the slug from the URL
+    $this['blog'] = Blog::find($blogId);
+    $this['blogs']=Blog::limit(4)->get();
+}
+?>
+==
+<main>
+
+    <section class="section-py-100">
+        <div class="container">
+            <div class="blog-container blog-group">
+
+                <div class="content g-reverse">
+                    <div class="mb-3">
+                        <h1>{{blog.tag_line_ar|raw}}</h1>
+                        <div class="d-flex flex-row-reverse">
+                            <a class="text-decoration-none post-author">{{blog.author_name_ar}}</a>
+                            <span class="minutes d-flex flex-row-reverse">5 دقيقة</span>
+                        </div>
+                    </div>
+
+                    <img src="{{blog.blog_image.path}}" class="img-fluid" alt="post img">
+                    {{blog.description_ar|raw}}
+                </div>
+                <aside class="aside g-reverse">
+                    <h4 class="post-title">قائمة المشاركات
+                    </h4>
+                    <hr>
+                    {% for item in blogs %}
+
+                    <div class="col-12">
+                        <a href="/ar/blog-details/{{item.id}}">
+                            <div class="blog-list-post">
+                                <img src="{{item.blog_image.path}}" class="img-fluid" alt="">
+                                <div>
+                                    <div class="d-flex flex-row-reverse">
+                                        <a href="/ar/blog-details/{{item.id}}"
+                                            class="text-decoration-none post-author">{{item.author_name_ar}}</a>
+                                        <span class="minutes d-flex flex-row-reverse">5 دقيقة</span>
+                                    </div>
+                                    <h4>{{item.tag_line_ar|raw}}</h4>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+
+
+                </aside>
+            </div>
+        </div>
+    </section>
+
+
+
+
+</main>

@@ -1,0 +1,4 @@
+title: Doctor
+modelClass: MyClinic\Doctor\Models\Doctor
+toolbar:
+    buttons: reorder_toolbar

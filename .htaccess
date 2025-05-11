@@ -1,0 +1,138 @@
+<IfModule mod_rewrite.c>
+    # Ensure mod_negotiation is enabled
+    <IfModule mod_negotiation.c>
+        Options -MultiViews
+    </IfModule>
+
+    # Turn on rewrite engine
+    RewriteEngine On
+
+    # Redirect non-www to www
+    RewriteCond %{HTTP_HOST} ^myclinic\.com\.sa [NC]
+    RewriteRule ^(.*)$ https://www.myclinic.com.sa/$1 [L,R=301]
+    
+
+    # Force HTTPS for all traffic
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    ##
+    ## Blacklisted folders
+    ##
+    RewriteRule ^bootstrap/.* index.php [L,NC]
+    RewriteRule ^config/.* index.php [L,NC]
+    RewriteRule ^vendor/.* index.php [L,NC]
+    RewriteRule ^storage/cms/.* index.php [L,NC]
+    RewriteRule ^storage/logs/.* index.php [L,NC]
+    RewriteRule ^storage/framework/.* index.php [L,NC]
+    RewriteRule ^storage/temp/protected/.* index.php [L,NC]
+    RewriteRule ^storage/app/uploads/protected/.* index.php [L,NC]
+    RewriteRule ^robots.txt - [L]
+    RewriteRule ^sitemap.xml - [L]
+    RewriteRule ^google1674d3147ac618b8.html - [L]
+
+    ##
+    ## Whitelisted folders
+    ##
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteCond %{REQUEST_FILENAME} !/.well-known/*
+    RewriteCond %{REQUEST_FILENAME} !/app/(assets|resources)/.*
+    RewriteCond %{REQUEST_FILENAME} !/storage/app/media/.*
+    RewriteCond %{REQUEST_FILENAME} !/storage/app/resources/.*
+    RewriteCond %{REQUEST_FILENAME} !/storage/app/uploads/public/.*
+    RewriteCond %{REQUEST_FILENAME} !/storage/temp/public/.*
+    RewriteCond %{REQUEST_FILENAME} !/themes/.*/(assets|resources)/.*
+    RewriteCond %{REQUEST_FILENAME} !/plugins/.*/(assets|resources)/.*
+    RewriteCond %{REQUEST_FILENAME} !/modules/.*/(assets|resources)/.*
+    RewriteRule !^index.php index.php [L,NC]
+
+    ##
+    ## Block all PHP files, except index.php
+    ##
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteCond %{REQUEST_FILENAME} \.php$
+    RewriteRule !^index.php index.php [L,NC]
+
+    ##
+    ## Standard routes for October CMS
+    ##
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+
+    # Prevent direct access to index.php
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.php\ HTTP/
+    RewriteRule ^index\.php$ https://%{HTTP_HOST}/ [R=301,L]
+
+    # Remove index.php from URLs
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?$1 [L,QSA]
+
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+</IfModule>
+
+<IfModule mod_auth_basic.c>
+    # Apply authentication to paths starting with /administration-panel
+    <FilesMatch "^administration-panel">
+        AuthType Basic
+        AuthName "Restricted Area"
+        AuthUserFile .htpasswd
+        Require valid-user
+    </FilesMatch>
+</IfModule>
+
+<IfModule mod_rewrite.c>
+
+    # Deny access to .pl files (Perl scripts)
+    <FilesMatch "\.pl$">
+        Require all denied
+    </FilesMatch>
+
+    # Deny access to .cgi files in cgi-bin directory
+    <FilesMatch "^/xampp/cgi-bin/.*\.cgi$">
+        Require all denied
+    </FilesMatch>
+
+    # Deny specific files within cgi-bin
+    <Files "/xampp/cgi-bin/printenv.pl">
+        Require all denied
+    </Files>
+
+    <Files "/xampp/cgi-bin/cgi.cgi">
+        Require all denied
+    </Files>
+
+    # Deny access to .env file (environment variables)
+    <FilesMatch "^\.env$">
+        Order allow,deny
+        Require all denied
+    </FilesMatch>
+
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive on
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType text/css "access plus 1 month"
+</IfModule>
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+</IfModule>
+

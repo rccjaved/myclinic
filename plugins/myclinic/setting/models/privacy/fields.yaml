@@ -1,0 +1,27 @@
+fields:
+    title:
+        label: Title
+        span: auto
+        type: text
+    title_ar:
+        label: 'Arabic Title'
+        span: auto
+        type: text
+    description:
+        label: Description
+        size: small
+        span: auto
+        type: richeditor
+    description_ar:
+        label: 'Arabic Description'
+        size: small
+        span: auto
+        type: richeditor
+    is_core_value:
+        label: 'Is Core Value'
+        span: auto
+        type: switch
+    slug:
+        label: Slug
+        span: auto
+        type: text

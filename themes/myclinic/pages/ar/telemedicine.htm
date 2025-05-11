@@ -1,0 +1,378 @@
+url = "/ar/telemedicine"
+layout = "master-ar"
+title = "Telemedicine"
+meta_title = "Home Medication Delivery, Lab, Home Base Services, 24 Hr Helpline On Telemedicine, Telemedicine Services, Virutal Doctors, Virtual Consultation, Online Doctors"
+meta_description = "We bring medical expertise to your fingertips, offering virtual consultations that provide the same quality care as an in-person visit."
+
+[resources]
+less[] = "pages/telemedicine.less"
+==
+<?php
+use MyClinic\Setting\Models\Testimonial;
+use MyClinic\Setting\Models\Slider;
+use MyClinic\Setting\Models\CommonComponent;
+use MyClinic\Setting\Models\PageContent;
+
+function onStart()
+{
+$testimonials=Testimonial::where('category','home')->orderBy('name')->get();
+$this['testimonials'] = $testimonials;
+$sliders = Slider::where('type','telemedicine')->get();
+$this['sliders'] = $sliders;
+
+$this['telemedicine_common_section']=CommonComponent::where('slug','telemedicine')->first();
+$this['telemedicineServices']=PageContent::where('page','tele-medicine')->where('section','tele-medicine-services')->get();
+$this['telemedicine24hrhelpline']=PageContent::where('page','tele-medicine')->where('section','24-hr-helpline')->first();
+$fromMobile = Agent::isMobile();
+$this['fromMobile']= $fromMobile;
+}
+?>
+==
+<div class="swiper-container resize-slider">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+        <!-- Slider -->
+        {% for item in sliders %}
+        <div class="swiper-slide">
+            <img src="{{item.slider_image_ar_mobile.path}}" class="slidemc" alt="">
+       
+            <img src="{{item.slider_image_ar.path}}" class="slidemc slidemc-m-home" alt="">
+                   <div class="slide-text w-100 text-end">
+                <h1 class="mb-3">{{item.title_ar|raw}}</h1>
+                <p class="mb-3 mb-sm-5">{{item.tag_line_ar}}</p>
+                {% if item.link_value %}
+                <a href="/ar/{{item.link_value}}" class="btn btn-primary slide-s btn-mc-01 mb-6"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none"
+                        style="margin-right: 20px;">
+                        <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                        <path d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M27.048 19.5984H18.7148H12"
+                            stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>{{item.link_name_ar}}</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- If we need pagination -->
+    <div class="swiper-pagination"></div>
+
+    <!-- If we need navigation buttons -->
+    <div class="swiper-button-prev"><span></span></div>
+    <div class="swiper-button-next"><span></span></div>
+
+
+
+
+</div>
+
+
+<!-- ======= TELEMEDICINE START ======= -->
+
+{% if telemedicine_common_section %}
+<section class="section-py-100 section-bg">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-end">
+                    <h1>{{telemedicine_common_section.title_ar|raw}}</h1>
+                    {{telemedicine_common_section.description_ar|raw}}
+                    {% if telemedicine_common_section.link_value %}
+                    <a href="{{telemedicine_common_section.link_value}}#appDownload"
+                        class="btn btn-primary btn-mc-01 float-end mb-3">
+
+                        <svg class="ms-3" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"
+                            fill="none">
+                            <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                            <path
+                                d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>{{telemedicine_common_section.link_name_ar}}</a>
+                    {% endif %}
+
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <img src="{{telemedicine_common_section.section_image.path}}" class="img-fluid" alt="">
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+
+
+<section class="mb-3 mb-sm-5">
+    <div class="container">
+        <div class="row g-4 pro-px">
+            <div class="col-12 text-center">
+                <h1 class="pt-4">الخدمات</h1>
+            </div>
+            {% for item in telemedicineServices %}
+            <div class="col-12 col-md-6 col-xl-4 col-xxl-4">
+                <div class="services-box tele-box">
+                    <img src="{{item.section_image.path}}" class="img-fluid order-1 order-md-0" alt="">
+                    <div class="services-body order-0 order-md-1">
+                        <h2 class="blog-title-truncate">{{item.title_ar|raw}}</h2>
+                        <p class="truncate text-justy">{{item.description_ar|raw}}</p>
+                        {% if item.link_value %}
+
+                        <a href="/ar/{{item.link_value}}" class="btn btn-primary btn-services"><svg
+                                xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"
+                                fill="none">
+                                <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                                <path
+                                    d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                    stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>{{item.link_name_ar}}</a>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+
+
+
+<!-- ======= TELEMEDICINE END ======= -->
+{% partial 'components/testimonial-ar'testimonials=testimonials %}
+
+
+
+<!-- ======= FIND YOUR DOCTOR START ======= -->
+
+{% if telemedicine24hrhelpline %}
+
+<section class="section-bg section-py-100">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-end">
+                    <h1>{{telemedicine24hrhelpline.title_ar|raw}}</h1>
+                    <p class="text-justy">{{telemedicine24hrhelpline.description_ar|raw}}</p>
+                    {% if telemedicine24hrhelpline.link_value %}
+
+                    <a href="{{telemedicine24hrhelpline.link_value}}" class="btn btn-primary btn-mc-01 float-end mb-3">
+
+                        <svg class="ms-3" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"
+                            fill="none">
+                            <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                            <path
+                                d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>{{telemedicine24hrhelpline.link_name_ar}}</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <!-- <img src="{{'assets/imgs/find-a-doctor.png'|theme}}" class="img-fluid" alt=""> -->
+                <div class="mcgallery">
+                    <div class="gallery">
+                        <div class="colz">
+                            <div class="image">
+                                <a href="/ar/find-doctor"><img src="{{'assets/imgs/001dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/ar/find-doctor"><img src="{{'assets/imgs/002dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/ar/find-doctor"><img src="{{'assets/imgs/003dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/ar/find-doctor"><img src="{{'assets/imgs/004dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/ar/find-doctor"><img src="{{'assets/imgs/005dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+
+                        </div>
+                        <div class="colz">
+                            <div class="image">
+                                <a href="/ar/find-doctor"><img src="{{'assets/imgs/005dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/ar/find-doctor"><img src="{{'assets/imgs/004dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/ar/find-doctor"><img src="{{'assets/imgs/003dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/ar/find-doctor"><img src="{{'assets/imgs/004dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/ar/find-doctor"><img src="{{'assets/imgs/005dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="colz">
+                            <div class="image">
+                                <a href="/ar/find-doctor"><img src="{{'assets/imgs/003dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/ar/find-doctor"><img src="{{'assets/imgs/004dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/ar/find-doctor"><img src="{{'assets/imgs/001dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/ar/find-doctor"><img src="{{'assets/imgs/002dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/ar/find-doctor"><img src="{{'assets/imgs/005dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+<!-- ======= FIND YOUR DOCTOR END ======= -->
+
+
+
+{% partial 'components/appDownload-ar' %}
+
+{% partial 'components/askUs-ar' %}
+
+
+{% put scripts %}
+
+<script>
+    var multipleCardCarousel = document.querySelector("#carouselExampleControls");
+
+    if (window.matchMedia("(min-width: 576px)").matches) {
+        var carousel = new bootstrap.Carousel(multipleCardCarousel, {
+            interval: false
+        });
+        var carouselWidth = $(".carousel-inner")[0].scrollWidth;
+        var cardWidth = $(".carousel-item").width();
+        var scrollPosition = 0;
+        $("#carouselExampleControls .carousel-control-next").on("click", function () {
+            if (scrollPosition < carouselWidth - cardWidth * 3) {
+                scrollPosition += cardWidth;
+                $("#carouselExampleControls .carousel-inner").animate(
+                    { scrollLeft: scrollPosition },
+                    600
+                );
+            }
+        });
+        $("#carouselExampleControls .carousel-control-prev").on("click", function () {
+            if (scrollPosition > 0) {
+                scrollPosition -= cardWidth;
+                $("#carouselExampleControls .carousel-inner").animate(
+                    { scrollLeft: scrollPosition },
+                    600
+                );
+            }
+        });
+    } else {
+        $(multipleCardCarousel).addClass("slide");
+    }
+
+</script>
+<script>
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const additionalY = { val: 0 };
+    let additionalYAnim;
+    let offset = 0;
+    const cols = gsap.utils.toArray(".colz");
+
+    cols.forEach((col, i) => {
+        const images = col.childNodes;
+
+        // DUPLICATE IMAGES FOR LOOP
+        images.forEach((image) => {
+            var clone = image.cloneNode(true);
+            col.appendChild(clone);
+        });
+
+        // SET ANIMATION
+        images.forEach((item) => {
+            let columnHeight = item.parentElement.clientHeight;
+            let direction = i % 2 !== 0 ? "+=" : "-="; // Change direction for odd columns
+
+            gsap.to(item, {
+                y: direction + Number(columnHeight / 2),
+                duration: 10,
+                repeat: -1,
+                ease: "none",
+                modifiers: {
+                    y: gsap.utils.unitize((y) => {
+                        if (direction == "+=") {
+                            offset += additionalY.val;
+                            y = (parseFloat(y) - offset) % (columnHeight * 0.5);
+                        } else {
+                            offset += additionalY.val;
+                            y =
+                                (parseFloat(y) + offset) %
+                                -Number(columnHeight * 0.5);
+                        }
+
+                        return y;
+                    }),
+                },
+            });
+        });
+    });
+</script>
+
+<script>
+
+    // ------------- New Slider ----------
+
+    // swiper    
+    var mySwiper = new Swiper('.swiper-container', {
+        effect: '',
+        loop: false,
+        speed: 1000,
+        slidesPerView: 1,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            type: 'bullets',
+            clickable: 'true'
+        },
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+
+
+
+    });
+
+
+
+</script>
+
+{% endput %}

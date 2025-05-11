@@ -1,0 +1,12 @@
+list: $/myclinic/setting/models/pagecontent/columns.yaml
+modelClass: MyClinic\Setting\Models\PageContent
+title: PageContent
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+recordsPerPage: 20
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordUrl: 'myclinic/setting/pagecontent/update/:id'

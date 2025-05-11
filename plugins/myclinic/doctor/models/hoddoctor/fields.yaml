@@ -1,0 +1,18 @@
+fields:
+    location_id:    
+        label: Specialty
+        span: auto
+        type: dropdown
+        options: listLocations
+    specialty_id:
+        label: Specialty
+        span: auto
+        type: dropdown
+        options: listSpecialty
+    doctor_id:
+        label: HOD
+        span: auto
+        type: dropdown
+        options: listDoctors
+   
+    

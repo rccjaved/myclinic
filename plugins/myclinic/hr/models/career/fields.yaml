@@ -1,0 +1,94 @@
+fields:
+    first_name:
+        label: 'First Name'
+        span: auto
+        type: text
+    last_name:
+        label: 'Last Name'
+        span: auto
+        type: text
+    education:
+        label: Education
+        span: auto
+        type: text
+    years_of_exp:
+        label: 'Years Of Expirence'
+        span: auto
+        type: text
+    current_residence:
+        label: 'Current Residence'
+        span: auto
+        type: text
+    job_category:
+        label: 'Job Category'
+        span: auto
+        type: text
+    nationality:
+        label: Nationality
+        span: auto
+        type: text
+    gender:
+        label: Gender
+        span: auto
+        type: text
+    email:
+        label: Email
+        span: auto
+        type: text
+    phone:
+        label: Phone
+        span: auto
+        type: text
+    contract_type:
+        label: 'Contract Type'
+        span: auto
+        type: text
+    city_of_employment:
+        label: 'City Of employment'
+        span: auto
+        type: text
+    file:
+        label: CV
+        mode: file
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload
+    license:
+        label: License
+        mode: file
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload
+    education_certificate:
+        label: 'Education Certificate'
+        mode: file
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload
+    exp_certificate:
+        label: 'Expereince  Certificate'
+        mode: file
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload
+    additional_certificate:
+        label: 'Additional Certificate'
+        mode: file
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload

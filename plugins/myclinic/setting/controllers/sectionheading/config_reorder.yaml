@@ -1,0 +1,4 @@
+title: SectionHeading
+modelClass: MyClinic\Setting\Models\SectionHeading
+toolbar:
+    buttons: reorder_toolbar

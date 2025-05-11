@@ -1,0 +1,4 @@
+title: Testimonial
+modelClass: MyClinic\Setting\Models\Testimonial
+toolbar:
+    buttons: reorder_toolbar

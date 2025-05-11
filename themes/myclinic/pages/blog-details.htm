@@ -1,0 +1,65 @@
+url = "/blog-details/:id"
+layout = "master"
+title = "Blog Detail"
+description = "{{ blog.description }}"
+meta_title = "{{ blog.tag_line }}"
+meta_description = "{{ blog.description }}"
+==
+<?php
+use MyClinic\Setting\Models\Blog;
+function onStart()
+{
+    $blogId = $this->param('id'); // Get the slug from the URL
+    $this['blog'] = Blog::find($blogId);
+    $this['blogs']=Blog::limit(4)->get();
+}
+?>
+==
+<main>
+
+    <section class="section-py-100">
+        <div class="container">
+            <div class="blog-container">
+
+                <div class="content">
+                    <div class="mb-3">
+                        <h1>{{blog.tag_line|raw}}</h1>
+                        <a href="#" class="text-decoration-none post-author">{{blog.author_name}}</a><span
+                            class="minutes">5
+                            MIN</span>
+                    </div>
+
+                    <img src="{{blog.blog_image.path}}" class="img-fluid" alt="post img">
+                    {{blog.description|raw}}
+                </div>
+                <aside class="aside">
+                    <h4 class="post-title">Post List</h4>
+                    <hr>
+                    {% for item in blogs %}
+
+                    <div class="col-12">
+                        <a href="/blog-details/{{item.id}}">
+                            <div class="blog-list-post">
+                                <img src="{{item.blog_image.path}}" class="img-fluid" alt="post img">
+                                <div>
+                                    <a href="/blog-details/{{item.id}}"
+                                        class="text-decoration-none list-post-author">{{item.author_name}}</a><span
+                                        class="list-minutes">5 MIN</span>
+                                    <h4>{{item.tag_line}}</h4>
+
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+
+
+                </aside>
+            </div>
+        </div>
+    </section>
+
+
+
+
+</main>

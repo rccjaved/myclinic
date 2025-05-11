@@ -1,0 +1,299 @@
+url = "/ar/our-programs"
+layout = "master-ar"
+title = "Our Programs"
+==
+<?php
+use MyClinic\Setting\Models\Testimonial;
+use MyClinic\Programs\Models\Program;
+use MyClinic\Setting\Models\Slider;
+use MyClinic\Setting\Models\PageContent;
+
+function onStart()
+{
+  $testimonials=Testimonial::where('category','program')->get();
+  $this['testimonials'] = $testimonials;
+  $this['programs']=Program::orderBy('name')->get();
+  
+  $sliders = Slider::where('type','our_programs')->get();
+  $this['sliders'] = $sliders;
+  $this['overview']=PageContent::where('page','our-programs')->where('section','our-programs-overview')->first();
+  $fromMobile = Agent::isMobile();
+  $this['fromMobile']= $fromMobile;
+}
+?>
+==
+<div class="swiper-container resize-slider">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+        <!-- Slider -->
+        {% for item in sliders %}
+        <div class="swiper-slide">
+            <img src="{{item.slider_image_ar_mobile.path}}" class="slidemc" alt="">
+            <img src="{{item.slider_image_ar.path}}" class="slidemc slidemc-m-home" alt="">
+                 <div class="slide-text w-100 text-end">
+                <h1 class="mb-3">{{item.title_ar|raw}}</h1>
+                <p class="mb-3 mb-sm-5">{{item.tag_line_ar}}</p>
+                {% if item.link_value %}
+                <a href="/ar/{{item.link_value}}" class="btn btn-primary slide-s btn-mc-01 mb-6"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none"
+                        style="margin-right: 20px;">
+                        <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                        <path d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M27.048 19.5984H18.7148H12"
+                            stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>{{item.link_name_ar}}</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- If we need pagination -->
+    <div class="swiper-pagination"></div>
+
+    <!-- If we need navigation buttons -->
+    <div class="swiper-button-prev"><span></span></div>
+    <div class="swiper-button-next"><span></span></div>
+
+
+
+
+</div>
+
+{% if overview %}
+
+<section class="section-py-120 m-3">
+    <div class="container program-section-bg">
+        <div class="row align-items-center">
+            <!-- <div class="col-12 col-lg-5 order-1 order-lg-0 ps-sm-0 text-center">
+                <img src="{{'assets/imgs/pro-overview.png'|theme}}" class="img-fluid pb-3 pb-sm-0" alt="">
+            </div> -->
+            <div class="col-12">
+                <div class="mc-block text-end">
+                    <h1>{{overview.title_ar|raw}}</h1>
+                    <p class="text-justy">{{overview.description_ar|raw}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+
+<section class="mb-3 mb-sm-5">
+    <div class="container">
+        <div class="row g-4 pro-px">
+            <div class="col-12 text-center">
+                <h1 class="">قائمة البرامج </h1>
+            </div>
+            {% for item in programs %}
+            <div class="col-12 col-md-6 col-xl-4 col-xxl-4">
+                <div class="services-box">
+                    <a href="/ar/program-detail/{{item.slug}}" style="text-decoration: none;color: black;">
+                        <img src="{{item.program_list_page_image.path}}" class="img-fluid order-1 order-md-0" alt="">
+                        <div class="services-body order-0 order-md-1">
+                            <h2>
+                                {{item.name_ar|raw}}
+                            </h2>
+                            <p class="truncate-ar">{{item.tag_line_ar|raw}}</p>
+                            <button class="btn btn-primary btn-services"><svg xmlns="http://www.w3.org/2000/svg"
+                                    width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                    <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                                    <path
+                                        d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                        stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>قم بالتسجيل
+                            </button>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+
+
+
+
+
+
+        </div>
+    </div>
+</section>
+
+
+
+
+<!-- <section class="section-py-100 section-bg">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-center text-lg-start">
+                    <h1>Lorem Ipsum</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
+                    <a href="javascript:void(0)" class="btn btn-primary btn-mc-01 mb-3"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                            <path
+                                d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>Contact Us</a>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 px-0">
+                <img src="{{'assets/imgs/pro_001.png'|theme}}" class="img-fluid" alt="">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-py-100">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6 order-1 order-lg-0">
+                <img src="{{'assets/imgs/pro_002.png'|theme}}" class="img-fluid" alt="">
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-center text-lg-start">
+                    <h1>Lorem Ipsum</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
+                    <a href="javascript:void(0)" class="btn btn-primary btn-mc-01 mb-3"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                            <path
+                                d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-py-100 section-bg">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-center text-lg-start">
+                    <h1>Lorem Ipsum</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
+                    <a href="javascript:void(0)" class="btn btn-primary btn-mc-01 mb-3"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                            <path
+                                d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>Contact Us</a>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 px-0">
+                <img src="{{'assets/imgs/pro_003.png'|theme}}" class="img-fluid" alt="">
+            </div>
+        </div>
+    </div>
+</section> -->
+{% partial 'components/testimonial-ar' testimonials=testimonials %}
+
+
+{% partial 'components/appDownload-ar' %}
+
+
+{% put scripts %}
+
+<script>
+
+    // ------------- New Slider ----------
+
+    // swiper    
+    var mySwiper = new Swiper('.swiper-container', {
+        effect: '',
+        loop: false,
+        speed: 1000,
+        slidesPerView: 1,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            type: 'bullets',
+            clickable: 'true'
+        },
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+
+
+
+    });
+
+
+
+</script>
+
+{% endput %}
+
+
+
+{% put scripts %}
+
+
+
+<script>
+// More & Less
+
+// requires jquery
+$(document).ready(function () {
+    if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)
+    ) {
+        // nothing
+    } else {
+        (function () {
+            var showChar = 50;
+            var ellipsestext = "...";
+
+            $(".truncate-ar").each(function () {
+                var content = $(this).html();
+                if (content.length > showChar) {
+                    var c = content.substr(0, showChar);
+                    var h = content;
+                    var html =
+                        '<div class="truncate-text-ar" style="display:block">' +
+                        c +
+                        '<span class="moreellipses">' +
+                        ellipsestext +
+                        '&nbsp;&nbsp;<a href="" class="moreless more">أكثر</a></span></span></div><div class="truncate-text-ar" style="display:none">' +
+                        h +
+                        '<a href="" class="moreless less">أقل</a></span></div>';
+
+                    $(this).html(html);
+                }
+            });
+
+            $(".moreless").click(function () {
+                var thisEl = $(this);
+                var cT = thisEl.closest(".truncate-text-ar");
+                var tX = ".truncate-text-ar";
+
+                if (thisEl.hasClass("less")) {
+                    cT.prev(tX).toggle();
+                    cT.slideToggle();
+                } else {
+                    cT.toggle();
+                    cT.next(tX).fadeToggle();
+                }
+                return false;
+            });
+            /* end iffe */
+        })();
+    }
+
+    /* end ready */
+});
+</script>
+
+{% endput %}

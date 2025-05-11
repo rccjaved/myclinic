@@ -1,0 +1,22 @@
+columns:
+    doctor_id:
+        label: Doctor Name
+        type: text
+        relation: doctor
+        select: name  # Specify the field name 'name' from the 'Doctor' model
+        sortable: true
+        search: true
+    specialty_id:
+        label: Specialty
+        type: text
+        searchable: true
+        sortable: true
+        select: name
+        relation: specialty
+    location_id:
+        label: Locations
+        type: text
+        searchable: true
+        sortable: true
+        select: name
+        relation: location

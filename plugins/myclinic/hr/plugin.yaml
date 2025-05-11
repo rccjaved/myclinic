@@ -1,0 +1,24 @@
+plugin:
+    name: 'myclinic.hr::lang.plugin.name'
+    description: 'myclinic.hr::lang.plugin.description'
+    author: 'My Clinic'
+    icon: oc-icon-dashboard
+    homepage: ''
+navigation:
+    hr:
+        label: HR
+        url: /
+        icon: icon-life-ring
+        sideMenu:
+            ask-us:
+                label: 'Ask Us'
+                url: myclinic/hr/askus
+                icon: icon-sitemap
+            career-request:
+                label: 'Career Requests'
+                url: myclinic/hr/careers
+                icon: icon-sitemap
+            program-enrollment:
+                label: 'Program Enrollment'
+                url: myclinic/hr/programenrollment
+                icon: icon-sitemap

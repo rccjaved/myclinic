@@ -1,0 +1,85 @@
+fields:
+    type:
+        label: Page
+        options:
+            home_page: 'Home Page'
+            about_us: 'About Us'
+            specialty_detail: 'Specialty Detail'
+            our_specialty: 'Our Specialty'
+            telemedicine: Telemedicine
+            our_programs: 'Our Programs'
+            find_doctor: 'Find Doctor'
+            home-healthcare: 'Home Health-Care'
+            career: Career
+            contact-us: 'Contact Us'
+            all-blogs: 'All Blogs'
+            services: Services
+            faqs: Faqs
+            online-health-tools: 'Online Health Tools'
+        showSearch: true
+        span: auto
+        type: dropdown
+    title:
+        label: Title
+        span: auto
+        type: text
+    title_ar:
+        label: 'Arabic Title'
+        span: auto
+        type: text
+    tag_line:
+        label: 'Tag Line'
+        span: auto
+        type: text
+    tag_line_ar:
+        label: 'Arabic Tag Line'
+        span: auto
+        type: text
+    link_name:
+        label: 'Link Button Name'
+        span: auto
+        type: text
+    link_name_ar:
+        label: 'Arabic Link Name'
+        span: auto
+        type: text
+    link_value:
+        label: Link
+        span: auto
+        type: text
+    slider_image:
+        label: Image
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload
+    slider_image_ar:
+        label: 'Arabic Image'
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload
+    slider_image_mobile:
+        label: 'Mobile Slider'
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload
+    slider_image_ar_mobile:
+        label: 'Mobile  Arabic Slider'
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload

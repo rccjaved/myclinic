@@ -1,0 +1,26 @@
+fields:
+    category:
+        label: Category
+        options:
+            home: Home
+            program: Program
+            specialty: Specialty
+        showSearch: true
+        span: full
+        type: dropdown
+    name:
+        label: 'Patient Name'
+        span: auto
+        type: text
+    name_ar:
+        label: 'Patient Name in Arabic'
+        span: auto
+        type: text
+    testimonial:
+        label: Testimonial
+        span: auto
+        type: text
+    testimonial_ar:
+        label: 'Arabic Testimonial'
+        span: auto
+        type: text

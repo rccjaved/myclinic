@@ -1,0 +1,10 @@
+name: AskUs
+form: $/myclinic/hr/models/askus/fields.yaml
+modelClass: MyClinic\Hr\Models\AskUs
+defaultRedirect: myclinic/hr/askus
+create:
+    redirect: 'myclinic/hr/askus/update/:id'
+    redirectClose: myclinic/hr/askus
+update:
+    redirect: myclinic/hr/askus
+    redirectClose: myclinic/hr/askus

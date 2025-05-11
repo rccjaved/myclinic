@@ -1,0 +1,36 @@
+plugin:
+    name: 'myclinic.doctor::lang.plugin.name'
+    description: 'myclinic.doctor::lang.plugin.description'
+    author: 'My Clinic'
+    icon: oc-icon-plus
+    homepage: ''
+navigation:
+    Doc:
+        label: Doc
+        url: '#'
+        icon: icon-life-ring
+        sideMenu:
+            specialties:
+                label: Specialties
+                url: myclinic/doctor/specialty
+                icon: icon-sitemap
+            health-concerns:
+                label: 'Health Concerns'
+                url: myclinic/doctor/healthconcerns
+                icon: icon-sitemap
+            doctor-list:
+                label: Doctors
+                url: myclinic/doctor/doctor
+                icon: icon-sitemap
+            languages:
+                label: Languages
+                url: myclinic/setting/language
+                icon: icon-sitemap
+            speialty-slider:
+                label: 'Specialty Slider'
+                url: myclinic/doctor/specialtyslider
+                icon: icon-sitemap
+            doc-spec-location-hod:
+                label: HOD
+                url: myclinic/doctor/hoddoctor
+                icon: icon-sitemap

@@ -1,0 +1,19 @@
+.social-mc-logo{
+  background: #003868;
+  padding: 3rem;
+  border-radius: 1rem;
+}
+
+.social-num{
+  margin-top: 5rem;
+  background: #003868;
+  color: #FFF !important;
+  padding: 1rem;
+  text-decoration: none;
+  border-radius: 1rem;
+}
+.social-num a{
+  font-size: 2rem;
+  color: #FFF;
+  font-weight: bold;
+}

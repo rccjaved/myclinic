@@ -1,0 +1,10 @@
+name: HealthConcerns
+form: $/myclinic/doctor/models/healthconcern/fields.yaml
+modelClass: MyClinic\Doctor\Models\HealthConcern
+defaultRedirect: myclinic/doctor/healthconcerns
+create:
+    redirect: 'myclinic/doctor/healthconcerns/update/:id'
+    redirectClose: myclinic/doctor/healthconcerns
+update:
+    redirect: myclinic/doctor/healthconcerns
+    redirectClose: myclinic/doctor/healthconcerns

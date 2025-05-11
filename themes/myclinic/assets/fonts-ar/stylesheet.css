@@ -1,0 +1,54 @@
+@font-face {
+    font-family: 'GE Thameen';
+    src: url('GEThameen-DemiBold.woff2') format('woff2'),
+        url('GEThameen-DemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'GE Thameen';
+    src: url('GEThameen-DemiBoldItalic.woff2') format('woff2'),
+        url('GEThameen-DemiBoldItalic.woff') format('woff');
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'GE Thameen';
+    src: url('GEThameen-Light.woff2') format('woff2'),
+        url('GEThameen-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'GE Thameen';
+    src: url('GEThameen-LightItalic.woff2') format('woff2'),
+        url('GEThameen-LightItalic.woff') format('woff');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'GE Thameen';
+    src: url('GEThameen-Book.woff2') format('woff2'),
+        url('GEThameen-Book.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'GE Thameen';
+    src: url('GEThameen-DemiBold.woff2') format('woff2'),
+        url('GEThameen-DemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+

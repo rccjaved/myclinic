@@ -1,0 +1,11 @@
+columns:
+    name:
+        label: Name
+        type: text
+        searchable: true
+        sortable: true
+    name_ar:
+        label: 'Arabic Name'
+        type: text
+        searchable: true
+        sortable: true

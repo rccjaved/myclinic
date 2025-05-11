@@ -1,0 +1,250 @@
+url = "/ar/health-homecare-bkp"
+layout = "master-ar"
+title = "Homecare"
+meta_title = "Post surgery and hospitalization care, Central line care, Urinary catheter care and maintenance, Simple burns care, Homecare Services, Lab sample collection services, ECG Home Services,"
+meta_description = "Experience the convenience of home care as we healthcare professionals that provide you home care that include Doctor/Physician’s Visit and Nurse visits. Revitalize Your Health as we also provide Physiotherapy Expertise at the comfort of your home."
+
+[resources]
+less[] = "pages/homecare.less"
+==
+<?php
+use MyClinic\Setting\Models\Testimonial;
+use MyClinic\Setting\Models\Slider;
+use MyClinic\Setting\Models\HomeHealthCare;
+use MyClinic\Setting\Models\CommonComponent;
+function onStart()
+{
+$testimonials=Testimonial::where('category','home')->orderBy('name')->get();
+$this['testimonials'] = $testimonials;
+
+
+$sliders = Slider::where('type','home-healthcare')->get();
+$this['sliders'] = $sliders;
+
+$this['sections']=HomeHealthCare::all();
+$this['telemedicine_common_section']=CommonComponent::where('slug','telemedicine')->first();
+$fromMobile = Agent::isMobile();
+$this['fromMobile']= $fromMobile;
+}
+?>
+==
+<div class="swiper-container resize-slider">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+        <!-- Slider -->
+        {% for item in sliders %}
+        <div class="swiper-slide resize-slider">
+            <img src="{{item.slider_image_ar_mobile.path}}" class="slidemc" alt="">
+         
+            <img src="{{item.slider_image_ar.path}}" class="slidemc slidemc-m-home" alt="">
+                      <div class="slide-text slider-text-arabic container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="mb-3">{{item.title_ar|raw}}</h1>
+                        <p class="mb-3 mb-sm-5">{{item.tag_line_ar}}</p>
+                        {% if item.link_value %}
+                        <a href="{{item.link_value}}"
+                            class="btn btn-primary slide-s btn-mc-01 mb-6 float-end">
+                            <svg class="ms-3" xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                                viewBox="0 0 40 40" fill="none">
+                                <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                                <path d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M27.048 19.5984H18.7148H12"
+                                    stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>{{item.link_name_ar}}</a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- If we need pagination -->
+    <div class="swiper-pagination"></div>
+
+    <!-- If we need navigation buttons -->
+    <div class="swiper-button-prev"><span></span></div>
+    <div class="swiper-button-next"><span></span></div>
+
+
+
+
+</div>
+
+
+<!-- ======= HOME VISIT START ======= -->
+
+
+{% for item in sections %}
+{% if forloop.counter is even %}
+<!-- Index is even -->
+<section class="section-py-120">
+    <div class="container program-section-bg">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6 order-1 order-sm-0 ps-sm-0">
+                <img src="{{item.homecare_image.path}}" class="img-fluid pb-3 pb-sm-0" alt="">
+            </div>
+            <div class="col-12 col-lg-6 order-0 order-sm-1">
+                <div class="mc-block text-lg-end">
+                    <h1 class="text-end">{{item.title_ar}}</h1>
+                    {{item.description_ar|raw}}
+                    {% if item.link_value %}
+                    <a href="/ar/{{item.link_value}}" class="btn btn-primary btn-mc-01 mb-3 float-end">
+
+                        <svg class="ms-3" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"
+                            fill="none">
+                            <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                            <path
+                                d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>{{item.link_name_ar}}</a>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% else %}
+<!-- Index is odd -->
+<section class="post-surgery section-bg section-py-100">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="mc-block pe-3 list-style-custom-dot">
+                    <h1 class="text-center text-lg-start">{{item.title_ar}}</h1>
+                    {{item.description_ar|raw}}
+                    {% if item.link_value %}
+                    <a href="/ar/{{item.link_value}}" class="btn btn-primary btn-mc-01 mb-3"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                            <path
+                                d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>{{item.link_name_Ar}}</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 px-lg-0">
+                <img src="{{item.homecare_image.path}}" class="img-fluid" alt="">
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endfor %}
+
+{% partial 'components/askUs-ar' %}
+
+
+
+{% partial 'components/testimonial-ar'testimonials=testimonials %}
+
+
+
+{% if telemedicine_common_section %}
+<section class="section-py-100 section-bg">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-end">
+                    <h1>{{telemedicine_common_section.title_ar}}</h1>
+                    {{telemedicine_common_section.description_ar|raw}}
+                    {% if telemedicine_common_section.link_value %}
+                    <a href="/ar/{{telemedicine_common_section.link_value}}"
+                        class="btn btn-primary btn-mc-01 float-end mb-3">
+
+                        <svg class="ms-3" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"
+                            fill="none">
+                            <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                            <path
+                                d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>{{telemedicine_common_section.link_name_ar}}</a>
+                    {% endif %}
+
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <img src="{{telemedicine_common_section.section_image.path}}" class="img-fluid" alt="">
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+{% partial 'components/appDownload-ar' %}
+
+
+{% put scripts %}
+
+
+
+<script>
+    $('.btn-mc-city-group').on('click', 'a', function () {
+        $('.btn-mc-city-group a.active').removeClass('active');
+        $(this).addClass('active');
+    });
+    jQuery('.targetLocation').hide();
+    jQuery('#location1').show();
+    jQuery(function () {
+        jQuery('').click(function () {
+            jQuery('.targetLocation').show();
+        });
+        jQuery('.showLocation').click(function () {
+            jQuery('.targetLocation').hide();
+            jQuery('#location' + $(this).attr('target')).show();
+        });
+    });
+
+</script>
+
+<script>
+    // swiper    
+    var mySwiper = new Swiper('.swiper-container', {
+        effect: '',
+        loop: false,
+        speed: 1000,
+        slidesPerView: 1,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            type: 'bullets',
+            clickable: 'true'
+        },
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+
+
+
+    });
+
+</script>
+
+<style>
+    .mc-block ul li {
+        text-align: right;
+        list-style: none;
+    }
+
+
+    .mc-block ul li::after {
+        content: '.';
+        font-size: 30px;
+        line-height: 0px;
+        position: relative;
+        margin-left: 8px;
+
+    }
+</style>
+
+{% endput %}

@@ -1,0 +1,10 @@
+name: Privacy
+form: $/myclinic/setting/models/privacy/fields.yaml
+modelClass: MyClinic\Setting\Models\Privacy
+defaultRedirect: myclinic/setting/privacy
+create:
+    redirect: 'myclinic/setting/privacy/update/:id'
+    redirectClose: myclinic/setting/privacy
+update:
+    redirect: myclinic/setting/privacy
+    redirectClose: myclinic/setting/privacy

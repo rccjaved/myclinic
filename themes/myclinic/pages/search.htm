@@ -1,0 +1,284 @@
+url = "/search"
+layout = "master"
+title = "Search Result"
+meta_title = "Search Results"
+
+[resources]
+less[] = "pages/result.less"
+==
+<?php
+use MyClinic\Doctor\Models\Doctor;
+use MyClinic\Doctor\Models\Specialty;
+use MyClinic\Programs\Models\Program;
+use MyClinic\Setting\Models\PageContent;
+use MyClinic\Setting\Models\Testimonial;
+use MyClinic\Setting\Models\HomeHealthCare;
+use MyClinic\Setting\Models\CommonComponent;
+use MyClinic\Setting\Models\AboutUs;
+function onStart()
+{
+    $queryParam = isset($_GET['q']) ? $_GET['q'] : '';
+    
+    $specialtyWord = Specialty::where('name',$queryParam)->first();
+
+    if($specialtyWord){
+        $doctors = $specialtyWord->doctors;
+    }else{
+        $doctors = Doctor::where('name', 'LIKE', '%' . $queryParam . '%')
+        ->orWhere('highest_degree', 'LIKE', '%' . $queryParam . '%')
+        ->orWhere('about', 'LIKE', '%' . $queryParam . '%')
+        ->orWhere('specialty_desc', 'LIKE', '%' . $queryParam . '%')
+        ->get();
+    }
+
+    
+    if($specialtyWord){
+        $specialty = Specialty::where('id', $specialtyWord->id)
+        ->get();
+    }else{
+        $specialty = Specialty::where('name', 'LIKE', '%' . $queryParam . '%')
+        ->orWhere('description', 'LIKE', '%' . $queryParam . '%')
+        ->orWhere('tag_line', 'LIKE', '%' . $queryParam . '%')
+        ->get();
+    }
+    
+
+
+    $program = Program::where('name', 'LIKE', '%' . $queryParam . '%')
+    ->orWhere('description', 'LIKE', '%' . $queryParam . '%')
+    ->orWhere('tag_line', 'LIKE', '%' . $queryParam . '%')
+    ->get();
+
+    $pageContent = PageContent::where('title', 'LIKE', '%' . $queryParam . '%')
+    ->orWhere('description', 'LIKE', '%' . $queryParam . '%')
+    ->orWhere('section', 'LIKE', '%' . $queryParam . '%')
+    ->get();
+
+
+    $testimonials =Testimonial::where('name', 'LIKE', '%' . $queryParam . '%')
+    ->orWhere('testimonial', 'LIKE', '%' . $queryParam . '%')
+    ->get();
+
+
+    if (strcasecmp($queryParam, 'testimonial') === 0 || strcasecmp($queryParam, 'testimonials') === 0) {
+        // Your code for 'testimonial' case
+        // This block will be executed if $queryParam is 'testimonial' or 'Testimonial'
+
+        $testimonials = Testimonial::all();
+    }
+
+    $homeCare = HomeHealthCare::where('title', 'LIKE', '%' . $queryParam . '%')
+    ->orWhere('description', 'LIKE', '%' . $queryParam . '%')
+    ->get();
+
+    $commonContent = CommonComponent::where('title', 'LIKE', '%' . $queryParam . '%')
+    ->orWhere('description', 'LIKE', '%' . $queryParam . '%')
+    ->get();
+
+    $aboutUs = AboutUs::where('title', 'LIKE', '%' . $queryParam . '%')
+    ->orWhere('description', 'LIKE', '%' . $queryParam . '%')
+    ->get();
+
+
+    $records1 =$this->mapRecords($doctors,'doctors');
+    $records2 =$this->mapRecords($specialty,'specialty');
+    $records3 =$this->mapRecords($program,'program');
+    $records4 =$this->mapRecords($pageContent,'pageContent');
+    $records5 =$this->mapRecords($testimonials,'testimonial');
+    $records6 =$this->mapRecords($homeCare,'common');
+    $records7 =$this->mapRecords($commonContent,'common');
+    $records8 =$this->mapRecords($aboutUs,'common');
+
+    
+
+    $records = array_merge($records1, $records2, $records3, $records4, $records5, $records6, $records7, $records8);
+
+    $this['records']=$records;
+    $this['keyword']=$queryParam;
+    $this['count'] = count($records);
+
+}
+
+
+function mapRecords($records,$type){
+    $mappedRecords =[];
+    if($type == 'doctors'){
+        foreach($records as $item){
+            $temp=[
+            'image'=> $item->doctor_image ? $item->doctor_image->path : null,
+            'url'=>'doctor-detail/'.$item->id,
+            'title'=>$item->designation.$item->name ." ( ".$item->specialty_desc." )",
+            'desc'=>$item->about
+            ];
+
+            $mappedRecords[]=$temp;
+        }
+
+
+    }elseif($type == 'specialty'){
+        foreach($records as $item){
+            $temp=[
+            'image'=> $item->specialty_image ? $item->specialty_image->path : null,
+            'url'=>'specialty-detail/'.$item->slug,
+            'title'=>"Specialty : ".$item->name,
+            'desc'=>$item->tag_line
+            ];
+
+            $mappedRecords[]=$temp;
+        }
+    }
+    elseif($type == 'program'){
+        foreach($records as $item){
+            $temp=[
+            'image'=> $item->program_image ? $item->program_image->path : null,
+            'url'=>'program-detail/'.$item->slug,
+            'title'=>"Program : ".$item->name,
+            'desc'=>$item->tag_line
+            ];
+
+            $mappedRecords[]=$temp;
+        }
+    }elseif($type == 'pageContent'){
+        foreach($records as $item){
+            $url  = '#';
+            if($item->link_value){
+                $url  = $item->link_value;
+            }
+            $temp=[
+            'image'=> $item->section_image ? $item->section_image->path : null,
+            'url'=>$url,
+            'title'=>$item->title,
+            'desc'=>$item->description
+            ];
+
+            $mappedRecords[]=$temp;
+        }
+    }
+    elseif($type == 'testimonial'){
+        foreach($records as $item){
+            $url  = '#';
+            $temp=[
+            'image'=> $item->section_image ? $item->section_image->path : null,
+            'url'=>$url,
+            'title'=>$item->name,
+            'desc'=>$item->testimonial
+            ];
+
+            $mappedRecords[]=$temp;
+        }
+    }elseif($type == 'common'){
+        foreach($records as $item){
+            $url  = '#';
+            if($item->link_value){
+                $url  = $item->link_value;
+            }
+            $temp=[
+            'image'=> $item->section_image ? $item->section_image->path : null,
+            'url'=>$url,
+            'title'=>$item->title,
+            'desc'=>$item->description
+            ];
+
+            $mappedRecords[]=$temp;
+        }
+    }
+
+    return $mappedRecords;
+}
+?>
+==
+<section class="mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="d-flex align-items-center">
+                    <h1 class="search-heading">Search result for this :</h1>
+                    <div class="resulte-category ms-3">{{keyword}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- no search result -->
+{% if not count %}
+<section class="mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <img style="max-width: 300px;" src="{{'assets/imgs/search.svg'|theme}}" alt="no result">
+                <p class="mt-4">No Results Found</p>
+                <button class="btn btn-primary"> Please Change your keyword</button>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+<!-- no search result end-->
+
+<section class="mt-3">
+    <div class="container">
+        <div class="row mt-3">
+            <div class="col-md-12">
+                {% for item in records %}
+                <div class="search-resulte-bg">
+                    <div class="search-avatar">
+                        <img src="{{item.image}}" alt="{{item.name}}">
+                    </div>
+                    <div class="search-text-wrap">
+                        <h2><a href="{{item.url}}">{{item.title}}</a> </h2>
+                        <p>{{item.desc|raw}}</p>
+                        <a href="{{item.url}}" class=" next-link-arrow"><svg xmlns="http://www.w3.org/2000/svg"
+                                id="Layer_2" height="512" viewBox="0 0 24 24" width="512" data-name="Layer 2">
+                                <path
+                                    d="m22.707 11.293-7-7a1 1 0 0 0 -1.414 1.414l5.293 5.293h-17.586a1 1 0 0 0 0 2h17.586l-5.293 5.293a1 1 0 1 0 1.414 1.414l7-7a1 1 0 0 0 0-1.414z" />
+                            </svg></a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+{% partial 'components/appDownload' %}
+
+
+<script>
+
+    // ------------- New Slider ----------
+
+    // swiper    
+    var mySwiper = new Swiper('.swiper-container', {
+        effect: '',
+        loop: false,
+        speed: 1000,
+        slidesPerView: 1,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            type: 'bullets',
+            clickable: 'true'
+        },
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+
+
+
+    });
+
+
+
+</script>

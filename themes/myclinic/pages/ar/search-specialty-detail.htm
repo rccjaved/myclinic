@@ -1,0 +1,395 @@
+url = "/ar/search-specialty/:slug"
+layout = "master-ar"
+title = "Search Specialty"
+meta_title = "Cardiology, Dermatology, ENT, Neurology, Orthopedic, Ophthalmology, Pediatric, Physiotherapy, OBYG, Occupational Medicine, Geriactic Medicine, Audio-vestibular & Speech, Internal Medicine, Surgery, Psychology & Psychiatry, Family Medicine, Endocrinology, Endocrinology, Nephrology, Hematology, ER, Rheumatology, Respiratory Medicine, Gastroenterology & Hepatology, Urology, Allergy and Immunology"
+meta_description = "Our expert team offers a diverse range of specialized medical services, personalized to your needs, ensuring your path to optimal well-being."
+==
+<?php
+use MyClinic\Doctor\Models\Specialty;
+use MyClinic\Doctor\Models\Doctor;
+use MyClinic\Setting\Models\Location;
+use MyClinic\Doctor\Models\HealthConcern;
+use MyClinic\Doctor\Models\HodDoctor;
+
+function onStart()
+{
+
+    $slug = $this->param('slug'); // Get the slug from the URL
+    $this['slug'] = $slug;
+    $specialty = Specialty::where('slug', $slug)->first();
+    $isMobile = false;
+    if($slug=='physiotherapy' || $slug=='Dental' ){
+        $this['isMobile']= true;
+    }
+    $this['specialty']=$specialty;
+    $this['locations']=Location::all();
+    $hodExist=HodDoctor::where('location_id',$location->id)->where('specialty_id',$specialty->id)->whereIn('doctor_id', $mergedDoctors)->get();
+    if(count($hodExist)){
+        $hod = Doctor::find($hodExist[0]->doctor_id);
+    }else{
+        $hod=null;
+    }
+
+    if($hod){
+        $this['hod']=$hod;
+        $this['doctors']=$specialty->doctors()->where('doctor_id','!=',$hod->id)->whereIn('doctor_id', $mergedDoctors)->orderBy('name')->get();
+    }else{
+        $this['doctors']=$specialty->doctors()->whereIn('doctor_id', $mergedDoctors)->orderBy('name')->get();
+    }
+    $this['optionDoctorList']=$specialty->doctors()->whereIn('doctor_id', $mergedDoctors)->orderBy('name_ar')->get();
+
+    $this['specialties']=Specialty::orderBy('name')->get();
+    $this['healthConcerns']=HealthConcern::all();
+    $this['bookingLink']='https://bamc.myclinic.com.sa:8443/';
+    $this['canBook']= true;
+    if($slug=='er'){
+        $this['canBook']= false;
+    }
+}
+?>
+==
+<!-- ======= BANNER START ======= -->
+<section class="section-bg">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-12 col-sm-6 text-center text-sm-start px-0">
+                <div class="mc-block text-end">
+                    <h1>{{specialty.name_ar|raw}}</h1>
+                    <p>{{specialty.tag_line_ar}}</p>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 px-0">
+                <div class="position-relative search-doctor-list">
+                    <img src="{{specialty.specialty_banner_image.path}}" class="img-fluid" alt="">
+                    <form class="row row-cols-2 g-2 g-lg-3 dr-search-form align-items-center" id="search-form">
+                        <div class="col-12">
+                            <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+                            <span class="select2-selection__arrow" role="presentation"><b
+                                    role="presentation"></b></span>
+                            <select class="form-select form-select-lg select-mc" id="location">
+                                {% for item in locations %}
+                                {% if item.id == location.id %}
+                                <option value="{{location.id}}" selected>{{location.name_ar}}</option>
+                                {% else %}
+                                <option value={{item.id}}>{{item.name_ar}}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                      
+                        <div class="col">
+                            <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+                            <select class="form-select form-select-lg select-mc" id="doctor">
+                                <option value="">اسم الطبيب
+                                </option>
+                                {% for item in optionDoctorList %}
+                                <option value={{item.id}}><span >
+                                    {{item.designation_ar}}
+                                </span>{{item.name_ar}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+
+                        <div class="col">
+                            <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+                            <select class="form-select form-select-lg select-mc" id="specialty">
+                                {% for item in specialties %}
+                                {% if item.slug == specialty.slug %}
+                                <option value="{{specialty.slug}}" selected>{{specialty.name_ar}}</option>
+                                {% else %}
+                                <option value={{item.slug}}>{{item.name_ar}}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                       
+
+                        <div class="col-12">
+                            <button
+                                class="btn btn-primary btn-mc-search mc-search mb-4 mb-sm-0 mx-auto search-icon-degree"><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="49" height="48" viewBox="0 0 49 48"
+                                    fill="none">
+                                    <ellipse cx="24.2" cy="23.716" rx="24.2" ry="23.716" fill="white" />
+                                    <path
+                                        d="M22.8362 15.7266C26.0961 15.7266 28.735 18.3655 28.735 21.6253C28.735 24.8852 26.0961 27.5241 22.8362 27.5241C19.5764 27.5241 16.9375 24.8852 16.9375 21.6253C16.9375 19.3279 18.2476 17.341 20.1663 16.3661M32.6675 31.4566L27.2225 26.0116"
+                                        stroke="#003868" stroke-width="1.452" stroke-miterlimit="10"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>ابحث
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ======= BANNER END ======= -->
+
+
+<!-- ======= OUR DOCTORS  START ======= -->
+<section class="mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center section-py-100 pt-0">
+                <h1 class="">أطباؤنا</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            {% if hod %}
+            <div class="col-12 col-sm-6 col-xl-4 col-xxl-3">
+                <a href="javascript:void(0)" onclick="GoLinks(event,'/ar/doctor-detail/'+'{{hod.id}}')">
+                    <div class="doctor-card">
+                        <div class="dr-calendar">
+                            <a href="#" class="dr-cale">21 June <svg xmlns="http://www.w3.org/2000/svg" width="17"
+                                    height="14" viewBox="0 0 17 14" fill="none">
+                                    <path
+                                        d="M4.13972 2.79159L4.13923 2.79251C4.04433 2.96893 3.86958 3.04198 3.67631 3.02825M4.13972 2.79159L11.9341 2.47286H13.3452V3.99706H1.82689V2.47257H3.23177C3.23686 2.54323 3.24357 2.61918 3.25723 2.68965M4.13972 2.79159C4.18233 2.71103 4.19061 2.62104 4.1956 2.56682L4.19593 2.56331L4.19597 2.56284M4.13972 2.79159L4.19597 2.56284M3.67631 3.02825L3.68693 2.87863L3.67633 3.02826C3.67632 3.02826 3.67631 3.02826 3.67631 3.02825ZM3.67631 3.02825C3.48261 3.01452 3.29843 2.90328 3.25723 2.68965M3.25723 2.68965L3.40451 2.66124L3.25726 2.68981C3.25725 2.68975 3.25724 2.6897 3.25723 2.68965ZM4.19597 2.56284C4.1985 2.53441 4.19952 2.50471 4.19978 2.47518M4.19597 2.56284L4.19978 2.47518M4.19978 2.47518H10.9669M4.19978 2.47518H10.9669M10.9669 2.47518C10.9706 2.53877 10.9757 2.60623 10.9867 2.66903C10.9867 2.66908 10.9868 2.66913 10.9868 2.66918L11.1345 2.6433L10.9669 2.47518ZM14.3096 11.1675C14.3099 9.60781 14.3099 8.04816 14.3099 6.48853V6.47528H15.1791V12.4453H3.6511V11.7293H13.6706C13.7057 11.7293 13.7403 11.7278 13.7711 11.7265L13.7723 11.7264C13.8046 11.725 13.833 11.7238 13.8608 11.7238C13.8987 11.7238 13.9316 11.7246 13.961 11.7253L13.9717 11.7256C13.9965 11.7262 14.0205 11.7268 14.0415 11.7267C14.065 11.7266 14.0926 11.7258 14.1195 11.7211C14.147 11.7163 14.1836 11.7059 14.218 11.6797C14.292 11.6235 14.3005 11.5381 14.3033 11.4978C14.3057 11.4643 14.3054 11.4199 14.3051 11.3714C14.305 11.3545 14.3049 11.337 14.3049 11.3194C14.3049 11.2981 14.3059 11.2762 14.3071 11.2503L14.3072 11.249C14.3083 11.2245 14.3096 11.1963 14.3096 11.1675ZM14.3096 11.1675L14.1596 11.1674M14.3096 11.1675L14.1596 11.1674M14.1596 11.1674C14.1599 9.60779 14.1599 8.04816 14.1599 6.48853V6.47528L13.6706 11.5793C13.7024 11.5793 13.7342 11.578 13.766 11.5766C13.7976 11.5752 13.8293 11.5738 13.8608 11.5738C14.0265 11.5738 14.0994 11.5871 14.1312 11.557C14.1605 11.5293 14.1549 11.4648 14.1549 11.3194C14.1549 11.2941 14.1561 11.2687 14.1573 11.2434C14.1584 11.2181 14.1596 11.1928 14.1596 11.1674ZM2.67055 11.7293H2.69568C2.69568 11.9131 2.69585 12.0969 2.69602 12.2806C2.69618 12.4644 2.69635 12.6483 2.69635 12.8321C2.69635 12.8539 2.69621 12.8753 2.69607 12.8961C2.69567 12.9556 2.6953 13.0098 2.69844 13.0517C2.70255 13.1066 2.71454 13.1925 2.78605 13.2539C2.85092 13.3097 2.93485 13.3175 2.99152 13.3206C3.03736 13.3231 3.09617 13.3228 3.16401 13.3225C3.18888 13.3224 3.21497 13.3222 3.24208 13.3222C5.29747 13.3222 7.35295 13.3228 9.40849 13.3233L9.42027 13.3233C11.4797 13.3238 13.5393 13.3243 15.5988 13.3243C15.6462 13.3243 15.6908 13.3247 15.7308 13.3251C15.7784 13.3256 15.8196 13.326 15.8514 13.3255C15.8825 13.3251 15.9135 13.3237 15.9419 13.3198C15.9695 13.316 16.0047 13.3085 16.0388 13.2898C16.0771 13.2687 16.1069 13.2374 16.1259 13.1981C16.1427 13.1633 16.1478 13.1286 16.15 13.1038C16.1526 13.0739 16.152 13.0323 16.1514 12.9918C16.1511 12.9746 16.1509 12.9575 16.1509 12.9415V3.55598C16.1509 3.54509 16.151 3.53306 16.1512 3.52047C16.1517 3.48111 16.1524 3.43619 16.1482 3.40294C16.1449 3.37642 16.1375 3.34071 16.1165 3.30543C16.0937 3.26719 16.0615 3.2402 16.0257 3.22262C15.9668 3.1938 15.894 3.18975 15.8333 3.18794C15.7854 3.18651 15.7243 3.18671 15.6509 3.18694C15.6207 3.18704 15.5884 3.18714 15.554 3.18714C15.3513 3.18714 15.1486 3.1875 14.9461 3.18787C14.7435 3.18823 14.5411 3.18859 14.3387 3.18859H14.3099C14.3099 3.06327 14.3083 2.94003 14.3068 2.81792C14.3037 2.57899 14.3008 2.34433 14.3095 2.10665C14.3103 2.08639 14.3111 2.06651 14.3119 2.04718C14.3147 1.98058 14.3172 1.92057 14.315 1.87421C14.3122 1.81654 14.3014 1.72577 14.2246 1.66266C14.1576 1.60759 14.0705 1.60137 14.0124 1.59892C13.9695 1.5971 13.9144 1.59754 13.8513 1.59804C13.8192 1.59829 13.785 1.59857 13.7492 1.59857C13.154 1.59857 12.5584 1.59828 11.9631 1.59799H11.9631H11.9314L11.9312 1.50426C11.9312 1.46178 11.9322 1.4249 11.9333 1.39207C11.9335 1.38661 11.9336 1.38115 11.9338 1.37572C11.9347 1.34975 11.9355 1.32442 11.9356 1.30247C11.9356 1.2765 11.9348 1.24547 11.9289 1.21518C11.9228 1.1834 11.9095 1.1431 11.8775 1.10717C11.8151 1.03714 11.7242 1.03157 11.6789 1.02925C11.6421 1.02738 11.5933 1.02775 11.5372 1.02819C11.5107 1.02839 11.4826 1.02861 11.4534 1.02861C11.4108 1.02861 11.3737 1.02779 11.3403 1.02702L11.3356 1.02691C11.3049 1.0262 11.275 1.02551 11.2488 1.02589C11.2054 1.02653 11.1213 1.02805 11.0558 1.08364C10.9852 1.14361 10.9756 1.23041 10.972 1.27936C10.9689 1.32206 10.9691 1.37806 10.9693 1.44202C10.9694 1.46023 10.9695 1.47909 10.9695 1.49847C10.9695 1.52909 10.9694 1.55978 10.9692 1.59104H4.19746C4.19734 1.5591 4.19723 1.52785 4.19723 1.49673C4.19723 1.47073 4.19752 1.44488 4.19779 1.4201C4.19831 1.37265 4.19879 1.32913 4.19714 1.29603C4.1948 1.24895 4.18796 1.16599 4.1252 1.1036C4.06377 1.04253 3.98136 1.03392 3.93131 1.03058C3.88827 1.0277 3.83252 1.02792 3.76895 1.02817C3.75016 1.02825 3.73069 1.02832 3.71066 1.02832C3.69046 1.02832 3.67085 1.02824 3.65197 1.02817C3.58887 1.02792 3.53384 1.0277 3.4917 1.03053C3.44351 1.03376 3.35912 1.04208 3.29824 1.10666C3.23792 1.17065 3.23455 1.25464 3.23336 1.2979C3.23266 1.32332 3.2333 1.35935 3.234 1.39861C3.23454 1.42936 3.23513 1.46209 3.23513 1.49326C3.23513 1.5275 3.23494 1.56184 3.23472 1.59799L3.21333 1.59799L3.21326 1.59799C2.61804 1.59828 2.02282 1.59828 1.42722 1.59828C1.37796 1.59828 1.32981 1.59751 1.28628 1.59681C1.23637 1.59601 1.19253 1.59531 1.16002 1.59597C1.1265 1.59666 1.09077 1.59871 1.05713 1.60559C1.02274 1.61263 0.981338 1.62648 0.944108 1.65738C0.866502 1.72177 0.857889 1.81667 0.854948 1.87167C0.852861 1.9107 0.853427 1.96228 0.854066 2.02054C0.854403 2.05124 0.85476 2.0838 0.85476 2.11734V11.2088C0.85476 11.252 0.853949 11.2952 0.853208 11.3347C0.852313 11.3824 0.851521 11.4247 0.852377 11.4548C0.853815 11.5055 0.857707 11.6047 0.935985 11.6715C0.974163 11.7041 1.01704 11.7176 1.0512 11.7242C1.08467 11.7306 1.12045 11.7321 1.15378 11.7325C1.18533 11.7328 1.22213 11.732 1.26197 11.7312L1.27163 11.731C1.31614 11.73 1.3669 11.729 1.42589 11.729L2.04816 11.7292L2.67055 11.7293ZM11.441 3.03237C11.6525 3.03623 11.8638 2.91657 11.9112 2.68464L11.4437 2.88239L11.4409 3.03237C11.4409 3.03237 11.4409 3.03237 11.441 3.03237ZM14.3186 4.0652H15.1784V5.58911H14.3186V4.0652ZM1.82522 10.853V4.8838H13.3455V10.853H1.82522Z"
+                                        fill="#003868" stroke="#003868" stroke-width="0.3" />
+                                </svg></a>
+                            <div class="slots">4 Slots Available</div>
+                        </div>
+                        <a href="/ar/doctor-detail/{{hod.id}}">
+                            <div class="doctor-img-001 text-center">
+                                <img src="{{hod.doctor_image.path}}" class="img-fluid" alt=""
+                                    style="border-radius: 50%;">
+                            </div>
+                        </a>
+
+                        <a href="/ar/doctor-detail/{{hod.id}}" style="text-decoration: none;">
+                            <h3> {{hod.name}}</h3>
+                        </a>
+
+                        <div class="dr-specialities drspecialty-truncate"><a
+                                href="/ar/doctor-detail/{{hod.id}}" style="text-decoration: none;"
+                                class="dr-specialities drspecialty-truncate">{{hod.specialty_desc}}</a></div>
+
+
+                        <div class=" row hide">
+                            <div class="col-12 text-center">
+                                <p><a href="/ar/doctor-detail/{{hod.id}}"
+                                        style="text-decoration: none; color: white;">{{hod.highest_degree}}</a></p>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-around">
+                            <div>
+                                <button href="javascript:void(0)"
+                                    onclick="GoLinks(event,'/ar/doctor-detail/'+'{{hod.id}}')"
+                                    class="btn btn-light btn-dr-card">الحساب التعريفي
+                                </button>
+                            </div>
+                            {% if canBook %}
+                            <div>
+                                {% if isMobile %}
+                                <a href="/ar/contact-us" class="btn btn-dr-card-2"><svg width="28" height="27"
+                                        viewBox="0 0 28 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <ellipse cx="13.7306" cy="13.7772" rx="13.4181" ry="13.1913" fill="white" />
+                                        <path class="arr-cl"
+                                            d="M14.9238 10.2812L18.565 13.781L14.9238 17.2807M12.8722 13.781H18.463M8.36719 13.781H14.7408"
+                                            stroke="#003868" stroke-width="2" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    اسألنا
+                                </a>
+                                {% else %}
+                                <button href="javascript:void(0)" onclick="GoLinks(event,'{{bookingLink}}')"
+                                    class="btn btn-dr-card-2"><svg width="28" height="27" viewBox="0 0 28 27"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <ellipse cx="13.7306" cy="13.7772" rx="13.4181" ry="13.1913" fill="white" />
+                                        <path class="arr-cl"
+                                            d="M14.9238 10.2812L18.565 13.781L14.9238 17.2807M12.8722 13.781H18.463M8.36719 13.781H14.7408"
+                                            stroke="#003868" stroke-width="2" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    احجز الآن
+                                </button>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+                </a>
+            </div>
+            {% endif %}
+            {% for item in doctors %}
+            <div class="col-12 col-sm-6 col-xl-4 col-xxl-3">
+                <a href="javascript:void(0)" onclick="GoLinks(event,'/ar/doctor-detail/'+'{{item.id}}')">
+                    <div class="doctor-card">
+                        <div class="dr-calendar">
+                            <a href="#" class="dr-cale">21 June <svg xmlns="http://www.w3.org/2000/svg" width="17"
+                                    height="14" viewBox="0 0 17 14" fill="none">
+                                    <path
+                                        d="M4.13972 2.79159L4.13923 2.79251C4.04433 2.96893 3.86958 3.04198 3.67631 3.02825M4.13972 2.79159L11.9341 2.47286H13.3452V3.99706H1.82689V2.47257H3.23177C3.23686 2.54323 3.24357 2.61918 3.25723 2.68965M4.13972 2.79159C4.18233 2.71103 4.19061 2.62104 4.1956 2.56682L4.19593 2.56331L4.19597 2.56284M4.13972 2.79159L4.19597 2.56284M3.67631 3.02825L3.68693 2.87863L3.67633 3.02826C3.67632 3.02826 3.67631 3.02826 3.67631 3.02825ZM3.67631 3.02825C3.48261 3.01452 3.29843 2.90328 3.25723 2.68965M3.25723 2.68965L3.40451 2.66124L3.25726 2.68981C3.25725 2.68975 3.25724 2.6897 3.25723 2.68965ZM4.19597 2.56284C4.1985 2.53441 4.19952 2.50471 4.19978 2.47518M4.19597 2.56284L4.19978 2.47518M4.19978 2.47518H10.9669M4.19978 2.47518H10.9669M10.9669 2.47518C10.9706 2.53877 10.9757 2.60623 10.9867 2.66903C10.9867 2.66908 10.9868 2.66913 10.9868 2.66918L11.1345 2.6433L10.9669 2.47518ZM14.3096 11.1675C14.3099 9.60781 14.3099 8.04816 14.3099 6.48853V6.47528H15.1791V12.4453H3.6511V11.7293H13.6706C13.7057 11.7293 13.7403 11.7278 13.7711 11.7265L13.7723 11.7264C13.8046 11.725 13.833 11.7238 13.8608 11.7238C13.8987 11.7238 13.9316 11.7246 13.961 11.7253L13.9717 11.7256C13.9965 11.7262 14.0205 11.7268 14.0415 11.7267C14.065 11.7266 14.0926 11.7258 14.1195 11.7211C14.147 11.7163 14.1836 11.7059 14.218 11.6797C14.292 11.6235 14.3005 11.5381 14.3033 11.4978C14.3057 11.4643 14.3054 11.4199 14.3051 11.3714C14.305 11.3545 14.3049 11.337 14.3049 11.3194C14.3049 11.2981 14.3059 11.2762 14.3071 11.2503L14.3072 11.249C14.3083 11.2245 14.3096 11.1963 14.3096 11.1675ZM14.3096 11.1675L14.1596 11.1674M14.3096 11.1675L14.1596 11.1674M14.1596 11.1674C14.1599 9.60779 14.1599 8.04816 14.1599 6.48853V6.47528L13.6706 11.5793C13.7024 11.5793 13.7342 11.578 13.766 11.5766C13.7976 11.5752 13.8293 11.5738 13.8608 11.5738C14.0265 11.5738 14.0994 11.5871 14.1312 11.557C14.1605 11.5293 14.1549 11.4648 14.1549 11.3194C14.1549 11.2941 14.1561 11.2687 14.1573 11.2434C14.1584 11.2181 14.1596 11.1928 14.1596 11.1674ZM2.67055 11.7293H2.69568C2.69568 11.9131 2.69585 12.0969 2.69602 12.2806C2.69618 12.4644 2.69635 12.6483 2.69635 12.8321C2.69635 12.8539 2.69621 12.8753 2.69607 12.8961C2.69567 12.9556 2.6953 13.0098 2.69844 13.0517C2.70255 13.1066 2.71454 13.1925 2.78605 13.2539C2.85092 13.3097 2.93485 13.3175 2.99152 13.3206C3.03736 13.3231 3.09617 13.3228 3.16401 13.3225C3.18888 13.3224 3.21497 13.3222 3.24208 13.3222C5.29747 13.3222 7.35295 13.3228 9.40849 13.3233L9.42027 13.3233C11.4797 13.3238 13.5393 13.3243 15.5988 13.3243C15.6462 13.3243 15.6908 13.3247 15.7308 13.3251C15.7784 13.3256 15.8196 13.326 15.8514 13.3255C15.8825 13.3251 15.9135 13.3237 15.9419 13.3198C15.9695 13.316 16.0047 13.3085 16.0388 13.2898C16.0771 13.2687 16.1069 13.2374 16.1259 13.1981C16.1427 13.1633 16.1478 13.1286 16.15 13.1038C16.1526 13.0739 16.152 13.0323 16.1514 12.9918C16.1511 12.9746 16.1509 12.9575 16.1509 12.9415V3.55598C16.1509 3.54509 16.151 3.53306 16.1512 3.52047C16.1517 3.48111 16.1524 3.43619 16.1482 3.40294C16.1449 3.37642 16.1375 3.34071 16.1165 3.30543C16.0937 3.26719 16.0615 3.2402 16.0257 3.22262C15.9668 3.1938 15.894 3.18975 15.8333 3.18794C15.7854 3.18651 15.7243 3.18671 15.6509 3.18694C15.6207 3.18704 15.5884 3.18714 15.554 3.18714C15.3513 3.18714 15.1486 3.1875 14.9461 3.18787C14.7435 3.18823 14.5411 3.18859 14.3387 3.18859H14.3099C14.3099 3.06327 14.3083 2.94003 14.3068 2.81792C14.3037 2.57899 14.3008 2.34433 14.3095 2.10665C14.3103 2.08639 14.3111 2.06651 14.3119 2.04718C14.3147 1.98058 14.3172 1.92057 14.315 1.87421C14.3122 1.81654 14.3014 1.72577 14.2246 1.66266C14.1576 1.60759 14.0705 1.60137 14.0124 1.59892C13.9695 1.5971 13.9144 1.59754 13.8513 1.59804C13.8192 1.59829 13.785 1.59857 13.7492 1.59857C13.154 1.59857 12.5584 1.59828 11.9631 1.59799H11.9631H11.9314L11.9312 1.50426C11.9312 1.46178 11.9322 1.4249 11.9333 1.39207C11.9335 1.38661 11.9336 1.38115 11.9338 1.37572C11.9347 1.34975 11.9355 1.32442 11.9356 1.30247C11.9356 1.2765 11.9348 1.24547 11.9289 1.21518C11.9228 1.1834 11.9095 1.1431 11.8775 1.10717C11.8151 1.03714 11.7242 1.03157 11.6789 1.02925C11.6421 1.02738 11.5933 1.02775 11.5372 1.02819C11.5107 1.02839 11.4826 1.02861 11.4534 1.02861C11.4108 1.02861 11.3737 1.02779 11.3403 1.02702L11.3356 1.02691C11.3049 1.0262 11.275 1.02551 11.2488 1.02589C11.2054 1.02653 11.1213 1.02805 11.0558 1.08364C10.9852 1.14361 10.9756 1.23041 10.972 1.27936C10.9689 1.32206 10.9691 1.37806 10.9693 1.44202C10.9694 1.46023 10.9695 1.47909 10.9695 1.49847C10.9695 1.52909 10.9694 1.55978 10.9692 1.59104H4.19746C4.19734 1.5591 4.19723 1.52785 4.19723 1.49673C4.19723 1.47073 4.19752 1.44488 4.19779 1.4201C4.19831 1.37265 4.19879 1.32913 4.19714 1.29603C4.1948 1.24895 4.18796 1.16599 4.1252 1.1036C4.06377 1.04253 3.98136 1.03392 3.93131 1.03058C3.88827 1.0277 3.83252 1.02792 3.76895 1.02817C3.75016 1.02825 3.73069 1.02832 3.71066 1.02832C3.69046 1.02832 3.67085 1.02824 3.65197 1.02817C3.58887 1.02792 3.53384 1.0277 3.4917 1.03053C3.44351 1.03376 3.35912 1.04208 3.29824 1.10666C3.23792 1.17065 3.23455 1.25464 3.23336 1.2979C3.23266 1.32332 3.2333 1.35935 3.234 1.39861C3.23454 1.42936 3.23513 1.46209 3.23513 1.49326C3.23513 1.5275 3.23494 1.56184 3.23472 1.59799L3.21333 1.59799L3.21326 1.59799C2.61804 1.59828 2.02282 1.59828 1.42722 1.59828C1.37796 1.59828 1.32981 1.59751 1.28628 1.59681C1.23637 1.59601 1.19253 1.59531 1.16002 1.59597C1.1265 1.59666 1.09077 1.59871 1.05713 1.60559C1.02274 1.61263 0.981338 1.62648 0.944108 1.65738C0.866502 1.72177 0.857889 1.81667 0.854948 1.87167C0.852861 1.9107 0.853427 1.96228 0.854066 2.02054C0.854403 2.05124 0.85476 2.0838 0.85476 2.11734V11.2088C0.85476 11.252 0.853949 11.2952 0.853208 11.3347C0.852313 11.3824 0.851521 11.4247 0.852377 11.4548C0.853815 11.5055 0.857707 11.6047 0.935985 11.6715C0.974163 11.7041 1.01704 11.7176 1.0512 11.7242C1.08467 11.7306 1.12045 11.7321 1.15378 11.7325C1.18533 11.7328 1.22213 11.732 1.26197 11.7312L1.27163 11.731C1.31614 11.73 1.3669 11.729 1.42589 11.729L2.04816 11.7292L2.67055 11.7293ZM11.441 3.03237C11.6525 3.03623 11.8638 2.91657 11.9112 2.68464L11.4437 2.88239L11.4409 3.03237C11.4409 3.03237 11.4409 3.03237 11.441 3.03237ZM14.3186 4.0652H15.1784V5.58911H14.3186V4.0652ZM1.82522 10.853V4.8838H13.3455V10.853H1.82522Z"
+                                        fill="#003868" stroke="#003868" stroke-width="0.3" />
+                                </svg></a>
+                            <div class="slots">4 Slots Available</div>
+                        </div>
+                        <a href="/ar/doctor-detail/{{item.id}}">
+                            <div class="doctor-img-001 text-center">
+                                <img src="{{item.doctor_image.path}}" class="img-fluid" alt=""
+                                    style="border-radius: 50%;">
+                            </div>
+                        </a>
+
+                        <a href="/ar/doctor-detail/{{item.id}}" style="text-decoration: none;">
+                            <h3><span >
+                                {{item.designation_ar}}
+                            </span> {{item.name_ar}}</h3>
+                        </a>
+
+                        <div class="dr-specialities drspecialty-truncate"><a
+                                href="/ar/doctor-detail/{{item.id}}" style="text-decoration: none;"
+                                class="dr-specialities drspecialty-truncate">{{item.specialty_desc_ar}}</a></div>
+
+
+                        <div class=" row hide">
+                            <div class="col-12 text-center">
+                                <p><a href="/ar/doctor-detail/{{item.id}}"
+                                        style="text-decoration: none; color: white;">{{item.highest_degree_ar}}</a></p>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-around">
+                            <div>
+                                <button href="javascript:void(0)"
+                                    onclick="GoLinks(event,'/ar/doctor-detail/'+'{{item.id}}')"
+                                    class="btn btn-light btn-dr-card">
+                                    الحساب التعريفي
+                                </button>
+                            </div>
+                            {% if canBook %}
+                            <div>
+                                {% if isMobile %}
+                                <a href="/ar/contact-us" class="btn btn-dr-card-2"><svg width="28" height="27"
+                                        viewBox="0 0 28 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <ellipse cx="13.7306" cy="13.7772" rx="13.4181" ry="13.1913" fill="white" />
+                                        <path class="arr-cl"
+                                            d="M14.9238 10.2812L18.565 13.781L14.9238 17.2807M12.8722 13.781H18.463M8.36719 13.781H14.7408"
+                                            stroke="#003868" stroke-width="2" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    اسألنا
+                                </a>
+                                {% else %}
+                                <button href="javascript:void(0)" onclick="GoLinks(event,'{{bookingLink}}')"
+                                    class="btn btn-dr-card-2"><svg width="28" height="27" viewBox="0 0 28 27"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <ellipse cx="13.7306" cy="13.7772" rx="13.4181" ry="13.1913" fill="white" />
+                                        <path class="arr-cl"
+                                            d="M14.9238 10.2812L18.565 13.781L14.9238 17.2807M12.8722 13.781H18.463M8.36719 13.781H14.7408"
+                                            stroke="#003868" stroke-width="2" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    احجز الآن
+                                </button>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+</section>
+<!-- ======= OUR DOCTORS END ======= -->
+
+<!-- ======= DOWNLOAD OUR APP START ======= -->
+{% partial 'components/appDownload-ar' %}
+<!-- ======= DOWNLOAD OUR APP END ======= -->
+
+<script>
+    document.getElementById('search-form').addEventListener('submit', function (e) {
+        e.preventDefault();  // Prevent the default form submission
+
+        // Get the user's input
+        const specialty = document.getElementById('specialty').value;
+        const doctor = document.getElementById('doctor').value;
+        const location = document.getElementById('location').value;
+
+
+
+        // Determine the detail page URL based on the search type
+        const detailPageURL = (doctor) ? `/ar/doctor-detail/${doctor}` : (specialty) ? `/ar/search-specialty/${specialty}` : `/ar/location-doctors/${location}`;
+
+        // Redirect to the appropriate detail page
+        window.location.href = detailPageURL;
+    });
+
+
+    $(document).ready(function () {
+        $('#specialty').change(function () {
+            var countryId = $(this).val();
+
+            $.ajax({
+                url: '/specialty-doctors/' + countryId,
+                headers:{'language':'ar'},
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    var statesSelect = $('#doctor');
+                    statesSelect.empty();
+                    if (data.doctors.length) {
+                        statesSelect.append('<option value=""> Doctor </option>');
+                        $.each(data.doctors, function (key, state) {
+                            statesSelect.append('<option value="' + state.id + '">' + state.name + '</option>');
+                        });
+                    } else {
+                        statesSelect.append('<option value=""> Doctor </option>');
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // Handle errors
+                    console.error('API request failed:', textStatus, errorThrown);
+                }
+            });
+
+        });
+
+        $('#location').change(function () {
+            var countryId = $(this).val();
+
+            $.ajax({
+                url: '/location-specialties/' + countryId,
+                headers:{'language':'ar'},
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    var statesSelect = $('#specialty');
+                    statesSelect.empty();
+                    if (data.specialties.length) {
+                        $.each(data.specialties, function (key, state) {
+                            statesSelect.append('<option value="' + state.slug + '">' + state.name + '</option>');
+                        });
+                    } else {
+                        statesSelect.append('<option value=""> Specialty </option>');
+                    }
+
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // Handle errors
+                    console.error('API request failed:', textStatus, errorThrown);
+                }
+            });
+
+        });
+    });
+    function GoLinks(event, value) {
+
+        event.stopPropagation();
+        window.location = value;
+
+
+    }
+
+</script>

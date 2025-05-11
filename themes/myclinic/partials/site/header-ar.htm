@@ -1,0 +1,110 @@
+==
+<?php
+use MyClinic\Setting\Models\PageContent;
+
+
+function onStart()
+{
+  $this['headerLogo']=PageContent::where('page','header')->where('section','header-logo')->first();
+  $this['headerLinks']=PageContent::where('page','header')->where('section','header-links')->get();
+  $this['headerActionButton']=PageContent::where('page','header')->where('section','header-action-button')->first();
+  $this['headerPhones']=PageContent::where('page','header')->where('section','header-action-button')->where('title', 'phone')->first();
+
+}
+?>
+==
+<!-- ======= HEADER START ======= -->
+<header>
+  <nav class="navbar bg-navy navbar-expand-xxl navbar-dark">
+    <div class="container px-xxl-0 flex-row-reverse position-relative">
+      <a href="/ar" class="navbar-brand p-0 order-last order-md-first"><img
+          src="{{headerLogo.section_image.path}}" class="img-fluid nav-logo" alt=""></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarOffcanvas"
+        aria-controls="navbarOffcanvas" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <!-- <a class="btn search-icon d-block d-md-none order-last" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="31" viewBox="0 0 50 49" fill="none">
+          <ellipse cx="25" cy="24.5" rx="25" ry="24.5" fill="white" />
+          <path
+            d="M22.625 17C25.7336 17 28.25 19.5164 28.25 22.625C28.25 25.7336 25.7336 28.25 22.625 28.25C19.5164 28.25 17 25.7336 17 22.625C17 20.4342 18.2493 18.5395 20.0789 17.6099M32 32L27 27"
+            stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a> -->
+
+       <!-- Expand search bar-->
+       <div class="search-container-wrap search-container-wrap-mobile">
+        <form action="/ar/search" method="get">
+          <input class="search-expand expandright" id="searchright" type="search" name="q" placeholder="ابحث ">
+          <label class="button-search searchbutton" for="searchright"><span class="mglass">&#9906;</span></label>
+        </form>
+      </div>
+      <!-- Expand search bar end-->
+      <div class="offcanvas offcanvas-end bg-navy" id="navbarOffcanvas" tabindex="-1"
+        aria-labelledby="offcanvasNavbarLabel">
+        <div class="offcanvas-header offcanvas-header-ar">
+          <button type="button" class="btn-close btn-close-white text-reset" data-bs-dismiss="offcanvas"
+            aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body flex-row-reverse">
+          <div class="navbar-nav navbar-ar justify-content-center flex-grow-1 align-items-center flex-row-reverse">
+            <a href="/ar" class="nav-item nav-link d-lg-none d-block"><img src="{{headerLogo.section_image.path}}"
+              class="img-fluid nav-logo-m" width="150px" alt=""></a>
+            <a class="nav-item nav-link d-lg-none d-block" href="/ar">الصفحة الرئيسية</a>
+            {% for item in headerLinks %}
+            <a class="nav-item nav-link" href="/ar/{{item.link_value}}">{{item.link_name_ar}}</a>
+            {% endfor %}
+            <hr class="d-block d-xl-none">
+          </div>
+
+          <div class="navbar-nav justify-content-center flex-grow-1 align-items-center flex-row-reverse">
+            {% if headerPhones %}
+            <a style="text-decoration: none; color: #fff; margin-bottom: 10px;" href="tel:{{ headerPhones.link_value }}">
+              <img src="{{ headerPhones.section_image.path }}" class="img-fluid me-3" alt="header-phone"> {{
+              headerPhones.link_name_ar }}</a>
+            {% endif %}
+          </div>
+          <div class="navbar-nav navbar-ar justify-content-end ps-lg-3 flex-row-reverse align-items-center">
+
+            <a class="btn btn-light btn-book-now my-auto"
+              href="https://bamc.myclinic.com.sa:8443">احجز الآن</a>
+
+            <!-- Dropdown  language-->
+            <div class="btn-group flag-dropdown mt-3 mt-lg-0">
+              <a class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                AR
+              </a>
+              <ul class="dropdown-menu dropdown-menu-lg-start">
+                <li>
+                  <a class="dropdown-item">
+                    AR
+                    <svg id="Layer_1" enable-background="new 0 0 24 24" height="512" viewBox="0 0 24 24" width="512"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <switch>
+                        <g>
+                          <path
+                            d="m9.8 18c-.3 0-.5-.1-.7-.3l-4.9-5.2c-.4-.4-.4-1 0-1.4s1-.4 1.4 0l4.1 4.4 8.4-9.2c.3-.4 1-.5 1.4-.2s.5 1 .2 1.4l-.1.1-9.1 10c-.1.3-.4.4-.7.4z"
+                            fill="#02bc7d" />
+                        </g>
+                      </switch>
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider mb-0 w-100" />
+                </li>
+                <li>
+                  <a class="dropdown-item" href="/change-to/en">
+                    EN
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <!-- Dropdown  language end-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<!-- ======= HEADER END ======= -->

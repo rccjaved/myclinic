@@ -1,0 +1,126 @@
+fields:
+    slug:
+        label: Slug
+        span: auto
+        type: text
+    program_image:
+        label: 'Program Home Pgae Image'
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload
+    program_list_page_image:
+        label: 'Program List Page Image'
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload
+    program_banner_image:
+        label: 'Program Banner Image'
+        span: auto
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        type: fileupload
+    name:
+        label: Name
+        span: auto
+        type: text
+    name_ar:
+        label: 'Arabic Name'
+        span: auto
+        type: text
+    description:
+        label: Description
+        size: small
+        span: auto
+        type: textarea
+    description_ar:
+        label: 'Arabic Description'
+        size: small
+        span: auto
+        type: richeditor
+    tag_line:
+        label: 'Tag Line'
+        span: auto
+        type: text
+    tag_line_ar:
+        label: 'Arabic Tag Line'
+        span: auto
+        type: text
+    section_1_title:
+        label: 'Section Title 1'
+        span: auto
+        type: text
+    section_1:
+        label: 'Section 1'
+        span: auto
+        size: ''
+        type: textarea
+    section_2_title:
+        label: 'Section Title 2'
+        span: auto
+        type: text
+    section_2:
+        label: 'Section 2'
+        size: ''
+        span: auto
+        type: textarea
+    section_3_title:
+        label: 'Section Title 3'
+        span: auto
+        type: text
+    section_3:
+        label: 'Section 3'
+        size: ''
+        span: auto
+        type: textarea
+    section_4_title:
+        label: 'Section Title 4'
+        span: auto
+        type: text
+    section_4:
+        label: 'Section 4'
+        size: ''
+        span: auto
+        type: textarea
+    section_1_title_ar:
+        label: 'Arabic Section 1 Title'
+        span: auto
+        type: text
+    section_1_ar:
+        label: 'Arabic Section 1'
+        span: auto
+        type: text
+    section_2_title_ar:
+        label: 'Arabic Section 2 Title'
+        span: auto
+        type: text
+    section_2_ar:
+        label: 'Arabic Section 2'
+        span: auto
+        type: text
+    section_3_title_ar:
+        label: 'Arabic Section 3 Title'
+        span: auto
+        type: text
+    section_3_ar:
+        label: 'Arabic Section 3'
+        span: auto
+        type: text
+    section_4_title_ar:
+        label: 'Arabic Section 4 Title'
+        span: auto
+        type: text
+    section_4_ar:
+        label: 'Arabic Section 4'
+        span: auto
+        type: text

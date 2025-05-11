@@ -1,0 +1,10 @@
+name: Language
+form: $/myclinic/setting/models/language/fields.yaml
+modelClass: MyClinic\Setting\Models\Language
+defaultRedirect: myclinic/setting/language
+create:
+    redirect: 'myclinic/setting/language/update/:id'
+    redirectClose: myclinic/setting/language
+update:
+    redirect: myclinic/setting/language
+    redirectClose: myclinic/setting/language

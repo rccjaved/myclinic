@@ -1,0 +1,78 @@
+url = "/social-media-detail/:slug1/:slug2/:id"
+title = "Social Media Detail"
+meta_title = "Social Media Detail"
+
+[builderDetails]
+modelClass = "MyClinic\Social\Models\Social"
+identifierValue = "{{ :id }}"
+modelKeyColumn = "id"
+displayColumn = "phone_no"
+notFoundMessage = "Record not found"
+==
+<?php
+use MyClinic\Social\Models\Social;
+function onStart()
+{
+    $currentUrl = request()->fullUrl();
+    $id = $this->param('id');
+    $socialData = Social::where('id',$id)->first();
+    $this['socialData'] = $socialData;
+    // $this['program']=Program::where('slug', $slug)->first();
+    // $this['getYourselfEnrolled']=CommonComponent::where('slug','get-yourself-enrolled')->first();
+
+
+
+}
+?>
+==
+<!DOCTYPE html>
+<html>
+
+<head>
+          {% partial 'site/meta' %}
+
+</head>
+
+<body class="{{ 'page-'~this.page.id }}">
+    <a id="topbutton"></a>
+        {% partial 'site/header' %}
+ 
+    <body>
+        <section>
+            <div class="container">
+                <div class="row text-center align-items-center vh-100">
+                    <div class="col-sm-12 col-md-8 col-xxl-4 offset-md-2 offset-xxl-4 text-center">
+                        <div class="social-mc-logo">
+                            <img src="{{'assets/socialmedia/assets/imgs/my-clinic-logo.svg'|theme}}" class="img-fluid"
+                                alt="logo">
+                        </div>
+                        <div class="social-num">
+                            <h2>Book Your <br>Appointment Now</h2>
+                         
+                            <a class="text-decoration-none"
+                               >{{socialData.phone_no}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        {% partial 'site/footer' %}
+     
+        {% partial 'site/script' %}
+        <script>
+            window.onload = function () {
+
+                var phoneNumber = '{{socialData.phone_no}}';
+                // alert(phoneNumber)
+                var isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+                if (isMobile) {
+                    setTimeout(function () {
+                        window.location.href = 'tel:' + phoneNumber;
+                    }, 100);
+                }
+            }
+        </script>
+    </body>
+</html>

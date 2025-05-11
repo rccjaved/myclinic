@@ -1,0 +1,13 @@
+columns:
+    page:
+        label: Page
+        type: text
+    section:
+        label: Section
+        type: text
+    name:
+        label: Name
+        type: text
+    name_ar:
+        label: 'Arabic Name'
+        type: text

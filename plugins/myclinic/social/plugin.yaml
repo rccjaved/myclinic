@@ -1,0 +1,11 @@
+plugin:
+    name: 'myclinic.social::lang.plugin.name'
+    description: 'myclinic.social::lang.plugin.description'
+    author: 'My Clinic'
+    icon: oc-icon-facebook
+    homepage: ''
+navigation:
+    main-menu-item:
+        label: 'myclinic.social::lang.plugin.name'
+        url: myclinic/social/socialcontroller
+        icon: icon-life-ring

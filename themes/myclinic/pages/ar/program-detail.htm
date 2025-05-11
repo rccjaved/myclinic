@@ -1,0 +1,283 @@
+url = "/ar/program-detail/:slug"
+layout = "master-ar"
+title = "Program Details"
+meta_title = "Aesthetic Care Program, Asthma Program Pedia, Diabetes Management Adult and Pedia, Family Center Care Program, Geriatric Care, Hearing Aid Program, Osteoporosis Program, Osteoporosis Program, Pregnancy Care, Vaccination Program"
+meta_description = "Our healthcare programs offer an innovative approach to wellness with a focus on prevention, education, and empowerment."
+==
+<?php
+use MyClinic\Programs\Models\Program;
+use MyClinic\Setting\Models\CommonComponent;
+
+function onStart()
+{
+
+    $slug = $this->param('slug'); // Get the slug from the URL
+    $this['slug'] = $slug;
+    $this['program']=Program::where('slug', $slug)->first();
+    $this['getYourselfEnrolled']=CommonComponent::where('slug','get-yourself-enrolled')->first();
+
+
+
+}
+?>
+==
+<!-- ======= BANNER START ======= -->
+<section class="banner-img position-relative">
+    <img src="{{program.program_banner_image.path}}" alt="">
+    <div class="banner-content col-12 col-md-5 px-3 text-end ">
+        <h1>{{program.name_ar|raw}}</h1>
+        <p>{{program.tag_line_ar|raw}}</p>
+    </div>
+</section>
+<!-- ======= BANNER END ======= -->
+
+<!-- ======= START ======= -->
+<section class="section-py-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="text-center text-lg-end">
+                    <p class="text-justy">{{program.description_ar|raw}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ======= END ======= -->
+
+
+<!-- ======= ON_SITE SERVICES START ======= -->
+
+
+
+<section class="section-bg section-py-100">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-end">
+                    <h1>{{program.section_1_title_ar|raw}}</h1>
+                    <p class="text-justy">{{program.section_1_ar|raw}}</p>
+
+
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 px-0">
+                <img src="{{'assets/imgs/pro_001.png'|theme}}" class="img-fluid" alt="">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-py-100 bg-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6 order-1 order-lg-0">
+                <img src="{{'assets/imgs/pro_002.png'|theme}}" class="img-fluid" alt="">
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-end">
+                    <h1>{{program.section_2_title_ar|raw}}</h1>
+                    <p class="text-justy">{{program.section_2_ar|raw}}</p>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="section-bg section-py-100">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-end">
+                    <h1>{{program.section_3_title_ar|raw}}</h1>
+                    <p class="text-justy">{{program.section_3_ar|raw}}</p>
+
+
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 px-0">
+                <img src="{{'assets/imgs/pro_003.png'|theme}}" class="img-fluid" alt="">
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if program.slug == 'pregnancy-care-program' %}
+
+<section class="section-py-100 bg-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6 order-1 order-lg-0">
+                <img src="{{'assets/imgs/pro_002.png'|theme}}" class="img-fluid" alt="">
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-center text-lg-end">
+                    <h1>{{program.section_4_title_ar|raw}}</h1>
+                    <p class="text-justy">{{program.section_4_ar|raw}}</p>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+<!-- ======= ON_SITE SERVICES END ======= -->
+
+
+
+<!-- ======= QUERY FORM START ======= -->
+<section class="section-bg-2 section-py-100">
+    <div class="container bg-white section-py-120" style="background-image: url('assets/imgs/ask-us.png');">
+        <div id="submit-message">
+
+        </div>
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-end">
+                    <h1>{{getYourselfEnrolled.title_ar|raw}}</h1>
+                    <p>{{getYourselfEnrolled.description_ar|raw}}
+                    </p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 block-pe block-ps">
+                <form id="enrollment-form">
+                    <input id="program_id" value="{{program.id}}" type="hidden">
+                    <div class="row gy-3">
+                        <div class="col-12">
+                            <input type="text" class="form-control form-control-lg select-mc" placeholder="الاسم الكامل"
+                                aria-label="First name" id="full_name" required>
+                                <span class="error-message" id="error-full_name" style="color: red;"></span>
+                        </div>
+                        <div class="col-12">
+                            <input type="email" class="form-control form-control-lg select-mc"
+                                placeholder="عنوان البريد الإلكتروني" aria-label="Last name" id="email" required>
+                                <span class="error-message" id="error-email" style="color: red;"></span>
+                        </div>
+                        <div class="col-12">
+                            <input type="tel" class="form-control form-control-lg select-mc mb-sm-3"
+                                placeholder="رقم الهاتف (اختيارى)" aria-label="Last name" id="phone" required>
+                                <span class="error-message" id="error-phone" style="color: red;"></span>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-mc-01 mx-auto no-click float-end"><svg
+                                    class="ms-3" xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                                    viewBox="0 0 40 40" fill="none" style="margin-right: 12px;">
+                                    <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white"></ellipse>
+                                    <path d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M27.048 19.5984H18.7148H12"
+                                        stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                </svg>تسجيل الآن
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Success message container -->
+                <div id="submit-message" style="color: green; font-weight: bold;"></div>
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ======= QUERY FORM END ======= -->
+
+
+{% partial 'components/appDownload-ar' %}
+
+
+<style>
+    .banner-content {
+        right: 8%;
+        padding-left: 12% !important;
+    }
+
+    .banner-img img {
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+    }
+</style>
+
+
+
+<script>
+    document.getElementById('enrollment-form').addEventListener('submit', function (e) {
+        e.preventDefault();  // Prevent the default form submission
+
+        // Clear previous error messages and success message
+        document.querySelectorAll('.error-message').forEach(el => el.innerText = '');
+        document.getElementById('submit-message').innerText = '';
+
+        // Get the user's input
+        const full_name = document.getElementById('full_name').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const program_id = document.getElementById('program_id').value;
+        const submitButton = document.querySelector('.btn-mc-01'); // Get submit button
+        submitButton.disabled = true;  // Disable button
+
+        // Validation
+        const nameRegex = /^[\u0600-\u06FFa-zA-Z\s]*$/;  // Allows Arabic and English letters and spaces
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        let isValid = true;
+
+        // Validate full name
+        if (!nameRegex.test(full_name)) {
+            document.getElementById('error-full_name').innerText = "يجب أن يحتوي الاسم الكامل على حروف وأرقام فقط.";
+            isValid = false;
+        }
+
+        // Email Error
+        if (!emailRegex.test(email)) {
+            document.getElementById('error-email').innerText = "يرجى إدخال عنوان بريد إلكتروني صالح.";
+            isValid = false;
+        }
+
+        // Phone Error
+        if (phone && !/^\d{1,15}$/.test(phone)) {
+            document.getElementById('error-phone').innerText = "يجب أن يكون رقم الهاتف مكوناً من أرقام فقط ويحتوي على ما يصل إلى 15 رقمًا.";
+            isValid = false;
+        }
+
+        // If any validation failed, prevent form submission
+        if (!isValid) {
+            submitButton.disabled = false;  // Re-enable button
+            return;
+        }
+
+        const postData = {
+            full_name: full_name,
+            email: email,
+            phone: phone,
+            program_id: program_id,
+            language: 'ar'
+        };
+
+        $.ajax({
+            url: '/enrollment-submit',
+            type: 'POST',
+            dataType: 'json',
+            data: postData,
+            success: function (data) {
+                document.getElementById('submit-message').innerText = data.message;
+                document.getElementById('submit-message').style.color = 'green';  // Style success message
+                document.getElementById('full_name').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('phone').value = '';
+            },
+            error: function (jqXHR) {
+                document.getElementById('submit-message').innerText = 'حدث خطأ. يرجى المحاولة مرة أخرى.';
+                document.getElementById('submit-message').style.color = 'red';  // Style error message
+            },
+            complete: function () {
+                submitButton.disabled = false;  // Re-enable button
+            }
+        });
+    });
+</script>

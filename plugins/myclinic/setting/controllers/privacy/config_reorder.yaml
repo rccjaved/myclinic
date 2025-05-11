@@ -1,0 +1,4 @@
+title: Privacy
+modelClass: MyClinic\Setting\Models\Privacy
+toolbar:
+    buttons: reorder_toolbar

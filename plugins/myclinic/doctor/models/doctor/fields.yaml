@@ -1,0 +1,90 @@
+fields:
+    designation:
+        label: Designation
+        span: auto
+        type: text
+    name:
+        label: Name
+        span: auto
+        type: text
+    designation_ar:
+        label: 'Designation Arabic'
+        span: auto
+        type: text
+    name_ar:
+        label: 'Arabic Name'
+        span: auto
+        cssClass: text-right
+        type: text
+    highest_degree:
+        label: 'Highest Degree'
+        span: auto
+        type: text
+    highest_degree_ar:
+        label: 'Arabic Highest Degree'
+        span: auto
+        type: text
+    about:
+        label: About
+        size: small
+        span: auto
+        attributes:
+            maxlength: '255'
+        type: textarea
+    about_ar:
+        label: 'Arabic About'
+        size: small
+        span: auto
+        attributes:
+            maxlength: '255'
+        type: textarea
+    specialty_desc:
+        label: 'Specialty Discription'
+        span: auto
+        type: text
+    specialty_desc_ar:
+        label: 'Arabic Specialty Descripton'
+        span: auto
+        type: text
+    locations:
+        label: Locations
+        span: auto
+        nameFrom: name
+        descriptionFrom: description
+        type: relation
+    specialties:
+        label: Specialty
+        nameFrom: name
+        descriptionFrom: description
+        span: auto
+        type: relation
+    doctor_image:
+        label: 'Doctor Image'
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload
+    doctor_detail_image:
+        label: 'Doctor Detail Image'
+        span: auto
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        type: fileupload
+    languages:
+        label: Languages
+        nameFrom: name
+        descriptionFrom: description
+        span: auto
+        type: relation
+    doctor_app_id:
+        label: Mazik Doctors
+        span: left
+        type: dropdown
+        options: mazikDoctor
+

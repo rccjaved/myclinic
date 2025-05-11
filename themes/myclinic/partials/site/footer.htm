@@ -1,0 +1,169 @@
+==
+<?php
+use MyClinic\Setting\Models\PageContent;
+
+
+function onStart()
+{
+    $this['footerLogo']=PageContent::where('page','footer')->where('section','footer-logo')->first();
+    $this['footerAbout']=PageContent::where('page','footer')->where('section','footer-about')->first();
+    $this['footerSocialMediaLinks']=PageContent::where('page','footer')->where('section','footer-socialmedia-links')->get();
+    $this['footerCompanyLinks']=PageContent::where('page','footer')->where('section','footer-company-links')->get();
+    $this['footerUsefulLinks']=PageContent::where('page','footer')->where('section','footer-useful-links')->get();
+    $this['footerActionButton']=PageContent::where('page','footer')->where('section','footer-action-button')->first();
+    $this['footerAppDownload']=PageContent::where('page','footer')->where('section','footer-app-download')->get();
+    $this['footerClinicTimings']=PageContent::where('page','footer')->where('section','footer-clinic-timings')->first();
+    $this['footerPhones']=PageContent::where('page','footer')->where('section','footer-phones')->get();
+
+}
+?>
+==
+<!-- ======= Footer ======= -->
+<footer class="footer-bg footer-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-12 text-center text-lg-start">
+                <div class="footer-about-content">
+                    <div class="footer-logo">
+                        <a href="/"><img src="{{footerLogo.section_image.path}}" class="img-fluid mb-4" alt="my clinic logo"></a>
+                    </div>
+                    <p class="footer-about mb-4 text-lg-start text-justy">
+                        {{footerAbout.description|raw}}</p>
+                    <div class="text-lg-start text-center my-5 my-lg-auto socilimg">
+                        {% for item in footerSocialMediaLinks %}
+                        <a href="{{item.link_value}}"><img src="{{item.section_image.path}}" alt="social media icon"></a>
+                        {% endfor %}
+                    </div>
+                    <div class="col-12 d-none d-lg-block mt-2">
+                        <p class="text-white">© My Clinic <script>document.write(new Date().getFullYear())</script>. All rights reserved.</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-3 col-6 footer-list">
+                <h3>Company</h3>
+                <ul class="list-unstyled">
+                    {% for item in footerCompanyLinks %}
+                    <li><a href="/{{item.link_value}}"
+                            class="text-decoration-none text-white">{{item.link_name}}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <div class="d-none d-lg-block clinictime">
+                    {{footerClinicTimings.description|raw}}
+                    <ul class="list-unstyled">
+                        {% for item in footerPhones %}
+                        <a href="{{item.link_value}}" style="text-decoration: none;">
+
+                        <li class="mb-2">
+                            <img src="{{item.section_image.path}}" class="img-fluid me-3" alt="phone"> {{item.link_name}}
+                        </li></a>
+
+                        {% endfor %}
+                    </ul>
+                </div>
+
+
+            </div>
+            <div class="col-lg-2 col-6 footer-list">
+                <h3>Useful Links</h3>
+                <ul class="list-unstyled">
+                    {% for item in footerUsefulLinks %}
+                    <li><a href="/{{item.link_value}}"
+                            class="text-decoration-none text-white">{{item.link_name}}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <!-- <a href="javascript:void(0)" class="btn btn-light btn-footer-1 mb-3">Health Checkup</a> -->
+                <a href="https://bamc.myclinic.com.sa:8443"
+                    class="btn btn-light btn-footer-book-now text-start mb-5 d-flex align-items-center d-lg-none book-now-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="d-none d-lg-block" width="40" height="41"
+                        viewBox="0 0 40 41" style="margin-right: 1.25rem;" fill="none">
+                        <path
+                            d="M39.25 20.4984C39.25 30.8948 30.6458 39.3484 20 39.3484C9.35416 39.3484 0.75 30.8948 0.75 20.4984C0.75 10.1021 9.35416 1.64844 20 1.64844C30.6458 1.64844 39.25 10.1021 39.25 20.4984Z"
+                            fill="white" stroke="#223F85" stroke-width="1.5" />
+                        <path d="M21.7727 15.2969L27.2 20.4969L21.7727 25.6969M18.7148 20.4969H27.048M12 20.4969H19"
+                            stroke="#003868" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    <svg width="16" height="16" class="d-block d-lg-none me-3" viewBox="0 0 13 13" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12.4856 6.31394C12.4856 9.57254 9.7878 12.2279 6.4428 12.2279C3.0978 12.2279 0.4 9.57254 0.4 6.31394C0.4 3.05534 3.0978 0.4 6.4428 0.4C9.7878 0.4 12.4856 3.05534 12.4856 6.31394Z"
+                            fill="white" stroke="#223F85" stroke-width="0.8" />
+                        <path
+                            d="M7.01537 4.64062L8.76371 6.31575L7.01537 7.99088M6.0303 6.31575H8.71475M3.86719 6.31575H6.12217"
+                            stroke="#003868" stroke-width="0.8" stroke-miterlimit="10" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    Book Now</a>
+            </div>
+            <div class="col-lg-3 col-12 footer-list text-center">
+                <a href="https://bamc.myclinic.com.sa:8443"
+                    class="btn btn-light btn-footer-book-now mx-auto mb-5 d-flex align-items-center d-none d-lg-flex book-now-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="d-none d-lg-block" width="40" height="41"
+                        viewBox="0 0 40 41" style="margin-right: 1.25rem;" fill="none">
+                        <path
+                            d="M39.25 20.4984C39.25 30.8948 30.6458 39.3484 20 39.3484C9.35416 39.3484 0.75 30.8948 0.75 20.4984C0.75 10.1021 9.35416 1.64844 20 1.64844C30.6458 1.64844 39.25 10.1021 39.25 20.4984Z"
+                            fill="white" stroke="#223F85" stroke-width="1.5" />
+                        <path d="M21.7727 15.2969L27.2 20.4969L21.7727 25.6969M18.7148 20.4969H27.048M12 20.4969H19"
+                            stroke="#003868" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    <svg width="13" height="13" class="d-block d-lg-none me-3" viewBox="0 0 13 13" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12.4856 6.31394C12.4856 9.57254 9.7878 12.2279 6.4428 12.2279C3.0978 12.2279 0.4 9.57254 0.4 6.31394C0.4 3.05534 3.0978 0.4 6.4428 0.4C9.7878 0.4 12.4856 3.05534 12.4856 6.31394Z"
+                            fill="white" stroke="#223F85" stroke-width="0.8" />
+                        <path
+                            d="M7.01537 4.64062L8.76371 6.31575L7.01537 7.99088M6.0303 6.31575H8.71475M3.86719 6.31575H6.12217"
+                            stroke="#003868" stroke-width="0.8" stroke-miterlimit="10" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    Book Now</a>
+                <div class="row">
+                    <div class="col-lg-12 col-6">
+                        <a
+                            href="https://apps.apple.com/us/app/my-clinic-ksa/id1475630623?ign-itscg=30200&ign-itsct=apps_box_badge"><img
+                                src="{{'assets/imgs/appstaore-footer.png'|theme}}"
+                                class="mb-3 d-block mx-auto img-fluid" alt="appstore"></a>
+                    </div>
+                    <div class="col-lg-12 col-6">
+                        <a
+                            href="https://play.google.com/store/apps/details?id=com.myclinic.ksa&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img
+                                src="{{'assets/imgs/play-store-footer.png'|theme}}" class="img-fluid" alt="playstore"></a>
+                    </div>
+                </div>
+                <div class="d-block d-lg-none text-white timing-for-mob">
+                    {{footerClinicTimings.description|raw}}
+
+                    <ul class="list-unstyled w-100">
+                        {% for item in footerPhones %}
+                        <a href="{{item.link_value}}" style="text-decoration: none;">
+                            <li class="mb-2 text-center">
+                            <img src="{{item.section_image.path}}" class="img-fluid me-3" alt="back to top"> {{item.link_name}}
+                        </li>
+                         </a>
+                        {% endfor %}
+                    </ul>
+                    <!-- 
+                    <ul class="list-unstyled text-white ">
+                        {% for item in footerUsefulLinks %}
+                        <li class="text-white"><a href="{{item.link_value}}" class="text-decoration-none text-white">{{item.link_name}}</a>
+                        </li>
+                        {% endfor %}
+
+                    </ul> -->
+                </div>
+                <!-- <div class="col-12 text-end mt-5 d-none d-lg-block pe-5">
+                    <a href="javascript:void(0)" class="text-decoration-none">
+                        <p class="text-white patient-privacy">Patient Privacy Policy</p>
+                    </a>
+                </div> -->
+
+            </div>
+            <!-- <hr class="bg-white mx-auto my-3"> -->
+        </div>
+    </div>
+</footer>
+<!-- End Footer -->

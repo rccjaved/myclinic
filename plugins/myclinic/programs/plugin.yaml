@@ -1,0 +1,11 @@
+plugin:
+    name: 'myclinic.programs::lang.plugin.name'
+    description: 'myclinic.programs::lang.plugin.description'
+    author: 'My Clinic'
+    icon: oc-icon-chain
+    homepage: ''
+navigation:
+    main-menu-item:
+        label: 'myclinic.programs::lang.plugin.name'
+        url: myclinic/programs/programs
+        icon: icon-life-ring

@@ -1,0 +1,10 @@
+name: HealthHomeCare
+form: $/myclinic/setting/models/homehealthcare/fields.yaml
+modelClass: MyClinic\Setting\Models\HomeHealthCare
+defaultRedirect: myclinic/setting/healthhomecare
+create:
+    redirect: 'myclinic/setting/healthhomecare/update/:id'
+    redirectClose: myclinic/setting/healthhomecare
+update:
+    redirect: myclinic/setting/healthhomecare
+    redirectClose: myclinic/setting/healthhomecare

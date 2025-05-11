@@ -1,0 +1,257 @@
+url = "/program-detail/:slug"
+layout = "master"
+title = "Program Details"
+meta_title = "{{ program.name }}"
+meta_description = "Our healthcare programs offer an innovative approach to wellness with a focus on prevention, education, and empowerment. Aesthetic Care Program, Asthma Program Pedia, Diabetes Management Adult and Pedia, Family Center Care Program, Geriatric Care, Hearing Aid Program, Osteoporosis Program, Osteoporosis Program, Pregnancy Care, Vaccination Program"
+==
+<?php
+use MyClinic\Programs\Models\Program;
+use MyClinic\Setting\Models\CommonComponent;
+
+function onStart()
+{
+
+    $slug = $this->param('slug'); 
+    $this['slug'] = $slug;
+    $this['program']=Program::where('slug', $slug)->first();
+    $this['getYourselfEnrolled']=CommonComponent::where('slug','get-yourself-enrolled')->first();
+
+}
+?>
+==
+<!-- ======= BANNER START ======= -->
+<section class="banner-img">
+    <img src="{{program.program_banner_image.path}}" alt="{{program.name}}">
+    <div class="banner-content col-12 col-md-5 px-3">
+        <h1>{{program.name|raw}}</h1>
+        <p>{{program.tag_line|raw}}</p>
+    </div>
+</section>
+<!-- ======= BANNER END ======= -->
+
+<!-- ======= START ======= -->
+<section class="section-py-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="text-center text-lg-start">
+                    <p class="text-justy">{{program.description|raw}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ======= END ======= -->
+
+
+<!-- ======= ON_SITE SERVICES START ======= -->
+
+
+
+<section class="section-bg section-py-100">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-center text-lg-start">
+                    <h1>{{program.section_1_title|raw}}</h1>
+                    <p class="text-justy">{{program.section_1|raw}}</p>
+
+
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 px-0">
+                <img src="{{'assets/imgs/pro_001.png'|theme}}" class="img-fluid" alt="{{program.section_1_title}}">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-py-100 bg-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6 order-1 order-lg-0">
+                <img src="{{'assets/imgs/pro_002.png'|theme}}" class="img-fluid" alt="{{program.section_2_title}}">
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-center text-lg-start">
+                    <h1>{{program.section_2_title|raw}}</h1>
+                    <p class="text-justy">{{program.section_2|raw}}</p>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="section-bg section-py-100">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-center text-lg-start">
+                    <h1>{{program.section_3_title|raw}}</h1>
+                    <p class="text-justy">{{program.section_3|raw}}</p>
+
+
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 px-0">
+                <img src="{{'assets/imgs/pro_003.png'|theme}}" class="img-fluid" alt="{{program.section_3_title}}">
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if program.slug == 'pregnancy-care-program' %}
+
+<section class="section-py-100 bg-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6 order-1 order-lg-0">
+                <img src="{{'assets/imgs/pro_002.png'|theme}}" class="img-fluid" alt="{{program.section_4_title}}">
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-center text-lg-start">
+                    <h1>{{program.section_4_title|raw}}</h1>
+                    <p class="text-justy">{{program.section_4|raw}}</p>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+<!-- ======= ON_SITE SERVICES END ======= -->
+
+
+
+<!-- ======= QUERY FORM START ======= -->
+<section class="section-bg-2 section-py-100">
+    <div class="container bg-white section-py-120" style="background-image: url('assets/imgs/ask-us.png');">
+        <div id="submit-message">
+
+        </div>
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-center text-lg-start">
+                    <h1>{{getYourselfEnrolled.title|raw}}</h1>
+                    <p class="text-justy">{{getYourselfEnrolled.description|raw}}
+                    </p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 block-pe block-ps">
+                <form id="enrollment-form">
+                    <input id="program_id" value="{{program.id}}" type="hidden">
+                    <div class="row gy-3">
+                        <div class="col-12">
+                            <input type="text" class="form-control form-control-lg select-mc" placeholder="Full Name" aria-label="First name" id="full_name" required>
+                            <span class="error-message" id="error-full_name" style="color: red;"></span>
+                        </div>
+                        <div class="col-12">
+                            <input type="email" class="form-control form-control-lg select-mc" placeholder="Email" aria-label="Last name" id="email" required>
+                            <span class="error-message" id="error-email" style="color: red;"></span>
+                        </div>
+                        <div class="col-12">
+                            <input type="tel" class="form-control form-control-lg select-mc mb-sm-3" placeholder="Phone Number" aria-label="Last name" id="phone" required>
+                            <span class="error-message" id="error-phone" style="color: red;"></span>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary btn-mc-01 mx-auto no-click" type="submit">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none" style="margin-right: 12px;">
+                                    <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white"></ellipse>
+                                    <path d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M27.048 19.5984H18.7148H12"
+                                          stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>Enroll Now
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+
+                <!-- Success message container -->
+                <div id="submit-message" style="color: green; font-weight: bold;"></div>
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ======= QUERY FORM END ======= -->
+
+
+
+{% partial 'components/appDownload' %}
+
+
+<script>
+    document.getElementById('enrollment-form').addEventListener('submit', function (e) {
+        e.preventDefault();  // Prevent the default form submission
+
+        // Clear previous error messages and success message
+        document.querySelectorAll('.error-message').forEach(el => el.innerText = '');
+        document.getElementById('submit-message').innerText = '';
+
+        // Get the user's input
+        const full_name = document.getElementById('full_name').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const program_id = document.getElementById('program_id').value;
+
+        // Validation for name and phone number
+        const nameRegex = /^[a-zA-Z\s]+$/;  // Allows only letters and spaces
+        const phoneRegex = /^\d{1,15}$/;    // Allows up to 15 digits
+
+        let isValid = true;
+
+        // Validate full name
+        if (!nameRegex.test(full_name)) {
+            document.getElementById('error-full_name').innerText = "Full Name should contain only letters and spaces.";
+            isValid = false;
+        }
+
+        // Validate email (basic validation)
+        if (!email.includes("@") || !email.includes(".")) {
+            document.getElementById('error-email').innerText = "Please enter a valid email address.";
+            isValid = false;
+        }
+
+        // Validate phone number
+        if (!phoneRegex.test(phone)) {
+            document.getElementById('error-phone').innerText = "Phone Number should be in numbers without dashes to 15 digits.";
+            isValid = false;
+        }
+
+        // If any validation failed, prevent form submission
+        if (!isValid) return;
+
+        const postData = {
+            full_name: full_name,
+            email: email,
+            phone: phone,
+            program_id: program_id,
+            language: 'en'
+        };
+
+        $.ajax({
+            url: '/enrollment-submit',
+            type: 'POST',
+            dataType: 'json',
+            data: postData,
+            success: function (data) {
+                document.getElementById('submit-message').innerText = data.message;
+                document.getElementById('submit-message').style.color = 'green';  // Style success message
+                document.getElementById('full_name').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('phone').value = '';
+            },
+            error: function (jqXHR) {
+                document.getElementById('submit-message').innerText = 'An error occurred. Please try again.';
+                document.getElementById('submit-message').style.color = 'red';  // Style error message
+            }
+        });
+    });
+</script>

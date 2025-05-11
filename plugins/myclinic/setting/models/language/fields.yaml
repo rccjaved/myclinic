@@ -1,0 +1,9 @@
+fields:
+    name:
+        label: Name
+        span: auto
+        type: text
+    name_ar:
+        label: 'Name in Arabic'
+        span: auto
+        type: text

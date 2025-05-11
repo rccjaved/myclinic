@@ -1,0 +1,81 @@
+description = "Default layout"
+
+[resources]
+less[] = "layouts/master.less"
+==
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% partial 'site/meta' %}
+    
+  </head>
+
+<body class="{{ 'page-'~this.page.id }}">
+{% component 'googleTracker' %}
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NHS8GLVG"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T733M5M9"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+    <a id="topbutton"></a>
+    <!-- 
+    <ul id="floatmenu" class="menu slideInLeft">
+        <li title="My Clinic"><a href="/myclinic/" class="home">My Clinic</a></li>
+        <li title="Doctors"><a href="/myclinic/find-doctor" class="doctors">Doctor's</a></li>
+        <li title="Specialty"><a href="/myclinic/our-programs" class="special1">Specialties</a></li>
+        <li title="Book Now"><a href="/myclinic/our-specialities" class="booknow">Book Now</a></li>
+        <li title="Contact Us"><a href="/myclinic/contact-us" class="contactcall">contact</a></li>
+              
+    </ul> -->
+    <!-- Header -->
+    {% partial 'site/header' %}
+
+    <!-- Content -->
+    {% page %}
+
+    <!-- Footer -->
+    {% partial 'site/footer' %}
+
+    {% partial 'site/script' %}
+
+
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var mySwiper = new Swiper('.swiper-container', {
+          autoplay: {
+            delay: 20000,
+            disableOnInteraction: false,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+          pagination: {
+            el: '.swiper-pagination',
+            type: 'bullets',
+            clickable: true,
+          },
+        });
+    
+        var swiperVideos = document.querySelectorAll('.swiper-video');
+    
+        swiperVideos.forEach(function (video) {
+          video.addEventListener('play', function () {
+            mySwiper.autoplay.stop();
+          });
+    
+          video.addEventListener('pause', function () {
+            mySwiper.autoplay.start();
+          });
+        });
+      });
+    </script>
+</body>
+
+</html>

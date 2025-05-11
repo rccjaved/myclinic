@@ -1,0 +1,139 @@
+==
+<?php
+use MyClinic\Setting\Models\CommonComponent;
+function onStart()
+{
+$this['commonComponent']=CommonComponent::where('slug','ask-us')->first();
+}
+?>
+==
+<!-- ======= ASK US START ======= -->
+<section class="section-bg section-py-100">
+    <div class="container bg-white section-py-120 askus-img-bg">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-center text-lg-start">
+                    <h1>{{commonComponent.title|raw}}</h1>
+                    <p class="text-justy">{{commonComponent.description|raw}}</p>
+
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-6 block-pe block-ps">
+                <div id="submit-message">
+
+                </div>
+                <form id="ask-us-form">
+                    <div class="row gy-3">
+                        <div class="col-12">
+                            <input type="text" class="form-control form-control-lg select-mc" placeholder="Full Name"
+                                aria-label="First name" id="full_name" required>
+                            <span class="error-message" id="error-full_name" style="color: red;"></span>
+                        </div>
+                        <div class="col-12">
+                            <input type="email" class="form-control form-control-lg select-mc" placeholder="Email"
+                                aria-label="Last name" id="email" required>
+                            <span class="error-message" id="error-email" style="color: red;"></span>
+                        </div>
+                        <div class="col-12">
+                            <input type="tel" class="form-control form-control-lg select-mc" placeholder="Phone Number"
+                                aria-label="Last name" id="phone" maxlength="15" required>
+                            <span class="error-message" id="error-phone" style="color: red;"></span>
+                        </div>
+                        <div class="col-12">
+                            <textarea class="form-control form-control-lg select-mc mb-3"
+                                placeholder="Type your message" rows="3" id="message" required></textarea>
+                            <span class="error-message" id="error-message" style="color: red;"></span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-mc-01 mx-auto no-click" type="submit">
+                        Send
+                    </button>
+                </form>
+
+                <!-- Success message container -->
+                <div id="submit-message" style="color: green; font-weight: bold;"></div>
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ======= ASK US END ======= -->
+
+
+
+<script>
+    document.getElementById('ask-us-form').addEventListener('submit', function (e) {
+    e.preventDefault();  // Prevent the default form submission
+
+    // Clear previous error messages and success message
+    document.querySelectorAll('.error-message').forEach(el => el.innerText = '');
+    document.getElementById('submit-message').innerText = '';
+
+    // Get the user's input
+    const full_name = document.getElementById('full_name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const message = document.getElementById('message').value;
+
+    // Validation for Arabic, English letters and spaces for name, and Arabic/English letters, numbers, and punctuation for message
+    const nameRegex = /^[\u0600-\u06FFa-zA-Z\s]*$/;  // Allows Arabic and English letters and spaces
+    const messageRegex = /^[\u0600-\u06FFa-zA-Z0-9\s.,!?]*$/;  // Allows Arabic/English letters, numbers, spaces, punctuation
+    
+
+    let isValid = true;
+
+    // Validate full name
+    if (!nameRegex.test(full_name)) {
+        document.getElementById('error-full_name').innerText = "Full Name should contain only Valid Characters.";
+        isValid = false;
+    }
+
+    // Validate email (basic validation)
+    if (!email.includes("@") || !email.includes(".")) {
+        document.getElementById('error-email').innerText = "Please enter a valid email address.";
+        isValid = false;
+    }
+
+    // Validate phone number for numeric input only and length
+    if (!/^\d{1,15}$/.test(phone)) {
+        document.getElementById('error-phone').innerText = "Phone Number should be in numbers without dashes to 15 digits.";
+        isValid = false;
+    }
+
+    // Validate message field
+    if (!messageRegex.test(message)) {
+        document.getElementById('error-message').innerText = "Message should not contain special characters.";
+        isValid = false;
+    }
+
+    // If any validation failed, prevent form submission
+    if (!isValid) return;
+
+    const postData = {
+        full_name: full_name,
+        email: email,
+        phone: phone,
+        message: message,
+        language: 'en'
+    };
+
+    $.ajax({
+        url: '/ask-us-submit',
+        type: 'POST',
+        dataType: 'json',
+        data: postData,
+        success: function (data) {
+            document.getElementById('submit-message').innerText = data.message;
+            document.getElementById('submit-message').style.color = 'green'; // Style success message
+            document.getElementById('full_name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('message').value = '';
+        },
+        error: function (jqXHR) {
+            document.getElementById('submit-message').innerText = jqXHR.responseJSON.message;
+            document.getElementById('submit-message').style.color = 'red'; // Style error message
+        }
+    });
+});
+</script>

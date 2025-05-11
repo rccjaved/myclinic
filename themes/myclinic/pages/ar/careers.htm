@@ -1,0 +1,963 @@
+url = "/ar/careers"
+layout = "master-ar"
+title = "Careers"
+meta_title = "My Clinic Jobs, Heathcare Jobs, Medical jobs, Doctors job, Home Care Jobs, Cardiology Jobs, Dental Care
+Jobs, Pediatric Jobs, Orthopedic"
+meta_description = "Discover a range of positions that match your expertise and passion, and be part of a team that's
+committed to making a positive impact on lives. Explore our current openings and embark on a rewarding journey with us."
+
+[resources]
+less[] = "pages/careers.less"
+==
+<?php
+use MyClinic\Setting\Models\Slider;
+use MyClinic\Setting\Models\PageContent;
+
+function onStart()
+{
+    $this['sliders'] = Slider::where('type','career')->get();
+    $this['career']=PageContent::where('page','careers')->where('section','careers-careers')->first();
+    $fromMobile = Agent::isMobile();
+    $this['fromMobile']= $fromMobile;
+    $this['recaptchaSiteKey'] = env('RECAPTCHA_SITE_KEY');
+}
+?>
+==
+<script src="https://www.google.com/recaptcha/enterprise.js?render=6LdN9DwqAAAAABWc9uTyd3_Lh9uIpUtHcuPyOhux"></script>
+
+<style>
+    .requiredField {
+        border: 1px solid red;
+    }
+
+    .error-message {
+        font-size: 0.9em;
+        margin-top: 4px;
+    }
+
+    .custom-file-uploader {
+        cursor: pointer;
+        border-radius: 5px !important;
+    }
+</style>
+
+<div class="swiper-container resize-slider">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+        <!-- Slider -->
+        {% for item in sliders %}
+        <div class="swiper-slide">
+            <img src="{{item.slider_image_ar_mobile.path}}" class="slidemc" alt="">
+            <img src="{{item.slider_image_ar.path}}" class="slidemc slidemc-m-home" alt="">
+            <div class="slide-text">
+                <h1 class="mb-3">{{specialty.title_ar|raw}}</h1>
+                <p class="mb-3 mb-sm-5">{{specialty.tag_line_ar}}</p>
+                {% if item.link_value %}
+                <a href="/ar/{{item.link_value}}" class="btn btn-primary slide-s btn-mc-01 mb-6"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none"
+                        style="margin-right: 20px;">
+                        <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                        <path d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M27.048 19.5984H18.7148H12"
+                            stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>{{item.link_name_ar}}</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- If we need pagination -->
+    <div class="swiper-pagination"></div>
+
+    <!-- If we need navigation buttons -->
+    <div class="swiper-button-prev"><span></span></div>
+    <div class="swiper-button-next"><span></span></div>
+
+
+
+
+</div>
+
+{% if career %}
+<section class="section-py-100">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-xl-8 text-center">
+                <h1>{{career.title_ar|raw}}</h1>
+                <p>{{career.description_ar|raw}}
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+<section class="section-py-120 pt-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="py-60 pt-0 ">تقدم لوظيفة</h1>
+
+                <form id="career-form" class="pro-px" enctype="multipart/form-data">
+                    <div class="row flex-row-reverse">
+                        <div class="col-sm-6 col-12 mb-3">
+                            <input type="text" class="form-control form-control-lg select-mc"
+                                placeholder="* الاسم الأول" aria-label="First name" id="first_name">
+                        </div>
+                        <div class="col-sm-6 col-12 mb-3">
+                            <input type="text" class="form-control form-control-lg select-mc"
+                                placeholder="* اسم العائلة" aria-label="Last name" id="last_name">
+                        </div>
+                        <div class="col-sm-6 col-12 mb-3 position-relative arrow-icon-left">
+                            <span class="select2-selection__arrow" role="presentation"><b
+                                    role="presentation"></b></span>
+                            <select class="form-select form-select-lg select-mc " id="education">
+                                <option selected disabled value="null"> <span>*</span> التعليم </option>
+                                <option value="ثانوية عامة">ثانوية عامة</option>
+                                <option value="دبلوم">دبلوم</option>
+                                <option value="بكالوريوس">بكالوريوس</option>
+                                <option value="ماجستير">ماجستير</option>
+                                <option value="دكتوراه">دكتوراه</option>
+
+                            </select>
+                        </div>
+                        <div class="col-sm-6 col-12 mb-3">
+                            <input type="text" class="form-control form-control-lg select-mc"
+                                placeholder="* سنوات من الخبرة " aria-label="Last name" id="years_of_exp">
+                        </div>
+                        <div class="col-sm-6 col-12 mb-3 position-relative arrow-icon-left">
+                            <span class="select2-selection__arrow" role="presentation"><b
+                                    role="presentation"></b></span>
+
+
+                            <select class="form-select form-select-lg select-mc js-example-basic-multiple text-start"
+                                id="current_residence">
+                                <option selected disabled value="null"><span>*</span>بلد الإقامة الحالي</option>
+
+                            </select>
+                        </div>
+                        <div class="col-sm-6 col-12 mb-3 position-relative arrow-icon-left">
+                            <span class="select2-selection__arrow" role="presentation"><b
+                                    role="presentation"></b></span>
+                            <select class="form-select form-select-lg select-mc" id="job_category"
+                                onchange="displayCertificate()">
+                                <option selected disabled value="null"><span>*</span> المجال
+                                </option>
+                                <option value="طبي">طبي</option>
+                                <option value="غير طبي">غير طبي </option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 col-12 mb-3 position-relative arrow-icon-left">
+                            <span class="select2-selection__arrow" role="presentation"><b
+                                    role="presentation"></b></span>
+
+
+                            <select class="form-select form-select-lg select-mc js-example-basic-multiple text-start"
+                                id="nationality">
+                                <option selected disabled value="null"><span>*</span>الجنسية</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 col-12 mb-3 position-relative arrow-icon-left">
+                            <span class="select2-selection__arrow" role="presentation"><b
+                                    role="presentation"></b></span>
+                            <select class="form-select form-select-lg select-mc" id="gender">
+                                <option selected disabled value="null"><span>*</span>الجنس</option>
+                                <option value="ذكر">ذكر</option>
+                                <option value="أنثى">أنثى</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 col-12 mb-3 position-relative arrow-icon-left">
+                            <span class="select2-selection__arrow" role="presentation"><b
+                                    role="presentation"></b></span>
+                            <select class="form-select form-select-lg select-mc" id="city_of_employment">
+                                <option selected disabled value="null"><span>*</span>التقديم على أي مدينة </option>
+                                <option value="جدة">جدة</option>
+                                <option value="الرياض">الرياض</option>
+                                <option value="رابغ">رابغ</option>
+                                <option value="الدمام">الدمام</option>
+
+                            </select>
+                        </div>
+                        <div class="col-sm-6 col-12 mb-3 position-relative arrow-icon-left">
+                            <span class="select2-selection__arrow" role="presentation"><b
+                                    role="presentation"></b></span>
+                            <select class="form-select form-select-lg select-mc" id="contract_type">
+                                <option selected disabled value="null"><span>*</span>نوع العقد</option>
+                                <option value="دوام كامل">دوام كامل
+                                </option>
+                                <option value="دوام جزئي">دوام جزئي</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 col-12 mb-3">
+                            <input type="email" class="form-control form-control-lg select-mc"
+                                placeholder="* عنوان البريد الإلكتروني " aria-label="Last name" id="email">
+                        </div>
+                        <div class="col-sm-6 col-12 mb-3">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="flag-container">
+                                        </span>
+                                        <input type="number" class="form-control form-control-lg select-mc"
+                                            placeholder="+965" id="countryCode" oninput="updateFlag()">
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <input type="tel" class="form-control form-control-lg select-mc"
+                                        placeholder="* xxx-xxx-xxxx" id="phone" maxlength="12"/>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row gx-0">
+                            <div class="col-12 col-sm-6 my-3 pe-4">
+                                <div class="text-end">
+                                    <label class="d-block text-end text-black mb-2">
+                                        <span>*</span> يرجى تحميل سيرتك الذاتية
+                                    </label>
+                                    <div class="input-group-btn  position-relative overflow-hidden">
+                                        
+                                        <input dir="rtl" id="file" type="file" name="file" 
+                                            onchange="document.getElementById('filename-display').textContent = this.files.length ? this.files[0].name : 'لم يتم اختيار ملف';" 
+                                            accept=".pdf, .doc, .docx, .jpg, .png, .jpeg" style="display: none;" />
+                                        <span id="filename-display" class="ms-2">لم يتم اختيار ملف</span>
+                                        <button type="button" class="btn btn-primary custom-file-uploader" onclick="document.getElementById('file').click();">
+                                            اختر ملف
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-12 col-sm-6 my-3 d-none" id="certificate">
+                                <div class="">
+                                    <label class="d-block text-end text-black mb-2 me-3">
+                                        رخصة المستشار السعودي <span class="text-danger">مطلوب فقط للمتقدمين الطبيين</span>
+                                    </label>
+                                    <div class="input-group-btn  position-relative overflow-hidden">
+                                        
+                                        <input dir="rtl" id="license" type="file" name="license" 
+                                            onchange="document.getElementById('license-filename-display').textContent = this.files.length ? this.files[0].name : 'No file chosen';" 
+                                            accept=".pdf, .doc, .docx, .jpg, .png, .jpeg" style="display: none;" />
+                                        <span id="license-filename-display" class="ms-2">لا يتم اختيار ملف</span>
+                                        <button type="button" class="btn btn-primary custom-file-uploader" onclick="document.getElementById('license').click();">
+                                            اختر الملف
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-12 col-sm-6 my-3 pe-4 pe-md-2">
+                                <div class="text-end">
+                                    <label class="d-block text-end text-black mb-2">
+                                        شهادة التعليم
+                                    </label>
+                                    <span class="input-group-btn position-relative overflow-hidden">
+                                        
+                                        <input dir="rtl" id="education_certificate" type="file" name="education_certificate" 
+                                            onchange="document.getElementById('education-certificate-filename-display').textContent = this.files.length ? this.files[0].name : 'لم يتم اختيار ملف';" 
+                                            accept=".pdf, .doc, .docx, .jpg, .png, .jpeg" style="display: none;" />
+                                        <span id="education-certificate-filename-display" class="ms-2" dir="ltr">لم يتم اختيار ملف</span>
+                                        <button type="button" class="btn btn-primary custom-file-uploader" onclick="document.getElementById('education_certificate').click();">
+                                            اختر الملف
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-12 col-sm-6 my-3 pe-4">
+                                <div class="text-end">
+                                    <label class="d-block text-end text-black mb-2">
+                                        شهادة الخبرة
+                                    </label>
+                                    <span class="input-group-btn position-relative overflow-hidden">
+                                        
+                                        <input dir="ltr" id="exp_certificate" type="file" name="exp_certificate" 
+                                            onchange="document.getElementById('exp-certificate-filename-display').textContent = this.files.length ? this.files[0].name : 'No file chosen';" 
+                                            accept=".pdf, .doc, .docx, .jpg, .png, .jpeg" style="display: none;" />
+                                        <span id="exp-certificate-filename-display" class="ms-2">لا يتم اختيار ملف</span>
+                                        <button type="button" class="btn btn-primary custom-file-uploader" onclick="document.getElementById('exp_certificate').click();">
+                                            اختر الملف
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-12 col-sm-6 my-3 pe-4 pe-md-2">
+                                <div class="text-end">
+                                    <label class="d-block text-end text-black mb-2">
+                                        شهادة إضافية
+                                    </label>
+                                    <span class="input-group-btn  position-relative overflow-hidden">
+                                        
+                                        <input dir="rtl" id="additional_certificate" type="file" name="additional_certificate" 
+                                            onchange="document.getElementById('additional-certificate-filename-display').textContent = this.files.length ? this.files[0].name : 'No file chosen';" 
+                                            accept=".pdf, .doc, .docx, .jpg, .png, .jpeg" style="display: none;" />
+                                        <span id="additional-certificate-filename-display" class="ms-2">لا يتم اختيار ملف</span>
+                                        <button type="button" class="btn btn-primary custom-file-uploader" onclick="document.getElementById('additional_certificate').click();">
+                                            اختر الملف
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-12 col-sm-6 my-3 text-end pe-4">
+                                <div id="submit-message">
+
+                                </div>
+                                <button dir="rtl" class="btn btn-primary btn-mc-01 no-click ms-auto" type="submit">
+
+                                    <svg class="ms-3" xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                                        viewBox="0 0 40 40" fill="none">
+                                        <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                                        <path
+                                            d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M27.048 19.5984H18.7148H12"
+                                            stroke="#003868" stroke-width="2" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>قدم الآن </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% partial 'components/appDownload-ar' %}
+
+
+
+<style>
+    .upload-position {
+        position: absolute;
+        left: -102px;
+    }
+</style>
+<script>
+    var mySwiper = new Swiper('.swiper-container', {
+        effect: '',
+        loop: true,
+        speed: 1000,
+        slidesPerView: 1,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            type: 'bullets',
+            clickable: 'true'
+        },
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+
+
+
+    });
+
+    function GoLinks(event, value) {
+
+        event.stopPropagation();
+        window.location = value;
+    }
+
+
+    function displayCertificate() {
+        const value = document.getElementById('job_category').value.trim();
+        var certificate = document.getElementById('certificate');
+
+        if (value == 'طبي') {
+            certificate.classList.remove('d-none');
+        } else {
+            certificate.classList.add('d-none');
+        }
+    }
+
+    // Function to fetch nationalities from the REST Countries API
+    async function fetchNationalities() {
+        try {
+            const response = await fetch('https://restcountries.com/v3.1/all');
+            const data = await response.json();
+            return data.map(country => country.translations.ara.common); // Accessing Arabic translation
+        } catch (error) {
+            console.error('Error fetching nationalities:', error);
+            return [];
+        }
+    }
+    // Function to populate the dropdown with nationalities
+    async function populateNationalities() {
+        const select = document.getElementById("nationality");
+
+        const nationalities = await fetchNationalities();
+        nationalities.sort((a, b) => a.localeCompare(b));
+
+        nationalities.forEach(nationality => {
+            const option = document.createElement("option");
+            option.text = nationality;
+            option.value = nationality;
+            select.appendChild(option);
+
+
+        });
+    }
+
+    async function populateCites() {
+        const select = document.getElementById("current_residence");
+
+        const nationalities = await fetchNationalities();
+        nationalities.sort((a, b) => a.localeCompare(b));
+
+        nationalities.forEach(nationality => {
+            const option = document.createElement("option");
+            option.text = nationality;
+            option.value = nationality;
+            select.appendChild(option);
+        });
+    }
+
+    // Call the function to populate the dropdown on page load
+    populateNationalities();
+    populateCites();
+    function convertArabicNumeralsToEnglish(input) {
+        const arabicToEnglishMap = {
+            '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4',
+            '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9'
+        };
+        return input.replace(/[٠-٩]/g, char => arabicToEnglishMap[char]);
+    }
+
+    function updateFlag() {
+        const countryCodeInput = document.getElementById('countryCode').value;
+        const flagContainer = document.getElementById('flag-container');
+        const phoneField = document.getElementById('phone');
+        
+        // Clear previous flag
+        flagContainer.innerHTML = '';
+
+        // Get country data based on the input
+        const countryData = getCountryData(countryCodeInput);
+
+        if (countryData) {
+            // If country data is valid, show the flag
+            const countryISOCode = countryData.alpha2.toLowerCase();
+            const flagIcon = document.createElement('span');
+            flagIcon.classList.add('flag-icon', `flag-icon-${countryISOCode}`);
+            flagContainer.appendChild(flagIcon);
+            
+            // Move focus to the phone field after typing the country code
+            phoneField.focus();
+        } else {
+            // If country code is not valid, show an error message
+            if (!document.querySelector('.error-message')) {
+                const errorMessage = document.createElement('div');
+                errorMessage.classList.add('error-message');
+                errorMessage.style.color = 'red';
+                errorMessage.textContent = 'رمز البلد غير صالح. يرجى إدخال واحد صالح.';
+                flagContainer.appendChild(errorMessage);
+            }
+        }
+    }
+
+    function getCountryData(countryCallingCode) {
+        const countryData = {
+            "1": { alpha2: "US" }, // United States
+            "7": { alpha2: "RU" }, // Russia
+            "20": { alpha2: "EG" }, // Egypt
+            "27": { alpha2: "ZA" }, // South Africa
+            "30": { alpha2: "GR" }, // Greece
+            "31": { alpha2: "NL" }, // Netherlands
+            "32": { alpha2: "BE" }, // Belgium
+            "33": { alpha2: "FR" }, // France
+            "34": { alpha2: "ES" }, // Spain
+            "36": { alpha2: "HU" }, // Hungary
+            "39": { alpha2: "IT" }, // Italy
+            "40": { alpha2: "RO" }, // Romania
+            "41": { alpha2: "CH" }, // Switzerland
+            "43": { alpha2: "AT" }, // Austria
+            "44": { alpha2: "GB" }, // United Kingdom
+            "45": { alpha2: "DK" }, // Denmark
+            "46": { alpha2: "SE" }, // Sweden
+            "47": { alpha2: "NO" }, // Norway
+            "48": { alpha2: "PL" }, // Poland
+            "49": { alpha2: "DE" }, // Germany
+            "51": { alpha2: "PE" }, // Peru
+            "52": { alpha2: "MX" }, // Mexico
+            "53": { alpha2: "CU" }, // Cuba
+            "54": { alpha2: "AR" }, // Argentina
+            "55": { alpha2: "BR" }, // Brazil
+            "56": { alpha2: "CL" }, // Chile
+            "57": { alpha2: "CO" }, // Colombia
+            "58": { alpha2: "VE" }, // Venezuela
+            "60": { alpha2: "MY" }, // Malaysia
+            "61": { alpha2: "AU" }, // Australia
+            "62": { alpha2: "ID" }, // Indonesia
+            "63": { alpha2: "PH" }, // Philippines
+            "64": { alpha2: "NZ" }, // New Zealand
+            "65": { alpha2: "SG" }, // Singapore
+            "66": { alpha2: "TH" }, // Thailand
+            "81": { alpha2: "JP" }, // Japan
+            "82": { alpha2: "KR" }, // South Korea
+            "84": { alpha2: "VN" }, // Vietnam
+            "86": { alpha2: "CN" }, // China
+            "90": { alpha2: "TR" }, // Turkey
+            "91": { alpha2: "IN" }, // India
+            "92": { alpha2: "PK" }, // Pakistan
+            "93": { alpha2: "AF" }, // Afghanistan
+            "94": { alpha2: "LK" }, // Sri Lanka
+            "95": { alpha2: "MM" }, // Myanmar
+            "98": { alpha2: "IR" }, // Iran
+            "212": { alpha2: "MA" }, // Morocco
+            "213": { alpha2: "DZ" }, // Algeria
+            "216": { alpha2: "TN" }, // Tunisia
+            "218": { alpha2: "LY" }, // Libya
+            "220": { alpha2: "GM" }, // Gambia
+            "221": { alpha2: "SN" }, // Senegal
+            "222": { alpha2: "MR" }, // Mauritania
+            "223": { alpha2: "ML" }, // Mali
+            "224": { alpha2: "GN" }, // Guinea
+            "225": { alpha2: "CI" }, // Ivory Coast
+            "226": { alpha2: "BF" }, // Burkina Faso
+            "227": { alpha2: "NE" }, // Niger
+            "228": { alpha2: "TG" }, // Togo
+            "229": { alpha2: "BJ" }, // Benin
+            "230": { alpha2: "MU" }, // Mauritius
+            "231": { alpha2: "LR" }, // Liberia
+            "232": { alpha2: "SL" }, // Sierra Leone
+            "233": { alpha2: "GH" }, // Ghana
+            "234": { alpha2: "NG" }, // Nigeria
+            "235": { alpha2: "TD" }, // Chad
+            "236": { alpha2: "CF" }, // Central African Republic
+            "237": { alpha2: "CM" }, // Cameroon
+            "238": { alpha2: "CV" }, // Cape Verde
+            "239": { alpha2: "ST" }, // Sao Tome and Principe
+            "240": { alpha2: "GQ" }, // Equatorial Guinea
+            "241": { alpha2: "GA" }, // Gabon
+            "242": { alpha2: "CG" }, // Republic of the Congo
+            "243": { alpha2: "CD" }, // Democratic Republic of the Congo
+            "244": { alpha2: "AO" }, // Angola
+            "245": { alpha2: "GW" }, // Guinea-Bissau
+            "246": { alpha2: "IO" }, // British Indian Ocean Territory
+            "247": { alpha2: "SH" }, // Saint Helena
+            "248": { alpha2: "SC" }, // Seychelles
+            "249": { alpha2: "SD" }, // Sudan
+            "250": { alpha2: "RW" }, // Rwanda
+            "251": { alpha2: "ET" }, // Ethiopia
+            "252": { alpha2: "SO" }, // Somalia
+            "253": { alpha2: "DJ" }, // Djibouti
+            "254": { alpha2: "KE" }, // Kenya
+            "255": { alpha2: "TZ" }, // Tanzania
+            "256": { alpha2: "UG" }, // Uganda
+            "257": { alpha2: "BI" }, // Burundi
+            "258": { alpha2: "MZ" }, // Mozambique
+            "260": { alpha2: "ZM" }, // Zambia
+            "261": { alpha2: "MG" }, // Madagascar
+            "262": { alpha2: "RE" }, // Reunion
+            "263": { alpha2: "ZW" }, // Zimbabwe
+            "264": { alpha2: "NA" }, // Namibia
+            "265": { alpha2: "MW" }, // Malawi
+            "266": { alpha2: "LS" }, // Lesotho
+            "267": { alpha2: "BW" }, // Botswana
+            "268": { alpha2: "SZ" }, // Swaziland
+            "269": { alpha2: "KM" }, // Comoros
+            "290": { alpha2: "SH" }, // Saint Helena
+            "291": { alpha2: "ER" }, // Eritrea
+            "297": { alpha2: "AW" }, // Aruba
+            "298": { alpha2: "FO" }, // Faroe Islands
+            "299": { alpha2: "GL" }, // Greenland
+            "350": { alpha2: "GI" }, // Gibraltar
+            "351": { alpha2: "PT" }, // Portugal
+            "352": { alpha2: "LU" }, // Luxembourg
+            "353": { alpha2: "IE" }, // Ireland
+            "354": { alpha2: "IS" }, // Iceland
+            "355": { alpha2: "AL" }, // Albania
+            "356": { alpha2: "MT" }, // Malta
+            "357": { alpha2: "CY" }, // Cyprus
+            "358": { alpha2: "FI" }, // Finland
+            "359": { alpha2: "BG" }, // Bulgaria
+            "370": { alpha2: "LT" }, // Lithuania
+            "371": { alpha2: "LV" }, // Latvia
+            "372": { alpha2: "EE" }, // Estonia
+            "373": { alpha2: "MD" }, // Moldova
+            "374": { alpha2: "AM" }, // Armenia
+            "375": { alpha2: "BY" }, // Belarus
+            "376": { alpha2: "AD" }, // Andorra
+            "377": { alpha2: "MC" }, // Monaco
+            "378": { alpha2: "SM" }, // San Marino
+            "379": { alpha2: "VA" }, // Vatican City
+            "380": { alpha2: "UA" }, // Ukraine
+            "381": { alpha2: "RS" }, // Serbia
+            "382": { alpha2: "ME" }, // Montenegro
+            "383": { alpha2: "XK" }, // Kosovo
+            "385": { alpha2: "HR" }, // Croatia
+            "386": { alpha2: "SI" }, // Slovenia
+            "387": { alpha2: "BA" }, // Bosnia and Herzegovina
+            "389": { alpha2: "MK" }, // Macedonia
+            "420": { alpha2: "CZ" }, // Czech Republic
+            "421": { alpha2: "SK" }, // Slovakia
+            "423": { alpha2: "LI" }, // Liechtenstein
+            "500": { alpha2: "FK" }, // Falkland Islands
+            "501": { alpha2: "BZ" }, // Belize
+            "502": { alpha2: "GT" }, // Guatemala
+            "503": { alpha2: "SV" }, // El Salvador
+            "504": { alpha2: "HN" }, // Honduras
+            "505": { alpha2: "NI" }, // Nicaragua
+            "506": { alpha2: "CR" }, // Costa Rica
+            "507": { alpha2: "PA" }, // Panama
+            "508": { alpha2: "PM" }, // Saint Pierre and Miquelon
+            "509": { alpha2: "HT" }, // Haiti
+            "590": { alpha2: "GP" }, // Guadeloupe
+            "591": { alpha2: "BO" }, // Bolivia
+            "592": { alpha2: "GY" }, // Guyana
+            "593": { alpha2: "EC" }, // Ecuador
+            "594": { alpha2: "GF" }, // French Guiana
+            "595": { alpha2: "PY" }, // Paraguay
+            "596": { alpha2: "MQ" }, // Martinique
+            "597": { alpha2: "SR" }, // Suriname
+            "598": { alpha2: "UY" }, // Uruguay
+            "599": { alpha2: "CW" }, // Curacao
+            "670": { alpha2: "TL" }, // East Timor
+            "672": { alpha2: "NF" }, // Norfolk Island
+            "673": { alpha2: "BN" }, // Brunei
+            "674": { alpha2: "NR" }, // Nauru
+            "675": { alpha2: "PG" }, // Papua New Guinea
+            "676": { alpha2: "TO" }, // Tonga
+            "677": { alpha2: "SB" }, // Solomon Islands
+            "678": { alpha2: "VU" }, // Vanuatu
+            "679": { alpha2: "FJ" }, // Fiji
+            "680": { alpha2: "PW" }, // Palau
+            "681": { alpha2: "WF" }, // Wallis and Futuna
+            "682": { alpha2: "CK" }, // Cook Islands
+            "683": { alpha2: "NU" }, // Niue
+            "685": { alpha2: "WS" }, // Samoa
+            "686": { alpha2: "KI" }, // Kiribati
+            "687": { alpha2: "NC" }, // New Caledonia
+            "688": { alpha2: "TV" }, // Tuvalu
+            "689": { alpha2: "PF" }, // French Polynesia
+            "690": { alpha2: "TK" }, // Tokelau
+            "691": { alpha2: "FM" }, // Micronesia
+            "692": { alpha2: "MH" }, // Marshall Islands
+            "850": { alpha2: "KP" }, // North Korea
+            "852": { alpha2: "HK" }, // Hong Kong
+            "853": { alpha2: "MO" }, // Macau
+            "855": { alpha2: "KH" }, // Cambodia
+            "856": { alpha2: "LA" }, // Laos
+            "880": { alpha2: "BD" }, // Bangladesh
+            "886": { alpha2: "TW" }, // Taiwan
+            "960": { alpha2: "MV" }, // Maldives
+            "961": { alpha2: "LB" }, // Lebanon
+            "962": { alpha2: "JO" }, // Jordan
+            "963": { alpha2: "SY" }, // Syria
+            "964": { alpha2: "IQ" }, // Iraq
+            "965": { alpha2: "KW" }, // Kuwait
+            "966": { alpha2: "SA" }, // Saudi Arabia
+            "967": { alpha2: "YE" }, // Yemen
+            "968": { alpha2: "OM" }, // Oman
+            "970": { alpha2: "PS" }, // Palestine
+            "971": { alpha2: "AE" }, // United Arab Emirates
+            "972": { alpha2: "IL" }, // Israel
+            "973": { alpha2: "BH" }, // Bahrain
+            "974": { alpha2: "QA" }, // Qatar
+            "975": { alpha2: "BT" }, // Bhutan
+            "976": { alpha2: "MN" }, // Mongolia
+            "977": { alpha2: "NP" }, // Nepal
+            "992": { alpha2: "TJ" }, // Tajikistan
+            "993": { alpha2: "TM" }, // Turkmenistan
+            "994": { alpha2: "AZ" }, // Azerbaijan
+            "995": { alpha2: "GE" }, // Georgia
+            "996": { alpha2: "KG" }, // Kyrgyzstan
+            "998": { alpha2: "UZ" }  // Uzbekistan
+        };
+        return countryData[countryCallingCode];
+    }
+
+
+
+</script>
+
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Real-time validation for special characters in first_name and last_name
+        ['first_name', 'last_name'].forEach(function (fieldId) {
+            var fieldElement = document.getElementById(fieldId);
+            fieldElement.addEventListener('input', function () {
+                var fieldValue = fieldElement.value;
+                // Regex to allow only alphabets, Arabic characters, and spaces
+                if (/[^a-zA-Z\u0600-\u06FF\s]/.test(fieldValue)) {
+                    // Add error message if special characters are present
+                    if (!fieldElement.nextElementSibling || !fieldElement.nextElementSibling.classList.contains('error-message')) {
+                        fieldElement.classList.add('requiredField');
+                        fieldElement.insertAdjacentHTML('afterend', '<div class="error-message" style="color:red;">لا يسمح بشخصيات خاصة</div>');
+                    }
+                } else {
+                    // Remove error message if input becomes valid
+                    fieldElement.classList.remove('requiredField');
+                    if (fieldElement.nextElementSibling && fieldElement.nextElementSibling.classList.contains('error-message')) {
+                        fieldElement.nextElementSibling.remove();
+                    }
+                }
+            });
+        });
+    });
+
+    function validateForm() {
+        var isValid = true;
+        var firstErrorField = null;
+
+        // Clear previous error messages
+        $('.error-message').remove(); // Remove previous error messages
+        $('.requiredField').removeClass('requiredField'); // Remove the red border from previous errors
+
+        var fields = [
+            { id: 'first_name', name: 'First name' },
+            { id: 'last_name', name: 'Last name' },
+            { id: 'email', name: 'Email' },
+            { id: 'countryCode', name: 'Country code' },
+            { id: 'phone', name: 'Phone' },
+            { id: 'education', name: 'Education' },
+            { id: 'years_of_exp', name: 'Years of experience' },
+            { id: 'current_residence', name: 'Current residence' },
+            { id: 'job_category', name: 'Job category' },
+            { id: 'nationality', name: 'Nationality' },
+            { id: 'gender', name: 'Gender' },
+            { id: 'city_of_employment', name: 'City of employment' },
+            { id: 'contract_type', name: 'Contract type' }
+        ];
+
+        // Loop through each field to check for errors
+        fields.forEach(function (field) {
+            var fieldValue = document.getElementById(field.id).value;
+            var fieldElement = $('#' + field.id);
+
+            // Check for empty fields or 'null' value
+            if (fieldValue === '' || fieldValue === 'null') {
+                isValid = false;
+                fieldElement.addClass('requiredField'); // Highlight the field with a red border
+                fieldElement.after('<div class="error-message" style="color:red;">' + field.name + ' is required</div>');
+                
+                if (!firstErrorField) {
+                    firstErrorField = fieldElement; // Capture the first error field
+                }
+            }
+
+            // Additional validation for first name and last name to prevent special characters
+            if (field.id === 'first_name' || field.id === 'last_name') {
+                if (/[^a-zA-Z\u0600-\u06FF\s]/.test(fieldValue)) { // Updated regex for alphabets and spaces
+                    isValid = false;
+                    fieldElement.addClass('requiredField');
+                    fieldElement.after('<div class="error-message" style="color:red;">لا يسمح بشخصيات خاصة</div>');
+                    
+                    if (!firstErrorField) {
+                        firstErrorField = fieldElement; // Capture the first error field
+                    }
+                }
+            }
+
+            // Additional validation for Years of Experience
+            if (field.id === 'years_of_exp') {
+                if (!/^\d{1,2}$/.test(fieldValue)) { // Check if input is a 1-2 digit number
+                    isValid = false;
+                    fieldElement.addClass('requiredField');
+                    fieldElement.after('<div class="error-message" style="color:red;">يسمح فقط بالأرقام التي تحمل رقمين لسنوات من الخبرة</div>');
+                    
+                    if (!firstErrorField) {
+                        firstErrorField = fieldElement; // Capture the first error field
+                    }
+                }
+            }
+
+            // Additional validation for phone number (10-12 digits)
+            if (field.id === 'phone') {
+                if (!/^\d{10,12}$/.test(fieldValue)) {
+                    isValid = false;
+                    fieldElement.addClass('requiredField');
+                    fieldElement.after('<div class="error-message" style="color:red;">يرجى إدخال رقم هاتف صالح (10-12 أرقام)</div>');
+                    
+                    if (!firstErrorField) {
+                        firstErrorField = fieldElement;
+                    }
+                }
+            }
+        });
+
+        // Validation for file inputs and file size check (1MB limit)
+        var fileInputs = [
+            { id: 'file', name: 'file' },
+            { id: 'license', name: 'license' },
+            { id: 'education_certificate', name: 'education_certificate' },
+            { id: 'exp_certificate', name: 'exp_certificate' },
+            { id: 'additional_certificate', name: 'additional_certificate' }
+        ];
+
+        fileInputs.forEach(function(fileInput) {
+            var inputElement = document.getElementById(fileInput.id);
+            if (inputElement && inputElement.files.length > 0) {
+                var fileSize = inputElement.files[0].size;
+                if (fileSize > 1048576) { // 1MB in bytes
+                    isValid = false;
+                    var fileElement = $('#' + fileInput.id).parent();
+                    fileElement.addClass('requiredField');
+                    fileElement.after('<div class="error-message" style="color:red;">' + fileInput.name + ' should be less than 1MB</div>');
+
+                    if (!firstErrorField) {
+                        firstErrorField = fileElement;
+                    }
+                }
+            } else if (fileInput.id === 'file' && inputElement.files.length === 0) {
+                // Check if resume file is empty (mandatory field)
+                isValid = false;
+                var fileElement = $('#' + fileInput.id).parent();
+                fileElement.addClass('requiredField');
+                fileElement.after('<div class="error-message" style="color:red;">' + fileInput.name + ' is required</div>');
+
+                if (!firstErrorField) {
+                    firstErrorField = fileElement;
+                }
+            }
+        });
+
+        // Scroll to the first error field if validation fails
+        if (!isValid && firstErrorField) {
+            firstErrorField[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        return isValid;
+    }
+
+
+
+    document.getElementById('career-form').addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevent default form submission
+
+    // Function to handle form submission after getting the CAPTCHA token
+    async function handleSubmit() {
+        try {
+            // Wait for CAPTCHA to be ready and get the token
+            const token = await grecaptcha.enterprise.execute('6LdN9DwqAAAAABWc9uTyd3_Lh9uIpUtHcuPyOhux', { action: 'LOGIN' });
+
+            // Ensure form validation passes
+            if (!validateForm()) {
+                return;
+            }
+
+            // Create FormData and append user inputs
+            const formData = new FormData();
+            formData.append('first_name', document.getElementById('first_name').value);
+            formData.append('last_name', document.getElementById('last_name').value);
+            formData.append('email', document.getElementById('email').value);
+            formData.append('countryCode', document.getElementById('countryCode').value);
+            formData.append('phone', document.getElementById('phone').value);
+            formData.append('education', document.getElementById('education').value);
+            formData.append('years_of_exp', document.getElementById('years_of_exp').value);
+            formData.append('current_residence', document.getElementById('current_residence').value);
+            formData.append('job_category', document.getElementById('job_category').value);
+            formData.append('nationality', document.getElementById('nationality').value);
+            formData.append('gender', document.getElementById('gender').value);
+            formData.append('city_of_employment', document.getElementById('city_of_employment').value);
+            formData.append('contract_type', document.getElementById('contract_type').value);
+            formData.append('language', 'ar');
+            formData.append('g-recaptcha-token', token);
+
+            // Append files to FormData
+            const fileInput = document.getElementById('file');
+            if (fileInput.files.length) {
+                formData.append('file', fileInput.files[0]);
+            } else {
+                document.getElementById('file').classList.add('requiredField');
+            }
+
+            const license = document.getElementById('license');
+            if (document.getElementById('job_category').value == 'Medical' && !license.files.length) {
+                document.getElementById('license').classList.add('requiredField');
+                return;
+            } else if (license.files.length) {
+                formData.append('license', license.files[0]);
+            }
+
+            const education_certificate = document.getElementById('education_certificate');
+            if (education_certificate.files.length) {
+                formData.append('education_certificate', education_certificate.files[0]);
+            }
+
+            const exp_certificate = document.getElementById('exp_certificate');
+            if (exp_certificate.files.length) {
+                formData.append('exp_certificate', exp_certificate.files[0]);
+            }
+
+            const additional_certificate = document.getElementById('additional_certificate');
+            if (additional_certificate.files.length) {
+                formData.append('additional_certificate', additional_certificate.files[0]);
+            }
+
+        
+
+            // Submit the form data
+            const response = await fetch('/career-request', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                // Handle success (e.g., display a success message)
+                document.getElementById('submit-message').innerHTML = '<span style="color:green">الطلب المقدم بنجاح!</span>';
+                // Redirect to the careers page after a brief delay
+                setTimeout(function() {
+                    window.location.href = '/ar/careers';
+                }, 3000); // Delay of 2 seconds before redirecting
+                // Reset the form
+                document.getElementById('career-form').reset();
+            } else {
+                // Handle errors (e.g., display an error message)
+                document.getElementById('submit-message').innerHTML = '<span style="color:red">كان هناك خطأ في تقديم طلبك.</span>';
+            }
+        } catch (error) {
+            // console.error('Error during CAPTCHA execution:', error);
+            console.error('Error during form submission:', error);
+            document.getElementById('submit-message').innerHTML = '<span style="color:red">حدث خطأ غير متوقع.</span>';
+        }
+    }
+
+    // Execute the form submission handling function
+    handleSubmit();
+});
+
+
+
+</script>
+
+
+<script>
+    document.getElementById('file').addEventListener('change', function() {
+        document.getElementById('filename-display').textContent = this.files.length ? this.files[0].name : 'لا يتم اختيار ملف';
+    });
+
+    document.getElementById('license').addEventListener('change', function() {
+        document.getElementById('license-filename-display').textContent = this.files.length ? this.files[0].name : 'لا يتم اختيار ملف';
+    });
+
+    document.getElementById('education_certificate').addEventListener('change', function() {
+        document.getElementById('education-certificate-filename-display').textContent = this.files.length ? this.files[0].name : 'لا يتم اختيار ملف';
+    });
+
+    document.getElementById('exp_certificate').addEventListener('change', function() {
+        document.getElementById('exp-certificate-filename-display').textContent = this.files.length ? this.files[0].name : 'لا يتم اختيار ملف';
+    });
+
+    document.getElementById('additional_certificate').addEventListener('change', function() {
+        document.getElementById('additional-certificate-filename-display').textContent = this.files.length ? this.files[0].name : 'لا يتم اختيار ملف';
+    });
+</script>

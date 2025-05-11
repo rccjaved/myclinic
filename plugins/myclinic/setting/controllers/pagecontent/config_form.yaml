@@ -1,0 +1,10 @@
+name: PageContent
+form: $/myclinic/setting/models/pagecontent/fields.yaml
+modelClass: MyClinic\Setting\Models\PageContent
+defaultRedirect: myclinic/setting/pagecontent
+create:
+    redirect: 'myclinic/setting/pagecontent/update/:id'
+    redirectClose: myclinic/setting/pagecontent
+update:
+    redirect: myclinic/setting/pagecontent
+    redirectClose: myclinic/setting/pagecontent

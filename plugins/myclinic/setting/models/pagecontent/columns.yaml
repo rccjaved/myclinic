@@ -1,0 +1,10 @@
+columns:
+    page:
+        label: Page
+        type: text
+    section:
+        label: Section
+        type: text
+    title:
+        label: Title
+        type: text

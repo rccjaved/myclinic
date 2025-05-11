@@ -1,0 +1,64 @@
+plugin:
+    name: 'myclinic.setting::lang.plugin.name'
+    description: 'myclinic.setting::lang.plugin.description'
+    author: 'My Clinic'
+    icon: oc-icon-adjust
+    homepage: ''
+navigation:
+    Settings:
+        label: 'Content Settings'
+        url: myclinic/setting/promotion
+        icon: icon-gears
+        sideMenu:
+            Promotion:
+                label: Promotion
+                url: myclinic/setting/promotion
+                icon: icon-sitemap
+            'Promotion Item':
+                label: 'Promotion Item'
+                url: myclinic/setting/promotionitem
+                icon: icon-sitemap
+            locations:
+                label: Locations
+                url: myclinic/setting/locations
+                icon: icon-sitemap
+            testimonial:
+                label: Testimonial
+                url: myclinic/setting/testimonial
+                icon: icon-sitemap
+            sliders:
+                label: Sliders
+                url: myclinic/setting/sliders
+                icon: icon-sitemap
+            page-content:
+                label: 'Page Content'
+                url: myclinic/setting/pagecontent
+                icon: icon-sitemap
+            heal-home-care:
+                label: 'Health Home Care'
+                url: myclinic/setting/healthhomecare
+                icon: icon-sitemap
+            common-components:
+                label: 'Common Components'
+                url: myclinic/setting/commoncomponent
+                icon: icon-sitemap
+            blogs:
+                label: Blogs
+                url: myclinic/setting/blogs
+                icon: icon-sitemap
+            about-us:
+                label: 'About Us'
+                url: myclinic/setting/aboutus
+                icon: icon-sitemap
+            section-headings:
+                label: 'Section Heading'
+                url: myclinic/setting/sectionheading
+                icon: icon-sitemap
+            language:
+                label: Language
+                url: myclinic/setting/language
+                icon: icon-sitemap
+            privacy:
+                label: Privacy
+                url: myclinic/setting/privacy
+                icon: icon-sitemap

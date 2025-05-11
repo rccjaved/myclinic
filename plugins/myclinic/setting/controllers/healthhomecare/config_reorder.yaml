@@ -1,0 +1,4 @@
+title: HealthHomeCare
+modelClass: MyClinic\Setting\Models\HomeHealthCare
+toolbar:
+    buttons: reorder_toolbar

@@ -1,0 +1,44 @@
+==
+<?php
+use MyClinic\Setting\Models\CommonComponent;
+function onStart()
+{
+$this['commonComponent']=CommonComponent::where('slug','app-download')->first();
+}
+?>
+==
+<!-- ======= DOWNLOAD OUR APP START ======= -->
+<section class="download-app section-py-120" id="appDownload">
+    <div class="container download-app-bg">
+        <div class="row align-items-center">
+            <div class="col-12 col-sm-6 text-center">
+                <img src="{{commonComponent.section_image.path}}" class="img-fluid app-hand d-none d-sm-inline-flex"
+                    alt="mobile-app">
+            </div>
+            <div class="col-12 col-sm-6 col-lg-6 p-4">
+                <h1 class="text-end">{{commonComponent.title_ar}}</h1>
+                <p class="text-justy  text-end">{{commonComponent.description_ar|raw}}</p>
+
+                <div class="d-flex align-items-center  app-buttons justify-content-end">
+                    <img src="{{commonComponent.section_image.path}}"
+                        class="img-fluid app-hand d-block d-sm-none float-start" alt="none">
+                    <div class="row g-2 g-md-4 ">
+                        <div class="col-12 col-sm-6 col-xl-auto">
+                            <a
+                                href="https://apps.apple.com/us/app/my-clinic-ksa/id1475630623?itsct=apps_box_badge&itscg=30200"><img
+                                    src="{{'assets/imgs/appstore.png'|theme}}" class="img-fluid" alt="appstore"></a>
+
+                        </div>
+                        <div class="col-12 col-sm-6 col-xl-auto">
+                            <a
+                                href="https://play.google.com/store/apps/details?id=com.myclinic.ksa&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1">
+                                <img src="{{'assets/imgs/play-store.png'|theme}}" class="img-fluid" alt="playstore"></a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ======= DOWNLOAD OUR APP END ======= -->

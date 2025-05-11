@@ -1,0 +1,10 @@
+columns:
+    type:
+        label: Type
+        type: text
+    title:
+        label: Title
+        type: text
+    tag_line:
+        label: 'Tag Line'
+        type: text

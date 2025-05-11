@@ -1,0 +1,98 @@
+fields:
+    page:
+        label: 'Page Name'
+        options:
+            tele-medicine: Tele-Medicine
+            health-homecare: Health-Homecare
+            our-specialty: 'Our Specialty'
+            our-programs: 'Our Programs'
+            find-doctor: 'Find Doctor'
+            careers: Careers
+            contact-us: 'Contact Us'
+            services: Services
+            faqs: Faqs
+            oht: 'Online Health Tools'
+            home: Home
+            footer: Footer
+            header: Header
+        showSearch: true
+        span: auto
+        type: dropdown
+    section:
+        label: 'Section Name'
+        options:
+            tele-medicine-services: 'Tele-Medicine Services'
+            24-hr-helpline: '24 Hr Helpline'
+            homecare-services: Homecare-Services
+            our-specialty-overview: 'Our Specialty - Overview'
+            our-programs-overview: 'Our Programs - Overview'
+            find-doctor-our-doctors: 'Find Doctor - Our Doctors'
+            careers-careers: 'Careers - Career'
+            contact-us-get-in-touch: 'Contact Us - Get in touch'
+            services-on-site-services-text: 'Services - On-Site Services Text'
+            services-services-on-site-services: 'Services - On-Site Services'
+            services-corporate-services-text: 'Services - Corporate Services Text'
+            services-corporate-services: 'Services - Corporate Services'
+            faqs-general-faqs-text: 'Faqs - General Faqs Yext'
+            faqs-faq: Faqs-Faq
+            oht-bmi: 'Online Helath Tools - BMI'
+            oht-water-intake: 'Online Helath Tools - Water Intake'
+            oht-protein-intake: 'Online Helath Tools - Protein Intake'
+            oht-pregnancy-calculator: 'Online Helath Tools - Pregnancy Calculator'
+            home-plans: 'Home - Promotions & Plans Text'
+            home-news-announcement: 'Home -  News & Announcement'
+            footer-logo: 'Footer - Logo'
+            footer-about: 'Footer - About'
+            footer-company-links: 'Footer - Company Links'
+            footer-useful-links: 'Footer - Useful Links'
+            footer-clinic-timings: 'Footer - Clinic Timings'
+            footer-phones: 'Footer - Phones'
+            footer-privacy-policy: 'Footer - Privacy Policy'
+            footer-action-button: 'Footer - Action Button'
+            footer-app-download: 'Footer - APP Download'
+            footer-socialmedia-links: 'Footer - Socialmedia Links'
+            header-logo: 'Header - Logo'
+            header-links: 'Header - Links'
+            header-action-button: 'Header - Action Button'
+        showSearch: true
+        span: auto
+        type: dropdown
+    title:
+        label: Title
+        span: auto
+        type: text
+    title_ar:
+        label: 'Arabic Title'
+        span: auto
+        type: text
+    description:
+        label: Description
+        size: small
+        span: auto
+        type: richeditor
+    description_ar:
+        label: 'Arabic Description'
+        size: small
+        span: auto
+        type: richeditor
+    link_name:
+        label: 'Link Name'
+        span: auto
+        type: text
+    link_name_ar:
+        label: 'Arabic Link Name'
+        span: auto
+        type: text
+    link_value:
+        label: 'Link Value'
+        span: auto
+        type: text
+    section_image:
+        label: 'Section Image'
+        mode: file
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload

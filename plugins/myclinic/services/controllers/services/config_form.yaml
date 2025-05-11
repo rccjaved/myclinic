@@ -1,0 +1,10 @@
+name: Services
+form: $/myclinic/services/models/service/fields.yaml
+modelClass: MyClinic\Services\Models\Service
+defaultRedirect: myclinic/services/services
+create:
+    redirect: 'myclinic/services/services/update/:id'
+    redirectClose: myclinic/services/services
+update:
+    redirect: myclinic/services/services
+    redirectClose: myclinic/services/services

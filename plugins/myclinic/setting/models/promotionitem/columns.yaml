@@ -1,0 +1,7 @@
+columns:
+    promotion_id:
+        label: Promotion
+        type: text
+    text:
+        label: Text
+        type: text

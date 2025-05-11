@@ -1,0 +1,30 @@
+fields:
+    phone_no:
+        label: 'Phone no'
+        span: auto
+        type: text
+    platform:
+        label: 'Select Platform'
+        options:
+            fb_ig: 'FB&IG'
+            snapchat: Snapchat
+            tiktok: Tiktok
+        showSearch: true
+        span: auto
+        type: dropdown
+    type:
+        label: 'Select Type'
+        options:
+            mcj1: MCJ1
+            mcj2: MCJ2
+            mcr1: MCR1
+            call_center: 'Call Center'
+        showSearch: true
+        span: auto
+        type: dropdown
+    slug:
+        label: 'Page URL'
+        span: auto
+        disabled: 1
+        readOnly: 1
+        type: text

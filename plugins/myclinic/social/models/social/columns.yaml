@@ -1,0 +1,23 @@
+columns:
+    id:
+        label: Id
+        type: number
+        searchable: true
+        sortable: true
+    phone_no:
+        label: 'Phone No'
+        type: number
+        searchable: true
+        sortable: true
+    platform:
+        label: Platform
+        type: text
+        searchable: true
+    type:
+        label: Site
+        type: text
+        searchable: true
+        sortable: true
+    slug:
+        label: 'Page URL'
+        type: text

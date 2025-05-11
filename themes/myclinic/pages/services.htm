@@ -1,0 +1,400 @@
+url = "/services"
+layout = "master"
+title = "Services"
+meta_title = "Services"
+meta_description = "Comprehensive Care, Tailored to You: Discover Our Range of Specialized Healthcare Services. On-Site Services, Corporate Services, Lab Services, Radiology Services, Physiotherapy, Health Checkups, Vaccination Programs, Flu Shots."
+
+[resources]
+less[] = "pages/services.less"
+==
+<?php
+use MyClinic\Setting\Models\Slider;
+use MyClinic\Setting\Models\PageContent;
+use MyClinic\Setting\Models\CommonComponent;
+
+function onStart()
+{
+$sliders = Slider::where('type','services')->get();
+$this['sliders'] = $sliders;
+$this['servicesCorporateServicesText']=PageContent::where('page','services')->where('section','services-corporate-services-text')->first();
+$this['servicesCorporateServices']=PageContent::where('page','services')->where('section','services-corporate-services')->get();
+$this['servicesOnSiteServicesText']=PageContent::where('page','services')->where('section','services-on-site-services-text')->first();
+$this['servicesOnSiteServices']=PageContent::where('page','services')->where('section','services-services-on-site-services')->get();
+$this['findYourDoc']=CommonComponent::where('slug','find-your-doctor')->first();
+$fromMobile = Agent::isMobile();
+$this['fromMobile']= $fromMobile;
+
+}
+?>
+==
+<div class="swiper-container resize-slider">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+        <!-- Slider -->
+        {% for item in sliders %}
+        <div class="swiper-slide">
+            <img src="{{item.slider_image_mobile.path}}" class="slidemc" alt="services">
+            <img src="{{item.slider_image.path}}" class="slidemc slidemc-m-home" alt="services">
+            <div class="slide-text">
+                <h1 class="mb-3">{{item.title|raw}}</h1>
+                <p class="mb-3 mb-sm-5">{{item.tag_line}}</p>
+                {% if item.link_value %}
+                <a href="{{item.link_value}}" class="btn btn-primary slide-s btn-mc-01 mb-6"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none"
+                        style="margin-right: 20px;">
+                        <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                        <path d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M27.048 19.5984H18.7148H12"
+                            stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>{{item.link_name}}</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- If we need pagination -->
+    <div class="swiper-pagination"></div>
+
+    <!-- If we need navigation buttons -->
+    <div class="swiper-button-prev"><span></span></div>
+    <div class="swiper-button-next"><span></span></div>
+
+
+
+
+</div>
+
+
+
+<!-- ======= START ======= -->
+<section class="section-py-120">
+    <div class="container">
+        <div class="row btn-ser">
+            <div class="col-12 text-center">
+                <div class="btn-mc-services-group">
+                    <a href="#" class="btn-mc-services active">On-Site</a>
+                    <a href="#corporate" class="btn-mc-services">Corporate</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ======= END ======= -->
+
+
+<!-- ======= ON_SITE SERVICES START ======= -->
+
+<section class="section-py-100 section-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="text-center text-lg-start">
+                    <h1>{{servicesOnSiteServicesText.title}}</h1>
+                    <p class="text-justy">{{servicesOnSiteServicesText.description|raw}}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+
+{% for item in servicesOnSiteServices %}
+{% if loop.first %}
+{% set counter = 1 %}
+{% else %}
+{% set counter = counter + 1 %}
+{% endif %}
+
+{% if counter is even %}
+<section class="section-bg">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-center text-lg-start">
+                    <h1>{{item.title}}</h1>
+                    <p class="text-justy">{{item.description|raw}}</p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 px-0">
+                <img src="{{item.section_image.path}}" class="img-fluid" alt="{{item.name}}">
+            </div>
+        </div>
+    </div>
+</section>
+{% else %}
+<section class="section-bg">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6 order-1 order-lg-0 px-0">
+                <img src="{{item.section_image.path}}" class="img-fluid" alt="{{item.name}}">
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-center text-lg-start">
+                    <h1>{{item.title}}</h1>
+                    <p class="text-justy">{{item.description|raw}}</p>
+                </div>
+
+            </div>
+        </div>
+</section>
+
+{% endif %}
+{% endfor %}
+
+
+
+
+<!-- ======= ON_SITE SERVICES END ======= -->
+
+<!-- ======= FIND YOUR DOCTOR START ======= -->
+
+
+<section class="section-bg-2 section-py-100">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-center text-lg-start">
+                    <h1>{{findYourDoc.title|raw}}</h1>
+                    <p class="text-justy">{{findYourDoc.description|raw}}</p>
+
+                    <a href="{{findYourDoc.link_value}}" class="btn btn-primary btn-mc-01"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                            <path
+                                d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>{{findYourDoc.link_name}}</a>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="mcgallery">
+                    <div class="gallery">
+                        <div class="colz">
+                            <div class="image">
+                                <a href="/find-doctor"><img src="{{'assets/imgs/001dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/find-doctor"><img src="{{'assets/imgs/002dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/find-doctor"><img src="{{'assets/imgs/003dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/find-doctor"><img src="{{'assets/imgs/004dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/find-doctor"><img src="{{'assets/imgs/005dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+
+                        </div>
+                        <div class="colz">
+                            <div class="image">
+                                <a href="/find-doctor"><img src="{{'assets/imgs/005dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/find-doctor"><img src="{{'assets/imgs/004dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/find-doctor"><img src="{{'assets/imgs/003dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/find-doctor"><img src="{{'assets/imgs/004dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/find-doctor"><img src="{{'assets/imgs/005dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="colz">
+                            <div class="image">
+                                <a href="/find-doctor"><img src="{{'assets/imgs/003dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/find-doctor"><img src="{{'assets/imgs/004dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/find-doctor"><img src="{{'assets/imgs/001dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/find-doctor"><img src="{{'assets/imgs/002dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                            <div class="image">
+                                <a href="/find-doctor"><img src="{{'assets/imgs/005dr.png'|theme}}"
+                                        class="mcimg" alt=""></a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======= FIND YOUR DOCTOR END ======= -->
+
+
+<!-- ======= CORPORATE START ======= -->
+
+<section class="section-py-100 section-bg" id="corporate">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="text-center text-lg-start">
+                    <h1>{{servicesCorporateServicesText.title}}</h1>
+                    <p class="text-justy">{{servicesCorporateServicesText.description|raw}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% for item in servicesCorporateServices %}
+{% if loop.first %}
+{% set counter = 1 %}
+{% else %}
+{% set counter = counter + 1 %}
+{% endif %}
+
+{% if counter is even %}
+
+<section class="section-bg">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-center text-lg-start">
+                    <h1>{{item.title}}</h1>
+                    <p class="text-justy">{{item.description|raw}}</p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 px-0">
+                <img src="{{item.section_image.path}}" class="img-fluid" alt="{{item.name}}">
+            </div>
+        </div>
+    </div>
+</section>
+
+{% else %}
+<section class="section-bg">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6 order-1 order-lg-0 px-0">
+                <img src="{{item.section_image.path}}" class="img-fluid" alt="{{item.name}}">
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-center text-lg-start">
+                    <h1>{{item.title}}</h1>
+                    <p class="text-justy">{{item.description|raw}}</p>
+                </div>
+
+            </div>
+        </div>
+</section>
+
+
+{% endif %}
+{% endfor %}
+
+<!-- ======= END ======= -->
+
+
+
+{% partial 'components/appDownload' %}
+
+
+
+{% partial 'components/askUs' %}
+
+
+<script>
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const additionalY = { val: 0 };
+    let additionalYAnim;
+    let offset = 0;
+    const cols = gsap.utils.toArray(".colz");
+
+    cols.forEach((col, i) => {
+        const images = col.childNodes;
+
+        // DUPLICATE IMAGES FOR LOOP
+        images.forEach((image) => {
+            var clone = image.cloneNode(true);
+            col.appendChild(clone);
+        });
+
+        // SET ANIMATION
+        images.forEach((item) => {
+            let columnHeight = item.parentElement.clientHeight;
+            let direction = i % 2 !== 0 ? "+=" : "-="; // Change direction for odd columns
+
+            gsap.to(item, {
+                y: direction + Number(columnHeight / 2),
+                duration: 10,
+                repeat: -1,
+                ease: "none",
+                modifiers: {
+                    y: gsap.utils.unitize((y) => {
+                        if (direction == "+=") {
+                            offset += additionalY.val;
+                            y = (parseFloat(y) - offset) % (columnHeight * 0.5);
+                        } else {
+                            offset += additionalY.val;
+                            y =
+                                (parseFloat(y) + offset) %
+                                -Number(columnHeight * 0.5);
+                        }
+
+                        return y;
+                    }),
+                },
+            });
+        });
+    });
+</script>
+
+<script>
+    // swiper    
+    var mySwiper = new Swiper('.swiper-container', {
+        effect: '',
+        loop: false,
+        speed: 1000,
+        slidesPerView: 1,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            type: 'bullets',
+            clickable: 'true'
+        },
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+
+
+
+    });
+
+</script>

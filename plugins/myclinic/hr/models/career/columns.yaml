@@ -1,0 +1,34 @@
+columns:
+    first_name:
+        label: 'First Name'
+        type: text
+    last_name:
+        label: 'Last Name'
+        type: text
+    education:
+        label: Education
+        type: text
+    years_of_exp:
+        label: 'Years of experience'
+        type: text
+    current_residence:
+        label: 'Current Residence'
+        type: text
+    job_category:
+        label: 'Job Category'
+        type: text
+    nationality:
+        label: Nationality
+        type: text
+    gender:
+        label: Gender
+        type: text
+    email:
+        label: Email
+        type: text
+    phone:
+        label: Phone
+        type: text
+    created_at:
+        label: 'Form Submited on'
+        type: datetime

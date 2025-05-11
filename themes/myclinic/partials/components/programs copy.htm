@@ -1,0 +1,45 @@
+[builderList]
+modelClass = "MyClinic\Programs\Models\Program"
+scope = "-"
+scopeValue = "{{ :scope }}"
+displayColumn = "name"
+noRecordsMessage = "No records found"
+detailsPage = "-"
+detailsUrlParameter = "id"
+recordsPerPage = 10
+pageNumber = "{{ :page }}"
+
+==
+{% set records = builderList.records %}
+
+
+<section class="">
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-12 text-center">
+                <h1 class="mb-sm-5">Programs</h1>
+            </div>
+
+            {% for item in records %}
+            <div class="col-6 col-sm-3 mc-hide-2">
+                <div class="position-relative">
+                    <img src="{{item.program_image.path}}" class="img-fluid" alt="" />
+                    <a href="{{item.page_url}}" class="btn btn-light btn-spec-01 w-auto">{{item.name}}</a>
+                </div>
+            </div>
+            {% endfor %}
+
+
+            <div class="col-12">
+                <a href="" class="btn btn-spec-viewall load-more-programs"><svg xmlns="http://www.w3.org/2000/svg"
+                        width="40" height="40" viewBox="0 0 40 40" fill="none" style="margin-right: 10px">
+                        <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="#003868" />
+                        <path
+                            d="M24.7969 21.7727L19.5969 27.2L14.3969 21.7727M19.5969 18.7148L19.5969 27.048M19.5969 12L19.5969 21.5"
+                            stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>View all</a>
+            </div>
+        </div>
+    </div>
+</section>

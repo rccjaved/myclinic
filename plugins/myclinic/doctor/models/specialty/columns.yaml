@@ -1,0 +1,10 @@
+columns:
+    name:
+        label: Name
+        type: text
+    name_ar:
+        label: 'Arabic Name'
+        type: text
+    arabic_search_word:
+        label: 'Arabic Search Word'
+        type: text

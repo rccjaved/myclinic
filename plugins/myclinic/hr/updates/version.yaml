@@ -1,0 +1,17 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created table myclinic_hr_ask_us'
+    - builder_table_create_myclinic_hr_ask_us.php
+1.0.3:
+    - 'Created table myclinic_hr_career'
+    - builder_table_create_myclinic_hr_career.php
+1.0.4:
+    - 'Updated table myclinic_hr_career'
+    - builder_table_update_myclinic_hr_career.php
+1.0.5:
+    - 'Created table myclinic_hr_program_enrollment'
+    - builder_table_create_myclinic_hr_program_enrollment.php
+1.0.6:
+    - 'Updated table myclinic_hr_career'
+    - builder_table_update_myclinic_hr_career_2.php

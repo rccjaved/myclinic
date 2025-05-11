@@ -1,0 +1,4 @@
+title: Sliders
+modelClass: MyClinic\Setting\Models\Slider
+toolbar:
+    buttons: reorder_toolbar

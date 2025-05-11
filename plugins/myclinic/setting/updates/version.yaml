@@ -1,0 +1,107 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created table myclinic_setting_promotions'
+    - builder_table_create_myclinic_setting_promotions.php
+1.0.3:
+    - 'Created table myclinic_setting_promotion_items'
+    - builder_table_create_myclinic_setting_promotion_items.php
+1.0.4:
+    - 'Updated table myclinic_setting_promotion_items'
+    - builder_table_update_myclinic_setting_promotion_items.php
+1.0.5:
+    - 'Created table myclinic_setting_locations'
+    - builder_table_create_myclinic_setting_locations.php
+1.0.6:
+    - 'Created table myclinic_setting_testimonials'
+    - builder_table_create_myclinic_setting_testimonials.php
+1.0.7:
+    - 'Updated table myclinic_setting_locations'
+    - builder_table_update_myclinic_setting_locations.php
+1.0.8:
+    - 'Created table myclinic_setting_sliders'
+    - builder_table_create_myclinic_setting_sliders.php
+1.0.9:
+    - 'Updated table myclinic_setting_sliders'
+    - builder_table_update_myclinic_setting_sliders.php
+1.0.10:
+    - 'Created table myclinic_setting_page_content'
+    - builder_table_create_myclinic_setting_page_content.php
+1.0.11:
+    - 'Drop table myclinic_setting_page_content'
+    - builder_table_delete_myclinic_setting_page_content.php
+1.0.12:
+    - 'Created table myclinic_setting_home_health_care'
+    - builder_table_create_myclinic_setting_home_health_care.php
+1.0.13:
+    - 'Created table myclinic_setting_common_components'
+    - builder_table_create_myclinic_setting_common_components.php
+1.0.14:
+    - 'Updated table myclinic_setting_common_components'
+    - builder_table_update_myclinic_setting_common_components.php
+1.0.15:
+    - 'Updated table myclinic_setting_sliders'
+    - builder_table_update_myclinic_setting_sliders_2.php
+1.0.16:
+    - 'Updated table myclinic_setting_sliders'
+    - builder_table_update_myclinic_setting_sliders_3.php
+1.0.17:
+    - 'Updated table myclinic_setting_sliders'
+    - builder_table_update_myclinic_setting_sliders_4.php
+1.0.18:
+    - 'Updated table myclinic_setting_locations'
+    - builder_table_update_myclinic_setting_locations_2.php
+1.0.19:
+    - 'Updated table myclinic_setting_locations'
+    - builder_table_update_myclinic_setting_locations_3.php
+1.0.20:
+    - 'Updated table myclinic_setting_locations'
+    - builder_table_update_myclinic_setting_locations_4.php
+1.0.21:
+    - 'Updated table myclinic_setting_locations'
+    - builder_table_update_myclinic_setting_locations_5.php
+1.0.22:
+    - 'Updated table myclinic_setting_testimonials'
+    - builder_table_update_myclinic_setting_testimonials.php
+1.0.23:
+    - 'Created table myclinic_setting_blogs'
+    - builder_table_create_myclinic_setting_blogs.php
+1.0.24:
+    - 'Updated table myclinic_setting_blogs'
+    - builder_table_update_myclinic_setting_blogs.php
+1.0.25:
+    - 'Updated table myclinic_setting_common_components'
+    - builder_table_update_myclinic_setting_common_components_2.php
+1.0.26:
+    - 'Updated table myclinic_setting_locations'
+    - builder_table_update_myclinic_setting_locations_6.php
+1.0.27:
+    - 'Created table myclinic_setting_about_us'
+    - builder_table_create_myclinic_setting_about_us.php
+1.0.28:
+    - 'Updated table myclinic_setting_about_us'
+    - builder_table_update_myclinic_setting_about_us.php
+1.0.29:
+    - 'Updated table myclinic_setting_home_health_care'
+    - builder_table_update_myclinic_setting_home_health_care.php
+1.0.30:
+    - 'Created table myclinic_setting_page_content'
+    - builder_table_create_myclinic_setting_page_content.php
+1.0.31:
+    - 'Updated table myclinic_setting_locations'
+    - builder_table_update_myclinic_setting_locations_7.php
+1.0.32:
+    - 'Updated table myclinic_setting_locations'
+    - builder_table_update_myclinic_setting_locations_8.php
+1.0.33:
+    - 'Updated table myclinic_setting_promotion_items'
+    - builder_table_update_myclinic_setting_promotion_items_2.php
+1.0.34:
+    - 'Updated table myclinic_setting_testimonials'
+    - builder_table_update_myclinic_setting_testimonials_2.php
+1.0.35:
+    - 'Created table myclinic_setting_section_headings'
+    - builder_table_create_myclinic_setting_section_headings.php
+1.0.36:
+    - 'Created table myclinic_setting_language'
+    - builder_table_create_myclinic_setting_language.php

@@ -1,0 +1,614 @@
+url = "/search-specialty/:id/:slug"
+layout = "master"
+title = "Search Location Speciality"
+meta_title = "Cardiology, Dermatology, ENT, Neurology, Orthopedic, Ophthalmology, Pediatric, Physiotherapy, OBYG,
+Occupational Medicine, Geriactic Medicine, Audio-vestibular & Speech, Internal Medicine, Surgery, Psychology &
+Psychiatry, Family Medicine, Endocrinology, Endocrinology, Nephrology, Hematology, ER, Rheumatology, Respiratory
+Medicine, Gastroenterology & Hepatology, Urology, Allergy and Immunology"
+meta_description = "Our expert team offers a diverse range of specialized medical services, personalized to your needs,
+ensuring your path to optimal well-being."
+==
+<?php
+use MyClinic\Doctor\Models\Specialty;
+use MyClinic\Doctor\Models\Doctor;
+use MyClinic\Setting\Models\Location;
+use MyClinic\Doctor\Models\HealthConcern;
+use MyClinic\Doctor\Models\HodDoctor;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+use MyClinic\Doctor\Helpers\Encryptionhelper;
+
+
+function onStart()
+{
+    $location = Location::find($this->param('id'));
+    $this['location'] = $location;
+    $this['specialties'] = $location->specialties()->orderBy('name')->get();
+    $slug = $this->param('slug');
+    $this['slug'] = $slug;
+
+    $isMobile = false;
+    if ($slug === 'physiotherapy' || $slug === 'Dental') {
+        $isMobile = true;
+    }
+    $this['isMobile'] = $isMobile;
+
+
+    $specialty = Specialty::where('slug', $slug)->first();
+    $this['specialty'] = $specialty;
+    $specialityId = $specialty->app_speciality_id;
+
+    $locationDoctors = $location->doctors()->pluck('doctor_id')->toArray();
+    $specialtyDoctors = $specialty->doctors()->pluck('doctor_id')->toArray();
+    $mergedDoctors = array_intersect($locationDoctors, $specialtyDoctors);
+    $doctors = Doctor::whereIn('id', $mergedDoctors)->orderBy('name')->get();
+    $doctorAppIds = $doctors->pluck('doctor_app_id', 'id')->toArray();
+
+    // Skip API call if not required for specific slugs
+    if (!$isMobile) {
+        $companyIdMap = [
+            1 => 'nc01',
+            2 => 'safa',
+            3 => 'prc',
+            4 => 'ryd1'
+        ];
+
+        $companyId = $companyIdMap[$location->id];
+        $allApiData = [];
+        $nextRecordsFrom = 1;
+        $recordsPerPage = 5;
+
+        do {
+            $apiParams = [
+                'SecurityToken' => 'e236d058-fa14-44e1-aa07-5415d8f062c2',
+                'CompanyId' => $companyId,
+                'SpecialityId' => $specialityId,
+                'NextRecordsFrom' => $nextRecordsFrom,
+                'IsTelemedicine' => false,
+                'PreferredTime' => '0',
+                'IsFollowUp' => false
+            ];
+
+
+            $response = Http::post('https://bamc.myclinic.com.sa/OS.WebAPI.External/api/OSExternal/ApptGetEarlistSlots', $apiParams);
+
+
+            if ($response->successful()) {
+                $apiData = $response->json();
+                if (isset($apiData['ApptGetEarlistSlotBySpecialityResponse'])) {
+                    $doctorsData = $apiData['ApptGetEarlistSlotBySpecialityResponse'];
+                    $allApiData = array_merge($allApiData, $doctorsData);
+
+                    if (count($doctorsData) < $recordsPerPage) {
+                        break;
+                    }
+                    $nextRecordsFrom += $recordsPerPage;
+                } else {
+                    Log::error('ApptGetEarlistSlotBySpecialityResponse key not found in API response.');
+                    break;
+                }
+            } else {
+                Log::error('API request failed: ' . $response->body());
+                break;
+            }
+
+        } while (true);
+
+        $availableDates = [];
+        $bookingLinks = [];
+
+        $branchNameMap = array_flip($companyIdMap);
+        $branchNameMap = [
+            1 => 'Jeddah Al Mohammadiyah',
+            2 => 'Jeddah Al Safa',
+            3 => 'Jeddah Al Khalidiyyah Dental Center',
+            4 => 'Riyadh Al Sahafa'
+        ];
+
+        foreach ($allApiData as $doctorData) {
+            $doctorId = array_search($doctorData['DoctorId'], $doctorAppIds);
+
+            if ($doctorId !== false) {
+                $specialtyId = (int)$doctorData['SpecialtyId'];
+                $slotDate = isset($doctorData['SlotDate']) ? new DateTime($doctorData['SlotDate']) : null;
+                $slotTime = isset($doctorData['SlotTime']) ? new DateTime($doctorData['SlotTime']) : null;
+                $companyId = (string)$doctorData['Company'];
+                $doctorAppId = (int)$doctorData['DoctorId'];
+
+                // Check if slot date and time are null; if so, set them explicitly to null
+                $latestDate = isset($doctorData['WeekDates'][0]['Date']) ? $doctorData['WeekDates'][0]['Date'] : null;
+                $slotsAvailable = isset($doctorData['WeekDates']) ? count($doctorData['WeekDates']) : 0;
+
+                // Convert API location code to branch name
+                $branchName = isset($branchNameMap[array_search($companyId, $companyIdMap)]) 
+                    ? $branchNameMap[array_search($companyId, $companyIdMap)] 
+                    : 'Unknown';
+
+                // Store data only if `latestDate` and `slotTime` are available; otherwise, set them to null
+                $availableDates[$doctorId] = [
+                    'doctor_id' => $doctorAppId,
+                    'doctor_name' => $doctorData['DoctorName'],
+                    'latest_date' => $latestDate,
+                    'slots_available' => $slotsAvailable,
+                    'latest_time' => $slotTime ? $slotTime->format('H:i:s') : null,
+                    'company_name' => $branchName
+                ];
+
+                // Generate booking link only if `latestDate` is not null
+                if ($latestDate) {
+
+                   
+                    $dataToEncrypt = [
+                        'speciality_id' => $specialtyId, 
+                        'doctor_id' => $doctorAppId,
+                        'location' => $companyId,
+                        'date' => $slotDate ? $slotDate->format('Y-m-d') : null,
+                    ];
+
+                    $strJson = json_encode($dataToEncrypt);
+                    $encryptedQueries = encryptData($strJson);
+                    $bookingLinks[$doctorId] = 'https://bamc.myclinic.com.sa:8443/search-results?p=' . $encryptedQueries;
+                } else {
+                    $bookingLinks[$doctorId] = null;
+                }
+            }
+        }
+
+        $this['availableDates'] = $availableDates;
+        $this['bookingLinks'] = $bookingLinks;
+
+    } else {
+        $this['availableDates'] = [];
+        $this['bookingLinks'] = [];
+    }
+
+    $this['locations'] = Location::all();
+    $hodExist = HodDoctor::where('location_id', $location->id)
+        ->where('specialty_id', $specialty->id)
+        ->whereIn('doctor_id', $mergedDoctors)
+        ->first();
+
+    $hod = $hodExist ? Doctor::find($hodExist->doctor_id) : null;
+
+    if ($hod) {
+        $this['hod'] = $hod;
+        $this['doctors'] = $specialty->doctors()
+            ->where('doctor_id', '!=', $hod->id)
+            ->whereIn('doctor_id', $mergedDoctors)
+            ->orderBy('name')
+            ->get();
+    } else {
+        $this['doctors'] = $specialty->doctors()
+            ->whereIn('doctor_id', $mergedDoctors)
+            ->orderBy('name')
+            ->get();
+    }
+
+    $this['optionDoctorList'] = $specialty->doctors()
+        ->whereIn('doctor_id', $mergedDoctors)
+        ->orderBy('name')
+        ->get();
+
+    $this['healthConcerns'] = HealthConcern::all();
+    $this['canBook']= true;
+    if($slug=='er'){
+        $this['canBook']= false;
+    }
+}
+
+?>
+==
+<!-- ======= BANNER START ======= -->
+<section class="section-bg">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-12 col-sm-6 text-center text-sm-start px-0">
+                <div class="mc-block">
+                    <h1>{{specialty.name|raw}}</h1>
+                    <p>{{specialty.tag_line}}</p>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 px-0">
+                <div class="position-relative search-doctor-list">
+                    <img src="{{specialty.specialty_banner_image.path}}" class="img-fluid" alt="">
+                    <form class="row row-cols-2 g-2 g-lg-3 dr-search-form align-items-center" id="search-form">
+                        <div class="col-12">
+                            <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+                            <select class="form-select form-select-lg select-mc" id="location">
+                                {% for item in locations %}
+                                {% if item.id == location.id %}
+                                <option value="{{location.id}}" selected>{{location.name}}</option>
+                                {% else %}
+                                <option value={{item.id}}>{{item.name}}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+
+
+                        <div class="col">
+                            <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+                            <select class="form-select form-select-lg select-mc" id="specialty">
+                                <option value=""> Specialty </option>
+                                {% for item in specialties %}
+                                {% if item.slug == specialty.slug %}
+                                <option value="{{specialty.slug}}" selected>{{specialty.name}}</option>
+                                {% else %}
+                                <option value={{item.slug}}>{{item.name}}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col">
+                            <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+                            <select class="form-select form-select-lg select-mc" id="doctor">
+                                <option value="">Doctor’s Name</option>
+                                {% for item in optionDoctorList %}
+                                <option value={{item.id}}><span>
+                                        {{item.designation}}
+                                    </span>{{item.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+
+                        <div class="col-12">
+                            <button class="btn btn-primary btn-mc-search mc-search mb-4 mb-sm-0 mx-auto"><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="49" height="48" viewBox="0 0 49 48"
+                                    fill="none">
+                                    <ellipse cx="24.2" cy="23.716" rx="24.2" ry="23.716" fill="white" />
+                                    <path
+                                        d="M22.8362 15.7266C26.0961 15.7266 28.735 18.3655 28.735 21.6253C28.735 24.8852 26.0961 27.5241 22.8362 27.5241C19.5764 27.5241 16.9375 24.8852 16.9375 21.6253C16.9375 19.3279 18.2476 17.341 20.1663 16.3661M32.6675 31.4566L27.2225 26.0116"
+                                        stroke="#003868" stroke-width="1.452" stroke-miterlimit="10"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ======= BANNER END ======= -->
+
+
+<!-- ======= OUR DOCTORS  START ======= -->
+<section class="mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center section-py-100 pt-0">
+                <h1 class="">Our Doctors</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            {% if hod %}
+
+            <div class="col-12 col-sm-6 col-xl-4 col-xxl-3">
+                <a href="javascript:void(0)" onclick="GoLinks(event,'/doctor-detail/'+'{{hod.id}}')">
+                    <div class="doctor-card">
+
+                        <a href="/doctor-detail/{{hod.id}}">
+                            <div class="doctor-img-001 text-center">
+                                <img src="{{hod.doctor_image.path}}" class="img-fluid" alt=""
+                                    style="border-radius: 50%;">
+                            </div>
+                        </a>
+
+                        <a href="/doctor-detail/{{hod.id}}" style="text-decoration: none;">
+                            <h3> <span>
+                                    {{hod.designation}}
+                                </span>{{hod.name}}</h3>
+                        </a>
+
+                        <div class="dr-specialities drspecialty-truncate my-3"><a href="/doctor-detail/{{hod.id}}"
+                                style="text-decoration: none;"
+                                class="dr-specialities drspecialty-truncate">{{hod.specialty_desc}}</a></div>
+
+
+                        <div class="row hide">
+                            <div class="col-12 text-center">
+                                <p style="margin-bottom: 0px;"><a href="/doctor-detail/{{hod.id}}"
+                                        style="text-decoration: none; color: white;">{{hod.highest_degree}}</a></p>
+                            </div>
+                        </div>
+
+                        <div class="dr-calendar my-4">
+                            {% if availableDates[hod.id] and bookingLinks[hod.id] %}
+                            <div class="dr-calendar-text text-center">
+                                <p><strong>Earliest available appointment</strong></p>
+                                <p style="font-size: 12px;"><strong>{{ availableDates[hod.id].company_name }}</strong></p>
+                            </div>
+                            <div class="dr-calendar-flex">
+                                <a class="dr-cale">{{ availableDates[hod.id].latest_date | date("j-M-Y") }}</a>
+                                <a class="dr-cale">{{ availableDates[hod.id].latest_time | date("h:i A") }}</a>
+                                <!-- <div class="slots">{{ availableDates[hod.id].slots_available }} Slots</div> -->
+
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex justify-content-around">
+                            <div class="{% if not bookingLinks[hod.id] %}w-100 mt-40{% endif %}">
+                                <button href="javascript:void(0)"
+                                    onclick="GoLinks(event,'/doctor-detail/'+'{{hod.id}}')"
+                                    class="btn btn-light btn-dr-card {% if not bookingLinks[hod.id] %}w-100{% endif %}">
+                                    Profile
+                                </button>
+                            </div>
+
+                            {% if canBook %}
+                            <div>
+                                {% if isMobile %}
+                                <a href="/contact-us"
+                                    class="btn btn-dr-card-2 {% if not bookingLinks[hod.id] %}mt-40{% endif %}">
+                                    <svg width="28" height="27" viewBox="0 0 28 27" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <ellipse cx="13.7306" cy="13.7772" rx="13.4181" ry="13.1913" fill="white" />
+                                        <path class="arr-cl"
+                                            d="M14.9238 10.2812L18.565 13.781L14.9238 17.2807M12.8722 13.781H18.463M8.36719 13.781H14.7408"
+                                            stroke="#003868" stroke-width="2" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    Ask Us
+                                </a>
+                                {% else %}
+                                {% if bookingLinks[hod.id] %}
+                                <button href="javascript:void(0)" onclick="GoLinks(event, '{{ bookingLinks[hod.id] }}')"
+                                    class="btn btn-dr-card-2">
+                                    <svg width="28" height="27" viewBox="0 0 28 27" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <ellipse cx="13.7306" cy="13.7772" rx="13.4181" ry="13.1913" fill="white" />
+                                        <path class="arr-cl"
+                                            d="M14.9238 10.2812L18.565 13.781L14.9238 17.2807M12.8722 13.781H18.463M8.36719 13.781H14.7408"
+                                            stroke="#003868" stroke-width="2" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    Book Now
+                                </button>
+                                {% endif %}
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </a>
+            </div>
+            {% endif %}
+            {% for item in doctors %}
+            <div class="col-12 col-sm-6 col-xl-4 col-xxl-3">
+                <a href="javascript:void(0)" onclick="GoLinks(event,'/doctor-detail/'+'{{item.id}}')">
+                    <div class="doctor-card">
+                        <a href="/doctor-detail/{{item.id}}">
+                            <div class="doctor-img-001 text-center">
+                                <img src="{{item.doctor_image.path}}" class="img-fluid" alt=""
+                                    style="border-radius: 50%;">
+                            </div>
+                        </a>
+
+                        <a href="/doctor-detail/{{item.id}}" style="text-decoration: none;">
+                            <h3><span>{{item.designation}}</span> {{item.name}}</h3>
+                        </a>
+
+                        <div class="dr-specialities drspecialty-truncate my-3">
+                            <a href="/doctor-detail/{{item.id}}" style="text-decoration: none;"
+                                class="dr-specialities drspecialty-truncate">{{item.specialty_desc}}</a>
+                        </div>
+
+                        <div class="row hide">
+                            <div class="col-12 text-center">
+                                <p style="margin-bottom: -20px;">
+                                    <a href="/doctor-detail/{{item.id}}" style="text-decoration: none; color: white;">{{item.highest_degree}}</a>
+                                </p><br>
+                               
+                            </div>
+                        </div>
+
+                        
+                        <div class="dr-calendar my-4">
+                           
+                            {% if availableDates[item.id] and bookingLinks[item.id] %}
+                            <div class="dr-calendar-text text-center">
+                                <p><strong>Earliest available appointment</strong></p>
+                                <p style="font-size: 12px;"><strong>{{ availableDates[item.id].company_name }}</strong></p>
+                            </div>
+                            
+                            <div class="dr-calendar-flex">
+                                <a class="dr-cale">{{ availableDates[item.id].latest_date | date("j-M-Y") }}</a>
+                                <a class="dr-cale">{{ availableDates[item.id].latest_time | date("h:i A") }}</a>
+                                <!-- <div class="slots">{{ availableDates[item.id].slots_available }} Slots</div> -->
+                            </div>
+                            {% endif %}
+                        </div>
+                          
+
+                        <div class="d-flex justify-content-around">
+                            <div class="{% if not bookingLinks[item.id] %}w-100 mt-40{% endif %}">
+                                <button href="javascript:void(0)"
+                                    onclick="GoLinks(event,'/doctor-detail/'+'{{item.id}}')"
+                                    class="btn btn-light btn-dr-card {% if not bookingLinks[item.id] %}w-100{% endif %}">
+                                    Profile
+                                </button>
+                            </div>
+                            &nbsp;
+                            {% if canBook %}
+                            <div>
+                                {% if isMobile %}
+                                
+                                <a href="/contact-us"
+                                    class="btn btn-dr-card-2 {% if not bookingLinks[item.id] %}mt-40{% endif %}">
+                                    <svg width="28" height="27" viewBox="0 0 28 27" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <ellipse cx="13.7306" cy="13.7772" rx="13.4181" ry="13.1913" fill="white" />
+                                        <path class="arr-cl"
+                                            d="M14.9238 10.2812L18.565 13.781L14.9238 17.2807M12.8722 13.781H18.463M8.36719 13.781H14.7408"
+                                            stroke="#003868" stroke-width="2" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    Ask Us
+                                </a>
+                                {% else %}
+                                {% if bookingLinks[item.id] %}
+                                <button href="javascript:void(0)"
+                                    onclick="GoLinks(event, '{{ bookingLinks[item.id] }}')" class="btn btn-dr-card-2">
+                                    <svg width="28" height="27" viewBox="0 0 28 27" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <ellipse cx="13.7306" cy="13.7772" rx="13.4181" ry="13.1913" fill="white" />
+                                        <path class="arr-cl"
+                                            d="M14.9238 10.2812L18.565 13.781L14.9238 17.2807M12.8722 13.781H18.463M8.36719 13.781H14.7408"
+                                            stroke="#003868" stroke-width="2" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    Book Now
+                                </button>
+                                {% endif %}
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+
+
+
+        </div>
+
+    </div>
+</section>
+<!-- ======= OUR DOCTORS END ======= -->
+
+<!-- ======= DOWNLOAD OUR APP START ======= -->
+{% partial 'components/appDownload' %}
+<!-- ======= DOWNLOAD OUR APP END ======= -->
+
+<script>
+    document.getElementById('search-form').addEventListener('submit', function (e) {
+        e.preventDefault();  // Prevent the default form submission
+
+        // Get the user's input
+        const specialty = document.getElementById('specialty').value;
+        const doctor = document.getElementById('doctor').value;
+        const location = document.getElementById('location').value;
+
+
+
+        var detailPageURL = '';
+
+        if (specialty && location && !doctor) {
+            detailPageURL = `/search-specialty/${location}/${specialty}`;
+
+        } else {
+            detailPageURL = (doctor) ? `/doctor-detail/${doctor}` : (specialty) ? `/search-specialty/${specialty}` : `/location-doctors/${location}`
+        }
+
+        // Determine the detail page URL based on the search type
+
+        // Redirect to the appropriate detail page
+        window.location.href = detailPageURL;
+    });
+
+
+    $(document).ready(function () {
+        $('#specialty').change(function () {
+            var countryId = $(this).val();
+            var location = document.getElementById('location').value;
+            var doctor = document.getElementById('doctor').value;
+
+            $.ajax({
+                url: '/specialty-doctors/' + countryId + '?location=' + location,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    var statesSelect = $('#doctor');
+
+
+                    statesSelect.empty();
+                    if (data.doctors.length) {
+                        statesSelect.append('<option value=""> Doctor </option>');
+                        $.each(data.doctors, function (key, state) {
+                            var selected = (state.id == doctor) ? ' selected' : '';
+
+                            statesSelect.append('<option value="' + state.id + '"' + selected + '>' + (state.designation ? state.designation : null) + ' ' + state.name + '</option>');
+                        });
+                    } else {
+                        statesSelect.append('<option value=""> Doctor </option>');
+                    }
+
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // Handle errors
+                    console.error('API request failed:', textStatus, errorThrown);
+                }
+            });
+
+        });
+
+        $('#location').change(function () {
+            var countryId = $(this).val();
+            var specialty = document.getElementById('specialty').value;
+
+            $.ajax({
+                url: '/location-specialties/' + countryId,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    var statesSelect = $('#specialty');
+                    var doctorSelect = $('#doctor');
+                    var selectedSpecialtyDoctors = null;
+                    statesSelect.empty();
+                    if (data.specialties.length) {
+                        statesSelect.append('<option value=""> Specialty </option>');
+                        $.each(data.specialties, function (key, state) {
+                            var selected = (state.slug === specialty) ? ' selected' : '';
+                            selectedSpecialtyDoctors = (state.slug === specialty) ? state : null;
+                            statesSelect.append('<option value="' + state.slug + '"' + selected + '>' + state.name + '</option>');
+                        });
+                        $('#specialty').change();
+
+                    } else {
+                        statesSelect.append('<option value=""> Specialty </option>');
+                    }
+
+                    if (!selectedSpecialtyDoctors) {
+                        doctorSelect.empty();
+                        doctorSelect.append('<option value=""> Doctor </option>');
+                    }
+
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // Handle errors
+                    console.error('API request failed:', textStatus, errorThrown);
+                }
+            });
+
+        });
+    });
+    // function GoLinks(event, value) {
+
+    //     event.stopPropagation();
+    //     window.location = value;
+
+
+    // }
+
+
+    function GoLinks(event, bookingLink) {
+        event.preventDefault();
+
+        // If the booking link is not found (empty), redirect to the external site
+        if (!bookingLink || bookingLink === '') {
+            window.location.href = 'https://bamc.myclinic.com.sa:8443';
+        } else {
+            window.location.href = bookingLink;
+        }
+    }
+
+</script>

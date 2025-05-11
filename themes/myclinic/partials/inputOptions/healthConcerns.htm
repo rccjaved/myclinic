@@ -1,0 +1,19 @@
+[builderList]
+modelClass = "MyClinic\Doctor\Models\HealthConcern"
+scope = "-"
+scopeValue = "{{ :scope }}"
+displayColumn = "name"
+noRecordsMessage = "No records found"
+detailsPage = "-"
+detailsUrlParameter = "id"
+recordsPerPage = 10
+pageNumber = "{{ :page }}"
+==
+{% set records = builderList.records %}
+
+<select class="js-example-basic-multiple form-select form-select-lg select-mc">
+
+    <option disabled selected>Health Concerns</option>
+
+
+</select>

@@ -1,0 +1,410 @@
+==
+<?php
+use MyClinic\Setting\Models\Location;
+
+function onStart()
+{
+$alMohammadiyah = Location::find(1);
+
+
+    $this['specialties']=$alMohammadiyah->specialties()->where('show_home_page',1)->orderBy('name')->get();
+
+$this['locations']=Location::orderBy('id')->get(); 
+
+
+
+}
+?>
+==
+<section class="section-py-100 pb-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="py-60 pt-0">حدد موقعك</h1>
+            </div>
+        </div>
+        <div class="row btn-city">
+            <div class="col-12 text-center">
+                <div class="btn-mc-city-group revers">
+                    {% for location in locations %}
+                    {% if location.id == 1 %}
+                    <a target="{{location.id}}" class="btn-mc-city showLocation active">{{location.title_ar |raw}}</a>
+                    {% else %}
+                    <a target="{{location.id}}" class="btn-mc-city showLocation">{{location.title_ar |raw}}</a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="home-demo">
+                    <div class="owl-carousel owl-theme">
+                        <a class="special-letter showSpecial" target="28">ي</a>
+                        <a class="special-letter showSpecial" target="27">و</a>
+                        <a class="special-letter showSpecial" target="26">هـ</a>
+                        <a class="special-letter showSpecial" target="25">ن</a>
+                        <a class="special-letter showSpecial" target="24">م</a>
+                        <a class="special-letter showSpecial" target="23">ل</a>
+                        <a class="special-letter showSpecial" target="22">ك</a>
+                        <a class="special-letter showSpecial" target="21">ق</a>
+                        <a class="special-letter showSpecial" target="20">ف</a>
+                        <a class="special-letter showSpecial" target="19">غ</a>
+                        <a class="special-letter showSpecial" target="18">ع</a>
+                        <a class="special-letter showSpecial" target="17">ظ</a>
+                        <a class="special-letter showSpecial" target="16">ط</a>
+                        <a class="special-letter showSpecial" target="15">ض</a>
+                        <a class="special-letter showSpecial" target="14">ص</a>
+                        <a class="special-letter showSpecial" target="13">ش</a>
+                        <a class="special-letter showSpecial" target="12">س</a>
+                        <a class="special-letter showSpecial" target="11">ز</a>
+                        <a class="special-letter showSpecial" target="10">ر</a>
+                        <a class="special-letter showSpecial" target="9">ذ</a>
+                        <a class="special-letter showSpecial" target="8">د</a>
+                        <a class="special-letter showSpecial" target="7">خ</a>
+                        <a class="special-letter showSpecial" target="6">ح</a>
+                        <a class="special-letter showSpecial" target="5">ج</a>
+                        <a class="special-letter showSpecial" target="4">ث</a>
+                        <a class="special-letter showSpecial" target="3">ت</a>
+                        <a class="special-letter showSpecial" target="2">ب</a>
+                        <a class="special-letter showSpecial" target="1">أ</a>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<section>
+    <div class="container">
+        <div class="row section-py-100">
+            <div class="col-12">
+
+                <div class="row g-3 g-sm-4 flex-row-reverse" id="specialtyCard">
+
+                    {% for item in specialties %}
+                    <div class="col-12 col-md-6 col-lg-4 col-xl-3 mc-specl">
+                        <div class="speciality-box">
+                            <a href="/ar/specialty-detail/{{item.slug}}/1"> <img src="{{item.specialty_image.path}}"
+                                    class="img-fluid" alt="">
+                                <button class="btn btn-light btn-specilty">{{item.name_ar}}</button>
+                            </a>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+
+
+                </div>
+                <div class="col-12 mt-2">
+                    <a href="/ar/our-specialities" class="btn btn-outline-dark btn-view-all btn-view-all-specl"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="#003868" />
+                            <path
+                                d="M24.7969 21.7727L19.5969 27.2L14.3969 21.7727M19.5969 18.7148L19.5969 27.048M19.5969 12L19.5969 21.5"
+                                stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>عرض الكل</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        function setCookie(name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        function eraseCookie(name) {
+            document.cookie = name + '=; Max-Age=-99999999;';
+        }
+
+        var locationCookie = getCookie('userLocation');
+
+        if (!locationCookie) {
+            if (navigator.geolocation) {
+
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
+                    // var latitude = '21.5756';
+                    // var longitude = '39.2080'
+
+                    $.ajax({
+                        url: '/get-loctions?longitude=' + longitude + '&latitude=' + latitude,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            $('.btn-mc-city-group a').removeClass('active');
+                            $('.btn-mc-city-group a[target="' + data.location + '"]').click()
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            // Handle errors
+                            console.error('API request failed:', textStatus, errorThrown);
+                        }
+                    });
+                });
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+        }
+    });
+</script>
+
+
+<script>
+    var activeLocation = null;
+
+    $('.btn-mc-city-group').on('click', 'a', function () {
+        // Remove the 'active' class from all buttons and add it to the clicked button
+        $('.btn-mc-city-group a.active').removeClass('active');
+        $(this).addClass('active');
+
+        // Get the target attribute value of the clicked button (locationId)
+        var locationId = $(this).attr('target');
+
+        // Make an AJAX request to fetch specialties for the selected location
+        $.ajax({
+            url: '/location-specialties/' + locationId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Get the container for specialties
+                var specialtiesContainer = $('#specialtyCard');
+
+                // Clear the existing content
+                specialtiesContainer.empty();
+
+                // Check if there are specialties in the response
+                if (data.specialties.length > 0) {
+                    // Iterate through specialties and append them to the container
+                    var i = 1;
+                    data.specialties.forEach(function (item) {
+                        if (i <= 8) {
+                            var specialtyHtml = `
+                        <div class="col-12 col-md-6 col-lg-4 col-xl-3 mc-specl" style="display: block;">
+                        <div class="speciality-box">
+                            <a href="/ar/specialty-detail/${item.slug}/${locationId}"> <img src="${item.image_path}"
+                                    class="img-fluid" alt="">
+                                <button class="btn btn-light btn-specilty">${item.name_ar}</button>
+                            </a>
+                            </div>
+                        </div>
+                    `;
+                            specialtiesContainer.append(specialtyHtml);
+                        }
+
+                        i++;
+                    });
+                } else {
+                    // Handle the case when there are no specialties
+                    specialtiesContainer.html('<p>No specialties available for this location.</p>');
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Handle errors
+                console.error('API request failed:', textStatus, errorThrown);
+            }
+        });
+
+        activeLocation = $(this).attr('target');
+        $('.home-demo a.active').removeClass('active');
+
+
+    });
+
+
+    $('.home-demo').on('click', 'a', function () {
+
+        // Get the target attribute value of the clicked button (locationId)
+        var alphabet = $(this).attr('target');
+        var activeLocationValue = activeLocation ? activeLocation : 1;
+
+        $.ajax({
+            url: '/location-specialties/' + activeLocationValue + '/alphabet/ar/' + alphabet,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Get the container for specialties
+                var specialtiesContainer = $('#specialtyCard');
+
+                // Clear the existing content
+                specialtiesContainer.empty();
+
+                // Check if there are specialties in the response
+                if (data.specialties.length > 0) {
+                    var i = 1;
+                    data.specialties.forEach(function (item) {
+                        if (i <= 8) {
+                            var specialtyHtml = `
+                        <div class="col-12 col-md-6 col-lg-4 col-xl-3 mc-specl" style="display: block;">
+                        <div class="speciality-box">
+                            <a href="/ar/specialty-detail/${item.slug}/${activeLocationValue}"> <img src="${item.image_path}"
+                                    class="img-fluid" alt="">
+                                <button class="btn btn-light btn-specilty">${item.name_ar}</button>
+                            </a>
+                            </div>
+                        </div>
+                    `;
+                            specialtiesContainer.append(specialtyHtml);
+                        }
+                        i++;
+                    });
+                } else {
+                    // Handle the case when there are no specialties
+                    specialtiesContainer.html('<p>No specialties available for this location.</p>');
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Handle errors
+                console.error('API request failed:', textStatus, errorThrown);
+            }
+        });
+
+    });
+
+
+</script>
+
+<script>
+    var specialLetters = document.querySelectorAll('.special-letter');
+    var owl = $('.owl-carousel');
+    owl.owlCarousel({
+        loop: false,
+        rtl: true,
+        nav: false,
+        margin: 10,
+        responsive: {
+            0: {
+                items: 7
+            },
+            600: {
+                items: 12
+            },
+            960: {
+                items: 16
+            },
+            1200: {
+                items: 20
+            },
+            1600: {
+                items: 24
+            },
+            1920: {
+                items: 26
+            }
+        }
+    });
+
+    specialLetters.forEach(function (letter) {
+        letter.addEventListener('click', function () {
+            // Remove active class from all letters
+            specialLetters.forEach(function (el) {
+                el.classList.remove('active');
+            });
+
+            // Add active class to the clicked letter
+            letter.classList.add('active');
+        });
+    });
+    owl.on('mousewheel', '.owl-stage', function (e) {
+        if (e.deltaY > 0) {
+            owl.trigger('next.owl');
+        } else {
+            owl.trigger('prev.owl');
+        }
+        e.preventDefault();
+    });
+    $(function () {
+        if (window.matchMedia("(max-width: 700px)").matches) {
+            $(".mc-specl").slice(0, 5).show();
+            $(".mc-specl").slice(0, 5).show();
+            $(".mc-specl-2").slice(0, 5).show();
+            $(".mc-specl-3").slice(0, 5).show();
+            $(".mc-specl-4").slice(0, 5).show();
+            $(".mc-specl-5").slice(0, 5).show();
+            $(".mc-specl-6").slice(0, 5).show();
+            $(".mc-specl-7").slice(0, 5).show();
+            $(".mc-specl-8").slice(0, 5).show();
+            $(".mc-specl-9").slice(0, 5).show();
+            $(".mc-specl-10").slice(0, 5).show();
+            $(".mc-specl-11").slice(0, 5).show();
+            $(".mc-specl-12").slice(0, 5).show();
+            $(".mc-specl-13").slice(0, 5).show();
+            $(".mc-specl-14").slice(0, 5).show();
+            $(".mc-specl-15").slice(0, 5).show();
+            $(".mc-specl-16").slice(0, 5).show();
+            $(".mc-specl-17").slice(0, 5).show();
+            $(".mc-specl-18").slice(0, 5).show();
+            $(".mc-specl-19").slice(0, 5).show();
+            $(".mc-specl-20").slice(0, 5).show();
+            $(".mc-specl-21").slice(0, 5).show();
+            $(".mc-specl-22").slice(0, 5).show();
+            $(".mc-specl-23").slice(0, 5).show();
+            $(".mc-specl-24").slice(0, 5).show();
+            $(".mc-specl-25").slice(0, 5).show();
+            $(".mc-specl-26").slice(0, 5).show();
+        } else {
+            $(".mc-specl").slice(0, 8).show();
+            $(".mc-specl-2").slice(0, 8).show();
+            $(".mc-specl-3").slice(0, 8).show();
+            $(".mc-specl-4").slice(0, 8).show();
+            $(".mc-specl-5").slice(0, 8).show();
+            $(".mc-specl-6").slice(0, 8).show();
+            $(".mc-specl-7").slice(0, 8).show();
+            $(".mc-specl-8").slice(0, 8).show();
+            $(".mc-specl-9").slice(0, 8).show();
+            $(".mc-specl-10").slice(0, 8).show();
+            $(".mc-specl-11").slice(0, 8).show();
+            $(".mc-specl-12").slice(0, 8).show();
+            $(".mc-specl-13").slice(0, 8).show();
+            $(".mc-specl-14").slice(0, 8).show();
+            $(".mc-specl-15").slice(0, 8).show();
+            $(".mc-specl-16").slice(0, 8).show();
+            $(".mc-specl-17").slice(0, 8).show();
+            $(".mc-specl-18").slice(0, 8).show();
+            $(".mc-specl-19").slice(0, 8).show();
+            $(".mc-specl-20").slice(0, 8).show();
+            $(".mc-specl-21").slice(0, 8).show();
+            $(".mc-specl-22").slice(0, 8).show();
+            $(".mc-specl-23").slice(0, 8).show();
+            $(".mc-specl-24").slice(0, 8).show();
+            $(".mc-specl-25").slice(0, 8).show();
+            $(".mc-specl-26").slice(0, 8).show();
+        }
+
+        // $("body").on('click touchstart', '.btn-view-all-specl', function (e) {
+        //     e.preventDefault();
+        //     $(".mc-specl:hidden").slice(0, 3).slideDown();
+        //     if ($(".mc-specl:hidden").length == 0) {
+        //         $(".load-more").css('visibility', 'hidden');
+        //     }
+
+        // });
+    });
+
+</script>

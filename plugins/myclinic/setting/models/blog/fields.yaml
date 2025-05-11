@@ -1,0 +1,36 @@
+fields:
+    author_name:
+        label: 'Author Name'
+        span: auto
+        type: text
+    author_name_ar:
+        label: 'Author Name Arabic'
+        span: auto
+        type: text
+    tag_line:
+        label: 'Tag Line'
+        span: auto
+        type: text
+    tag_line_ar:
+        label: 'Tag Line Arabic'
+        span: auto
+        type: text
+    description:
+        label: Description
+        size: small
+        span: auto
+        type: richeditor
+    description_ar:
+        label: 'Description Arabic'
+        size: small
+        span: auto
+        type: richeditor
+    blog_image:
+        label: 'Blog Image'
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload

@@ -1,0 +1,16 @@
+columns:
+    full_name:
+        label: 'Full Name'
+        type: text
+    email:
+        label: Email
+        type: text
+    phone:
+        label: Phone
+        type: text
+    message:
+        label: Message
+        type: text
+    created_at:
+        label: 'Form Submited on'
+        type: datetime

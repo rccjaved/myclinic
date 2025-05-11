@@ -1,0 +1,4 @@
+title: AboutUs
+modelClass: MyClinic\Setting\Models\AboutUs
+toolbar:
+    buttons: reorder_toolbar

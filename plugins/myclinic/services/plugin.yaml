@@ -1,0 +1,11 @@
+plugin:
+    name: 'myclinic.services::lang.plugin.name'
+    description: 'myclinic.services::lang.plugin.description'
+    author: 'My Clinic'
+    icon: oc-icon-circle-o
+    homepage: ''
+navigation:
+    service:
+        label: 'myclinic.services::lang.plugin.name'
+        url: myclinic/services/services
+        icon: icon-life-ring

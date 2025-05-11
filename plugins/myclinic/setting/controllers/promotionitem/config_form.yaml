@@ -1,0 +1,10 @@
+name: PromotionItem
+form: $/myclinic/setting/models/promotionitem/fields.yaml
+modelClass: MyClinic\Setting\Models\PromotionItem
+defaultRedirect: myclinic/setting/promotionitem
+create:
+    redirect: 'myclinic/setting/promotionitem/update/:id'
+    redirectClose: myclinic/setting/promotionitem
+update:
+    redirect: myclinic/setting/promotionitem
+    redirectClose: myclinic/setting/promotionitem

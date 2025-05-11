@@ -1,0 +1,352 @@
+url = "/online-health-tool"
+layout = "master"
+title = "online Health Tool"
+meta_title = "Online Health Tool"
+
+[resources]
+less[] = "pages/online-health-tool.less"
+==
+<?php
+use MyClinic\Setting\Models\Slider;
+use MyClinic\Setting\Models\PageContent;
+
+function onStart()
+{
+  $sliders = Slider::where('type','online-health-tools')->get();
+  $this['sliders'] = $sliders;
+  $this['bmi']=PageContent::where('page','oht')->where('section','oht-bmi')->first();
+  $this['pregnancy']=PageContent::where('page','oht')->where('section','oht-pregnancy-calculator')->first();
+  $this['protein']=PageContent::where('page','oht')->where('section','oht-protein-intake')->first();
+  $this['water']=PageContent::where('page','oht')->where('section','oht-water-intake')->first();
+  $fromMobile = Agent::isMobile();
+  $this['fromMobile']= $fromMobile;
+
+}
+?>
+==
+<div class="swiper-container resize-slider">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+        <!-- Slider -->
+        {% for item in sliders %}
+        <div class="swiper-slide">
+            <img src="{{item.slider_image_mobile.path}}" class="slidemc" alt="online health tool">
+            <img src="{{item.slider_image.path}}" class="slidemc slidemc-m-home" alt="online health tool">
+            <div class="slide-text">
+                <h1 class="mb-3">{{item.title|raw}}</h1>
+                <p class="mb-3 mb-sm-5">{{item.tag_line}}</p>
+                {% if item.link_value %}
+                <a href="{{item.link_value}}" class="btn btn-primary slide-s btn-mc-01 mb-6"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none"
+                        style="margin-right: 20px;">
+                        <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                        <path d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M27.048 19.5984H18.7148H12"
+                            stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>{{item.link_name}}</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- If we need pagination -->
+    <div class="swiper-pagination"></div>
+
+    <!-- If we need navigation buttons -->
+    <div class="swiper-button-prev"><span></span></div>
+    <div class="swiper-button-next"><span></span></div>
+
+
+
+
+</div>
+
+
+<section class="section-py-100">
+    <div class="container section-bg">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6 px-0 order-1 order-lg-0">
+                <img src="{{bmi.section_image.path}}" class="img-fluid" alt="{{bmi.title}}">
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="mc-block-3 text-center text-lg-start">
+                    <h1>{{bmi.title|raw}}</h1>
+                    <p>{{bmi.description|raw}}</p>
+                    <div class="mb-lg-4">
+                        <form action="#">
+                            <div class="radio-buttons-container">
+                                <div class="radio-button"><span class="me-4">Gender</span>
+                                    <input name="radio-group" id="radio2" class="radio-button__input" type="radio">
+                                    <label for="radio2" class="radio-button__label">
+                                        <span class="radio-button__custom"></span>
+                                        Male
+                                    </label>
+                                </div>
+                                <div class="radio-button">
+                                    <input name="radio-group" id="radio1" class="radio-button__input" type="radio">
+                                    <label for="radio1" class="radio-button__label">
+                                        <span class="radio-button__custom"></span>
+                                        Female
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6 mb-3">
+                                    <!-- <label for="your-name" class="form-label">First Name</label> -->
+                                    <input type="text" class="form-control form-control-lg select-mc" id="your-name"
+                                        name="your-name" placeholder="Enter Height" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <!-- <label for="your-surname" class="form-label">Last Name</label> -->
+                                    <input type="text" class="form-control form-control-lg select-mc" id="your-surname"
+                                        name="your-surname" placeholder="Enter Weight" required>
+                                </div>
+                                <div class="col-12">
+                                    <a href="#" class="btn btn-primary btn-mc-01 mx-auto"><svg
+                                            xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                                            viewBox="0 0 40 40" fill="none">
+                                            <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                                            <path
+                                                d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                                stroke="#003868" stroke-width="2" stroke-miterlimit="10"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>Check Now</a>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-bg section-py-100">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+
+            <div class="col-12 col-lg-6">
+                <div class="mc-block-3 text-center text-lg-start">
+                    <h1>{{water.title|raw}}</h1>
+                    <p>{{water.description|raw}}</p>
+                    <div class="mb-lg-4">
+                        <form class="row gy-2 align-items-center mb-sm-4">
+                            <div class="col-xl col-12">
+                                <input type="text" class="form-control form-control-lg select-mc"
+                                    placeholder="Enter Height" aria-label="e">
+                            </div>
+                            <div class="col-xl col-12">
+                                <input type="text" class="form-control form-control-lg select-mc"
+                                    placeholder="Enter Weight" aria-label="">
+                            </div>
+                            <div class="col-xl col-12">
+                                <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+                                <select class="form-select form-select-lg select-mc" id="autoSizingSelect">
+                                    <option selected>Riyadh</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
+                            <div class="col-12 mt-3">
+                                <a href="#" class="btn btn-primary btn-mc-01 mx-auto"><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"
+                                        fill="none">
+                                        <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                                        <path
+                                            d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                            stroke="#003868" stroke-width="2" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>Check Now</a>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 px-0">
+                <img src="{{water.section_image.path}}" class="img-fluid" alt="{{water.title}}">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-py-100">
+    <div class="container section-bg">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6 px-0 order-1 order-lg-0">
+                <img src="{{protein.section_image.path}}" class="img-fluid" alt="{{protein.title}}">
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="mc-block-3 text-center text-lg-start">
+                    <h1>{{protein.title|raw}}</h1>
+                    <p>{{protein.description|raw}}</p>
+                    <div class="mb-lg-4">
+                        <form action="#">
+                            <div class="mb-lg-4">
+                                <div class="radio-buttons-container">
+                                    <div class="radio-button"><span class="me-4">Gender</span>
+                                        <input name="radio-group" id="radio2" class="radio-button__input" type="radio">
+                                        <label for="radio2" class="radio-button__label">
+                                            <span class="radio-button__custom"></span>
+                                            Male
+                                        </label>
+                                    </div>
+                                    <div class="radio-button">
+                                        <input name="radio-group" id="radio1" class="radio-button__input" type="radio">
+                                        <label for="radio1" class="radio-button__label">
+                                            <span class="radio-button__custom"></span>
+                                            Female
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                        <!-- <label for="your-name" class="form-label">First Name</label> -->
+                                        <input type="text" class="form-control form-control-lg select-mc" id="your-name"
+                                            name="your-name" placeholder="Age" required>
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <!-- <label for="your-surname" class="form-label">Last Name</label> -->
+                                        <input type="text" class="form-control form-control-lg select-mc"
+                                            id="your-surname" name="your-surname" placeholder="Enter Height" required>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" class="form-control form-control-lg select-mc"
+                                            placeholder="Enter Weight" aria-label="">
+                                    </div>
+                                    <div class="col">
+                                        <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+                                        <select class="form-select form-select-lg select-mc" id="autoSizingSelect">
+                                            <option selected>Activity Level</option>
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                            <option value="3">Three</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 mt-3">
+                                        <a href="#" class="btn btn-primary btn-mc-01 mx-auto"><svg
+                                                xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                                                viewBox="0 0 40 40" fill="none">
+                                                <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                                                <path
+                                                    d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                                    stroke="#003868" stroke-width="2" stroke-miterlimit="10"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>Check Now</a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-bg section-py-100">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+
+            <div class="col-12 col-lg-7">
+                <div class="mc-block-3 text-center text-lg-start">
+                    <h1>{{pregnancy.title}}</h1>
+                    <p>{{pregnancy.description|raw}}</p>
+                    <div class="mb-lg-4">
+                        <form class="row gy-2 align-items-center mb-sm-4">
+                            <div class="col-xl col-12">
+                                <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+                                <select class="form-select form-select-lg select-mc" id="autoSizingSelect">
+                                    <option selected>Calculation Method</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
+                            <div class="col-xl col-12">
+                                <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+                                <select class="form-select form-select-lg select-mc" id="autoSizingSelect">
+                                    <option selected>Last Period Start</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
+                            <div class="col-xl col-12">
+                                <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+                                <select class="form-select form-select-lg select-mc" id="autoSizingSelect">
+                                    <option selected>Cycle Length</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
+                            <div class="col-12 mt-3">
+                                <a href="#" class="btn btn-primary btn-mc-01 w-auto "><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"
+                                        fill="none">
+                                        <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                                        <path
+                                            d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                            stroke="#003868" stroke-width="2" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>Calculate My Due Date</a>
+                            </div>
+
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-5 px-0">
+                <img src="{{pregnancy.section_image.path}}" class="img-fluid" alt="{{pregnancy.title}}">
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% partial 'components/appDownload' %}
+
+
+{% put scripts %}
+
+<script>
+
+    // ------------- New Slider ----------
+
+    // swiper    
+    var mySwiper = new Swiper('.swiper-container', {
+        effect: '',
+        loop: false,
+        speed: 1000,
+        slidesPerView: 1,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            type: 'bullets',
+            clickable: 'true'
+        },
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+
+
+
+    });
+
+
+
+</script>
+
+{% endput %}

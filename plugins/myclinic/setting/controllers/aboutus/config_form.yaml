@@ -1,0 +1,10 @@
+name: AboutUs
+form: $/myclinic/setting/models/aboutus/fields.yaml
+modelClass: MyClinic\Setting\Models\AboutUs
+defaultRedirect: myclinic/setting/aboutus
+create:
+    redirect: 'myclinic/setting/aboutus/update/:id'
+    redirectClose: myclinic/setting/aboutus
+update:
+    redirect: myclinic/setting/aboutus
+    redirectClose: myclinic/setting/aboutus

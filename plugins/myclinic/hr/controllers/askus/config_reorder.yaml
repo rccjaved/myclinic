@@ -1,0 +1,4 @@
+title: AskUs
+modelClass: MyClinic\Hr\Models\AskUs
+toolbar:
+    buttons: reorder_toolbar

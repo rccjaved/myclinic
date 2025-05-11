@@ -1,0 +1,10 @@
+name: Careers
+form: $/myclinic/hr/models/career/fields.yaml
+modelClass: MyClinic\Hr\Models\Career
+defaultRedirect: myclinic/hr/careers
+create:
+    redirect: 'myclinic/hr/careers/update/:id'
+    redirectClose: myclinic/hr/careers
+update:
+    redirect: myclinic/hr/careers
+    redirectClose: myclinic/hr/careers

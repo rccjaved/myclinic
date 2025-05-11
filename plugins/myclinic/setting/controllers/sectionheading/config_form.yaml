@@ -1,0 +1,10 @@
+name: SectionHeading
+form: $/myclinic/setting/models/sectionheading/fields.yaml
+modelClass: MyClinic\Setting\Models\SectionHeading
+defaultRedirect: myclinic/setting/sectionheading
+create:
+    redirect: 'myclinic/setting/sectionheading/update/:id'
+    redirectClose: myclinic/setting/sectionheading
+update:
+    redirect: myclinic/setting/sectionheading
+    redirectClose: myclinic/setting/sectionheading

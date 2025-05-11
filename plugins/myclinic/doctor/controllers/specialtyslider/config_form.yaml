@@ -1,0 +1,10 @@
+name: SpecialtySlider
+form: $/myclinic/doctor/models/specialtyslider/fields.yaml
+modelClass: MyClinic\Doctor\Models\specialtySlider
+defaultRedirect: myclinic/doctor/specialtyslider
+create:
+    redirect: 'myclinic/doctor/specialtyslider/update/:id'
+    redirectClose: myclinic/doctor/specialtyslider
+update:
+    redirect: myclinic/doctor/specialtyslider
+    redirectClose: myclinic/doctor/specialtyslider

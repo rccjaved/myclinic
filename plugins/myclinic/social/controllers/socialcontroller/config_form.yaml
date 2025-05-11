@@ -1,0 +1,10 @@
+name: SocialController
+form: $/myclinic/social/models/social/fields.yaml
+modelClass: MyClinic\Social\Models\Social
+defaultRedirect: myclinic/social/socialcontroller
+create:
+    redirect: 'myclinic/social/socialcontroller'
+    redirectClose: myclinic/social/socialcontroller
+update:
+    redirect: myclinic/social/socialcontroller
+    redirectClose: myclinic/social/socialcontroller

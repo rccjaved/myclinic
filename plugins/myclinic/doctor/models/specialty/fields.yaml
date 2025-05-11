@@ -1,0 +1,79 @@
+fields:
+    locations:
+        label: Location
+        nameFrom: name
+        descriptionFrom: description
+        span: auto
+        type: relation
+    slug:
+        label: Slug
+        span: auto
+        type: text
+    name:
+        label: Name
+        span: auto
+        type: text
+    name_ar:
+        label: 'Arabic Name'
+        span: auto
+        type: text
+    tag_line:
+        label: 'Tag Line'
+        span: auto
+        type: text
+    tag_line_ar:
+        label: 'Arabic Tag Line'
+        span: auto
+        type: text
+    description:
+        label: Description
+        size: small
+        span: auto
+        attributes:
+            maxlength: '255'
+        type: richeditor
+    description_ar:
+        label: 'Arabic Discription'
+        size: small
+        span: auto
+        attributes:
+            maxlength: '255'
+        type: richeditor
+    specialty_image:
+        label: 'Specilty Image'
+        span: auto
+        mode: file
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        type: fileupload
+    # doctor_id:
+    #     label: HOD
+    #     span: auto
+    #     type: dropdown
+    #     options: listDoctors
+    show_home_page:
+        label: 'Show At Homepage'
+        span: auto
+        type: switch
+    specialty_banner_image:
+        label: 'Specialty Banner Image'
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload
+    arabic_search_word:
+        label: 'Arabic Search Word'
+        span: auto
+        type: text
+    doctors:
+        label: Doctor
+        nameFrom: name
+        descriptionFrom: description
+        span: auto
+        type: relation
+        options: listDoctors

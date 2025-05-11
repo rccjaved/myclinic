@@ -1,0 +1,23 @@
+fields:
+    page:
+        label: Page
+        options:
+            home: Home
+        showSearch: true
+        span: auto
+        type: dropdown
+    section:
+        label: 'Section Name'
+        options:
+            testimonial: Testimonial
+        showSearch: true
+        span: auto
+        type: dropdown
+    name:
+        label: Name
+        span: auto
+        type: text
+    name_ar:
+        label: 'Arabic Name'
+        span: auto
+        type: text

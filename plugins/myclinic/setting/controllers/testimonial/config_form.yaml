@@ -1,0 +1,10 @@
+name: Testimonial
+form: $/myclinic/setting/models/testimonial/fields.yaml
+modelClass: MyClinic\Setting\Models\Testimonial
+defaultRedirect: myclinic/setting/testimonial
+create:
+    redirect: 'myclinic/setting/testimonial/update/:id'
+    redirectClose: myclinic/setting/testimonial
+update:
+    redirect: myclinic/setting/testimonial
+    redirectClose: myclinic/setting/testimonial

@@ -1,0 +1,133 @@
+url = "/ar/faqs"
+layout = "master-ar"
+title = "Faqs"
+
+[resources]
+less[] = "pages/faqs.less"
+==
+<?php
+use MyClinic\Setting\Models\Slider;
+use MyClinic\Setting\Models\PageContent;
+
+function onStart()
+{
+  
+  $sliders = Slider::where('type','faqs')->get();
+  $this['sliders'] = $sliders;
+  $this['faqs']=PageContent::where('page','faqs')->where('section','faqs-faq')->get();
+  $this['generalFaqText']=PageContent::where('page','faqs')->where('section','faqs-general-faqs-text')->first();
+  $fromMobile = Agent::isMobile();
+  $this['fromMobile']= $fromMobile;
+}
+?>
+==
+<main>
+    <!-- Page Banner Start -->
+    <div class="swiper-container resize-slider">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper">
+            <!-- Slider -->
+            {% for item in sliders %}
+            <div class="swiper-slide">
+            <img src="{{item.slider_image_ar_mobile.path}}" class="slidemc" alt="">
+            <img src="{{item.slider_image_ar.path}}" class="slidemc slidemc-m-home" alt="">
+                <div class="slide-text w-100 text-end">
+                    <h1 class="mb-3">{{item.title_ar|raw}}</h1>
+                    <p class="mb-3 mb-sm-5">{{item.tag_line_ar}}</p>
+                    {% if item.link_value %}
+                    <a href="/ar/{{item.link_value}}" class="btn btn-primary slide-s btn-mc-01 mb-6"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none"
+                            style="margin-right: 20px;">
+                            <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                            <path d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M27.048 19.5984H18.7148H12"
+                                stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>{{item.link_name_ar}}</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- If we need pagination -->
+        <div class="swiper-pagination"></div>
+
+        <!-- If we need navigation buttons -->
+        <div class="swiper-button-prev"><span></span></div>
+        <div class="swiper-button-next"><span></span></div>
+
+
+
+
+    </div>
+
+
+    <section class="pt-5 pb-5">
+        <div class="container">
+            <div class="row gx-5 flex-row-reverse">
+                <div class="col-lg-5 col text-end">
+                    <h1>{{generalFaqText.title_ar|raw}}</h1>
+                    <p>{{generalFaqText.description_ar|raw}}</p>
+                </div>
+                <div class="col-lg-7">
+                    <div class="accordion border border-0" id="accordionFlushExample">
+                        {% for item in faqs %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapseOne" aria-expanded="false"
+                                    aria-controls="flush-collapseOne">
+                                    {{item.title_ar|raw}}
+                                </button>
+                            </h2>
+                            <div id="flush-collapseOne" class="accordion-collapse collapse"
+                                data-bs-parent="#accordionFlushExample">
+                                <div class="accordion-body">{{item.description_ar|raw}}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+
+</main>
+
+{% put scripts %}
+
+<script>
+
+    // ------------- New Slider ----------
+
+    // swiper    
+    var mySwiper = new Swiper('.swiper-container', {
+        effect: '',
+        loop: false,
+        speed: 1000,
+        slidesPerView: 1,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            type: 'bullets',
+            clickable: 'true'
+        },
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+
+
+
+    });
+
+
+
+</script>
+
+{% endput %}

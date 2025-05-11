@@ -1,0 +1,32 @@
+columns:
+    name:
+        label: Name
+        type: text
+        searchable: true
+        sortable: true
+    specialty_id:
+        label: Specialty
+        type: text
+        searchable: true
+        sortable: true
+        select: name
+        relation: specialties
+        valueFrom: name
+    location_id:
+        label: Locations
+        type: text
+        searchable: true
+        sortable: true
+        select: name
+        relation: locations
+        valueFrom: name
+    highest_degree:
+        label: 'Highest Degree'
+        type: text
+        searchable: true
+        sortable: true
+    image:
+        label: Thumbnail
+        type: partial
+        sortable: false
+        path: ~/plugins/myclinic/doctor/controllers/doctor/_thumbnail_column.htm

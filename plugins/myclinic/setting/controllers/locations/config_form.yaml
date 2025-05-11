@@ -1,0 +1,10 @@
+name: Locations
+form: $/myclinic/setting/models/location/fields.yaml
+modelClass: MyClinic\Setting\Models\Location
+defaultRedirect: myclinic/setting/locations
+create:
+    redirect: 'myclinic/setting/locations/update/:id'
+    redirectClose: myclinic/setting/locations
+update:
+    redirect: myclinic/setting/locations
+    redirectClose: myclinic/setting/locations

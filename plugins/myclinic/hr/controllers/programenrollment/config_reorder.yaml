@@ -1,0 +1,4 @@
+title: ProgramEnrollment
+modelClass: MyClinic\Hr\Models\ProgramEnrollment
+toolbar:
+    buttons: reorder_toolbar

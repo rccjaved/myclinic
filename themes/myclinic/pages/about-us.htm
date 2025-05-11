@@ -1,0 +1,343 @@
+url = "/about-us"
+layout = "master"
+title = "About Us"
+meta_title = "About Us"
+meta_description = "At My Clinic, we are dedicated to enhancing your well-being through a wide spectrum of healthcare services. Our expertise spans from preventive care to specialized treatments, all designed to address your unique health needs."
+
+[resources]
+less[] = "pages/about-us.less"
+==
+<?php
+use MyClinic\Setting\Models\Location;
+use MyClinic\Setting\Models\AboutUs;
+use MyClinic\Setting\Models\Slider;
+
+function onStart()
+{
+    $sliders = Slider::where('type','about_us')->get();
+    $this['sliders'] = $sliders;
+    $this['locations']=Location::orderBy('id')->get(); 
+    $this['aboutUsSection']=AboutUs::where('slug','about-us-section')->first();
+    $this['whatWeDoSection']=AboutUs::where('slug','what-we-do-section')->first();
+    $this['ourPurposeSection']=AboutUs::where('slug','our-purpose-section')->first();
+    $this['missionSection']=AboutUs::where('slug','mission-section')->first();
+    $this['servicesSection']=AboutUs::where('slug','services-section')->first();
+    $this['caringSection']=AboutUs::where('slug','caring-section')->first();
+    $this['ambitiousSection']=AboutUs::where('slug','ambitious-section')->first();
+    $this['responsibleSection']=AboutUs::where('slug','responsible-section')->first();
+    $this['collaborativeSection']=AboutUs::where('slug','collaborative-section')->first();
+
+
+}
+?>
+==
+<div class="swiper-container about-swiper">
+    <!-- Additional required wrapper eeee-->
+    <div class="swiper-wrapper">
+        <!-- Slider -->
+        {% for item in sliders %}
+        <div class="swiper-slide">
+            <img src="{{item.slider_image.path}}" class="slidemc" alt="about us">
+            <div class="slide-text">
+                <h1 class="mb-3">{{item.title|raw}}</h1>
+                <p class="mb-3 mb-sm-5">{{item.tag_line}}</p>
+                {% if item.link_value %}
+                <a href="{{item.link_value}}" class="btn btn-primary slide-s btn-mc-01 mb-6"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none"
+                        style="margin-right: 20px;">
+                        <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                        <path d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M27.048 19.5984H18.7148H12"
+                            stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>{{item.link_name}}</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- If we need pagination -->
+    <div class="swiper-pagination"></div>
+
+    <!-- If we need navigation buttons -->
+    <div class="swiper-button-prev"><span></span></div>
+    <div class="swiper-button-next"><span></span></div>
+
+
+
+
+</div>
+
+
+
+
+
+<!-- ======= TELEMEDICINE START ======= -->
+
+
+{% if aboutUsSection %}
+<section class="section-py-120 ">
+    <div class="container section-bg">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6 order-1 order-lg-0 ps-sm-0">
+                <img src="{{aboutUsSection.about_us_image.path}}" class="img-fluid" alt="">
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="mc-block-1">
+                    <h1>{{aboutUsSection.title}}</h1>
+                    <div class="about-company">
+                        {{aboutUsSection.description|raw}}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+
+{% if whatWeDoSection %}
+<section id="we-do" class="section-bg section-py-100">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-center text-lg-start">
+                    <h1>{{whatWeDoSection.title}}</h1>
+                    <p class="text-justy">{{whatWeDoSection.description|raw}}
+                    </p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <img src="{{whatWeDoSection.about_us_image.path}}" class="img-fluid" alt="">
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+
+
+<section id="our-sites" class="section-py-100">
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-12 text-center">
+                <h1 class="mb-4">Our Sites</h1>
+            </div>
+            {% for item in locations %}
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="program-box site-box mb-sm-4">
+                    <img src="{{item.location_image.path}}" class="img-fluid" alt="">
+                    <div class="box2 btn btn-light btn-program">{{item.name}}</div>
+                </div>
+                <p class="mb-lg-4 d-none d-sm-block">{{item.description|raw}}</p>
+            </div>
+            {% endfor %}
+
+
+
+
+            <div class="col-12">
+                <a href="/contact-us" class="btn btn-primary btn-mc-01 d-none d-sm-inline-block"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                        <path d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                            stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>Ask Us</a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% if ourPurposeSection %}
+<section class="section-bg-2 section-py-100">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-center text-lg-start">
+                    <h1>{{ourPurposeSection.title}}</h1>
+                    <p class="text-justy">{{ourPurposeSection.description|raw}}</p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <img src="{{ourPurposeSection.about_us_image.path}}" class="img-fluid" alt="">
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if missionSection %}
+<section class="section-py-100 section-bg">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6 order-1 order-lg-0">
+                <img src="{{missionSection.about_us_image.path}}" class="img-fluid" alt="">
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-center text-lg-start">
+                    <h1>{{missionSection.title}}</h1>
+                    <p class="text-justy">{{missionSection.description|raw}}</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+<section class="section-bg-2 section-py-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="text-center mb-3 mb-sm-5">
+                    <h1>Core Values</h1>
+                </div>
+            </div>
+        </div>
+        {% if caringSection %}
+        <div class="row align-items-center bg-white">
+            <div class="col-12 col-sm-6 px-0 order-1 order-sm-0">
+                <img src="{{caringSection.about_us_image.path}}" class="img-fluid" alt="image">
+            </div>
+            <div class="col-12 col-sm-6">
+                <div class="">
+                    <h1 class="mb-3 mt-3">{{caringSection.title}}</h1>
+                    <div class="list">
+                        {{caringSection.description|raw}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+<section class="section-bg-2">
+    <div class="container bg-white">
+        {% if ambitiousSection %}
+        <div class="row align-items-center">
+            <div class="col-12 col-sm-6">
+                <div class="mc-block">
+                    <h1 class="mb-3 mt-3">{{ambitiousSection.title}}</h1>
+                    <div class="list">
+                        {{ambitiousSection.description|raw}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 px-0 text-end">
+                <img src="{{ambitiousSection.about_us_image.path}}" class="img-fluid" alt="image">
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+<section class="section-bg-2 section-py-100">
+    <div class="container bg-white">
+        {% if responsibleSection %}
+        <div class="row align-items-center">
+            <div class="col-12 col-sm-6 px-0 order-1 order-sm-0">
+                <img src="{{responsibleSection.about_us_image.path}}" class="img-fluid" alt="image">
+            </div>
+            <div class="col-12 col-sm-6">
+                <div class="">
+                    <h1 class="mb-3 mt-3">{{responsibleSection.title}}</h1>
+                    <div class="list">
+                        {{responsibleSection.description|raw}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+<section class="section-bg-2 section-py-100 pt-0">
+    <div class="container bg-white">
+        {% if collaborativeSection %}
+        <div class="row align-items-center">
+            <div class="col-12 col-sm-6">
+                <div class="mc-block">
+                    <h1 class="mb-3 mt-3">{{collaborativeSection.title}}</h1>
+                    <div class="list">
+                        {{collaborativeSection.description|raw}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 px-0 text-end">
+                <img src="{{collaborativeSection.about_us_image.path}}" class="img-fluid" alt="image">
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+
+
+{% if servicesSection %}
+<section class="section-bg-2 section-py-100">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-center text-lg-start">
+                    <h1>{{servicesSection.title}}</h1>
+                    <p class="text-justy">{{servicesSection.description|raw}}</p>
+                    {% if servicesSection.link_value %}
+                    <a href="{{servicesSection.link_value}}" class="btn btn-primary slide-s btn-mc-01 mb-6"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none"
+                            style="margin-right: 20px;">
+                            <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                            <path d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M27.048 19.5984H18.7148H12"
+                                stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>{{servicesSection.link_name}}</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 px-sm-0">
+                <img src="{{servicesSection.about_us_image.path}}" class="img-fluid" alt="">
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% partial 'components/appDownload' %}
+
+
+<script>
+
+    // ------------- New Slider ----------
+
+    // swiper    
+    var mySwiper = new Swiper('.swiper-container', {
+        effect: '',
+        loop: false,
+        speed: 1000,
+        slidesPerView: 1,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            type: 'bullets',
+            clickable: 'true'
+        },
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+
+
+
+    });
+
+
+
+</script>

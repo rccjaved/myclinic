@@ -1,0 +1,48 @@
+fields:
+    title:
+        label: Title
+        span: auto
+        type: text
+    title_ar:
+        label: 'Arabic Title'
+        span: auto
+        type: text
+    description:
+        label: Description
+        size: small
+        span: auto
+        type: richeditor
+    description_ar:
+        label: 'Arabic Description'
+        size: small
+        span: auto
+        type: richeditor
+    link_name:
+        label: 'Link Button Name'
+        span: auto
+        type: text
+    link_name_ar:
+        label: 'Arabic Link Button Name'
+        span: auto
+        type: text
+    link_value:
+        label: 'Link Url'
+        span: auto
+        type: text
+    is_core_value:
+        label: 'Is Core Value'
+        span: auto
+        type: switch
+    about_us_image:
+        label: 'Section Image'
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload
+    slug:
+        label: Slug
+        span: auto
+        type: text

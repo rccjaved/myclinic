@@ -1,0 +1,33 @@
+fields:
+    title:
+        label: Title
+        span: auto
+        type: text
+    page_url:
+        label: 'Page Url'
+        span: auto
+        type: text
+    service_type:
+        label: 'Service Type'
+        options:
+            on-site: 'On Site'
+            corporate: Corporate
+        showSearch: true
+        span: auto
+        type: dropdown
+    service_image:
+        label: 'Service Image'
+        span: auto
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        imageWidth: '750'
+        imageHeight: '750'
+        type: fileupload
+    description:
+        label: Description
+        size: huge
+        span: auto
+        type: richeditor

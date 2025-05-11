@@ -1,0 +1,562 @@
+url = "/ar/doctor-detail/:id"
+layout = "master-ar"
+title = "Doctor Details"
+==
+<?php
+use MyClinic\Doctor\Models\Specialty;
+use MyClinic\Doctor\Models\Doctor;
+use MyClinic\Setting\Models\Location;
+use MyClinic\Doctor\Models\HealthConcern;
+use MyClinic\Setting\Models\Testimonial;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+use MyClinic\Doctor\Helpers\Encryptionhelper;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
+
+function onStart()
+{
+    $id = $this->param('id'); 
+    $doctor = Doctor::find($id);
+
+    if (!$doctor) {
+        return;
+    }
+
+    // Set doctor details
+    $doctor_app_id = $doctor->doctor_app_id;
+    $locations = $doctor->locations;
+    $doctor_locations = '';
+    $locationIDs = [];
+
+    foreach ($locations as $item) {
+        $doctor_locations .= ' ' . $item->name_ar . '<br>';
+        $locationIDs[] = $item->id;
+    }
+    $doctor_locations = rtrim($doctor_locations, '<br>');
+    $this['doctor_locations'] = $doctor_locations;
+
+    $language = $doctor->languages;
+    $doctor_language = '';
+    foreach ($language as $item) {
+        $doctor_language .= ' ' . $item->name_ar . ',';
+    }
+    $doctor_language = rtrim($doctor_language, ',');
+    $this['doctor_language'] = $doctor_language;
+
+    $this['doctor'] = $doctor;
+
+    // Handle specialties and determine button visibility
+    $specialties = $doctor->specialties;
+    $isBookNow = true;
+    $isButtonVisible = true;
+
+    $this['specialties'] = $specialties;
+    $specialty_ids = [];
+    foreach ($specialties as $item) {
+        if (in_array($item->slug, ['Dental', 'er', 'physiotherapy'])) {
+            $isBookNow = false;
+        }
+        if ($item->slug == 'er') {
+            $isButtonVisible = false;
+        }
+        $specialty_ids[] = $item->id;
+    }
+
+    // Fetch similar doctors
+    $doctor_ids = DB::table('myclinic_doctor_doctor_specialty')
+                    ->whereIn('specialty_id', $specialty_ids)
+                    ->pluck('doctor_id')->toArray();
+    $locationDoctors = DB::table('myclinic_doctor_doctor_location')
+                         ->whereIn('location_id', $locationIDs)
+                         ->pluck('doctor_id')->toArray();
+    $mergedDoctors = array_intersect($doctor_ids, $locationDoctors);
+
+    $similarDoctors = Doctor::whereIn('id', $mergedDoctors)
+                            ->whereNotIn('id', [$doctor->id])
+                            ->orderBy('name')
+                            ->get();
+
+    $this['similar_doctor'] = $similarDoctors;
+
+    $testimonials = Testimonial::where('category', 'home')->get();
+    $this['testimonials'] = $testimonials;
+    $this['isBookNow'] = $isBookNow;
+    $this['isButtonVisible'] = $isButtonVisible;
+
+    // Fetch availability only for the main doctor
+    list($isAvailable, $availableDates, $bookingLinks) = $this->fetchDoctorAvailability($doctor_app_id);
+    $this['availableDates'] = $availableDates;
+    $this['bookingLinks'] = $bookingLinks;
+    $this['isBookNow'] = $isBookNow && $isAvailable;
+}
+
+private function fetchDoctorAvailability($doctor_app_id)
+{
+    $cacheKey = 'doctor_availability_' . $doctor_app_id;
+    $cacheDuration = 60; // 1 minute cache
+    
+    if (Cache::has($cacheKey)) {
+        return Cache::get($cacheKey);
+    }
+
+    $companyMapping = [
+        'nc01' => 'جدة المحمدية',
+        'safa' => 'جدة الصفا',
+        'prc' => 'جدة الخالدية مركز طب الأسنان',
+        'ryd1' => 'الرياض الصحافة',
+    ];
+
+    $response = Http::post('https://bamc.myclinic.com.sa/OS.WebAPI.External/api/OSExternal/ApptGetEarlistSlots', [
+        "SecurityToken" => "e236d058-fa14-44e1-aa07-5415d8f062c2",
+        "DoctorId" => $doctor_app_id,
+        "IsTelemedicine" => false,
+        "PreferredTime" => "0",
+        "IsFollowUp" => false
+    ]);
+
+    $isAvailable = false;
+    $availableDates = [];
+    $bookingLinks = [];
+
+    if ($response->successful()) {
+        $earliestSlots = $response->json();
+
+        if (!empty($earliestSlots['ApptGetEarlistSlotBySpecialityResponse'])) {
+            $isAvailable = true;
+
+            foreach ($earliestSlots['ApptGetEarlistSlotBySpecialityResponse'] as $doctorData) {
+                $specialtyId = (int)$doctorData['SpecialtyId'];
+                $slotDate = $doctorData['SlotDate'] ? new DateTime($doctorData['SlotDate']) : null;
+                $slotTime = $doctorData['SlotTime'] ? new DateTime($doctorData['SlotTime']) : null;
+                $companyId = (string)$doctorData['Company'];
+                $companyName = $companyMapping[$companyId] ?? $companyId; 
+                $doctorAppId = (int)$doctorData['DoctorId'];
+
+                if ($slotDate && $slotTime) {
+                    $dataToEncrypt = [
+                        'speciality_id' => $specialtyId,
+                        'doctor_id' => $doctorAppId,
+                        'location' => $companyId,
+                        'date' => $slotDate->format('Y-m-d'),
+                    ];
+
+                    $strJson = json_encode($dataToEncrypt);
+                    $encryptedQueries = encryptData($strJson);
+
+                    $weekDates = $doctorData['WeekDates'] ?? [];
+                    $latestDate = $slotDate;
+                    $slotsAvailable = count($weekDates);
+
+                    $availableDates[$doctorAppId] = [
+                        'doctor_id' => $doctorAppId,
+                        'doctor_name' => $doctorData['DoctorName'],
+                        'latest_date' => $latestDate,
+                        'slots_available' => $slotsAvailable,
+                        'latest_time' => $slotTime->format('H:i:s'),
+                        'company_name' => $companyName
+                    ];
+
+                    $bookingLinks[$doctorAppId] = 'https://bamc.myclinic.com.sa:8443/search-results?p=' . $encryptedQueries;
+                }
+            }
+        }
+    }
+
+    $result = [$isAvailable, $availableDates, $bookingLinks];
+    Cache::put($cacheKey, $result, $cacheDuration);
+    
+    return $result;
+}
+
+public function onSimilarDoctorsAvailability()
+{
+    $doctorId = input('doctor_id');
+    
+    $cacheKey = 'doctor_avail_ar_' . $doctorId;
+    if (Cache::has($cacheKey)) {
+        return Cache::get($cacheKey);
+    }
+
+    $doctor = Doctor::find($doctorId);
+    if (!$doctor) {
+        return [];
+    }
+    
+    $response = Http::post('https://bamc.myclinic.com.sa/OS.WebAPI.External/api/OSExternal/ApptGetEarlistSlots', [
+        "SecurityToken" => "e236d058-fa14-44e1-aa07-5415d8f062c2",
+        "DoctorId" => $doctor->doctor_app_id,
+        "IsTelemedicine" => false,
+        "PreferredTime" => "0",
+        "IsFollowUp" => false
+    ]);
+
+    $result = ['availableDates' => null, 'bookingLink' => null];
+
+    if ($response->successful()) {
+        $data = $response->json();
+        if (!empty($data['ApptGetEarlistSlotBySpecialityResponse'])) {
+            $firstSlot = $data['ApptGetEarlistSlotBySpecialityResponse'][0];
+            
+            if ($firstSlot['SlotDate'] && $firstSlot['SlotTime']) {
+                $result = [
+                    'availableDates' => [
+                        'latest_date' => new DateTime($firstSlot['SlotDate']),
+                        'latest_time' => $firstSlot['SlotTime'],
+                        'company_name' => $this->getArabicCompanyName($firstSlot['Company'])
+                    ],
+                    'bookingLink' => $this->generateBookingLink($firstSlot)
+                ];
+            }
+        }
+    }
+
+    Cache::put($cacheKey, $result, 60);
+    return $result;
+}
+
+private function getArabicCompanyName($companyId)
+{
+    $companyMapping = [
+        'nc01' => 'جدة المحمدية',
+        'safa' => 'جدة الصفا',
+        'prc' => 'جدة الخالدية مركز طب الأسنان',
+        'ryd1' => 'الرياض الصحافة',
+    ];
+    
+    return $companyMapping[$companyId] ?? $companyId;
+}
+
+private function generateBookingLink($slotData)
+{
+    $dataToEncrypt = [
+        'speciality_id' => (int)$slotData['SpecialtyId'],
+        'doctor_id' => (int)$slotData['DoctorId'],
+        'location' => (string)$slotData['Company'],
+        'date' => (new DateTime($slotData['SlotDate']))->format('Y-m-d'),
+    ];
+    
+    return 'https://bamc.myclinic.com.sa:8443/search-results?p=' . encryptData(json_encode($dataToEncrypt));
+}
+?>
+==
+<!-- ======= BANNER START ======= -->
+<section class="doctor-detail-bg detail-padding pb-0">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12 col-sm-6">
+                <img src="{{doctor.doctor_detail_image.path}}" class="img-fluid doc-img-detail" alt="">
+            </div>
+            <div class="col-12 col-sm-6">
+                <div class="text-end description-wrap">
+                    {% if doctor.designation_ar %}
+                        <h1 class="pt-3 pt-md-0">
+                            <span>{{ doctor.designation_ar }}</span>&nbsp;{{ doctor.name_ar }}
+                        </h1>
+                    {% else %}
+                        <h1 class="pt-3 pt-md-0">{{ doctor.name_ar }}</h1>
+                    {% endif %}
+                    <p class="doc-specialty">{{doctor.specialty_desc_ar}}</p>
+
+                    <div class="edu-wrap">
+                        <div class="edu-tag">التعليم</div>
+                        <h2>{{doctor.highest_degree_ar}}</h2>
+                    </div>
+
+                    <ul class="dr-pro-list text-end dr-pro-list-en">
+                        <li> الموقع: {{doctor_locations|raw}}</li>
+                        <li>اللغات : {{doctor_language|raw}} </li>
+                    </ul>
+                    {% if isButtonVisible %}
+                        {% if isBookNow %}
+                        {% if bookingLinks[doctor.doctor_app_id] %}
+                        <a href="{{ bookingLinks[doctor.doctor_app_id] }}"class="btn btn-primary btn-mc-01 float-end">
+                            <svg class="ms-3" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                                <path d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                    stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>احجز الآن
+                        </a>
+                        {% endif %}
+                        {% else %}
+                        <a href="/ar/contact-us" class="btn btn-primary btn-mc-01 float-end">
+                            <svg class="ms-3" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                                <path d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                    stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>اسألنا
+                        </a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <img class="img-doc-background-tec" src="{{'assets/imgs/ask-us.png'|theme}}">
+</section>
+<!-- ======= BANNER END ======= -->
+
+{% partial 'components/testimonial-ar' testimonials=testimonials %}
+
+<!-- ======= OUR DOCTORS START ======= -->
+<section class="section-py-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center py-60 pt-0">
+                <h1 class="">أطباء مماثلين</h1>
+            </div>
+        </div>
+        <div class="row similar-doctors-container">
+            {% for item in similar_doctor %}
+            <div class="col-12 col-sm-6 col-xl-4 col-xxl-3 mc-hide-2">
+                <div class="doctor-card">
+                    <div class="doctor-img-2 text-center">
+                        <img src="{{ item.doctor_image.path }}" class="img-fluid" alt="" style="border-radius: 50%;">
+                    </div>
+                    <h3><span>{{ item.designation_ar }}</span>&nbsp;{{ item.name_ar }}</h3>
+                    <div class="dr-specialities">{{ item.specialty_desc_ar }}</div>
+
+                    <div class=" row hide">
+                        <div class="col-12 text-center">
+                            <p style="margin-bottom: 0px;"><a href="/ar/doctor-detail/{{hod.id}}"
+                                    style="text-decoration: none; color: white;">{{item.highest_degree_ar}}</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="dr-calendar my-4" style="direction: rtl;" id="doctor-availability-{{ item.id }}">
+                        <!-- Loading spinner will be shown initially -->
+                        <div class="loading-spinner text-center py-3">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="sr-only">جار التحميل...</span>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="d-flex justify-content-around">
+                        <div class="w-100 mt-50">
+                            <a href="/ar/doctor-detail/{{ item.id }}" class="btn btn-light btn-dr-card w-100 profile-link">
+                                <span class="btn-text">الحساب التعريفي</span>
+                                <span class="spinner-border spinner-border-sm d-none" role="status"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="col-12 mt-3">
+                <a href="#" class="btn btn-view-all btn-outline-dark view-more-dr">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="#003868" />
+                        <path d="M24.7969 21.7727L19.5969 27.2L14.3969 21.7727M19.5969 18.7148L19.5969 27.048M19.5969 12L19.5969 21.5"
+                            stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>عرض المزيد من الأطباء
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ======= OUR DOCTORS END ======= -->
+
+<style>
+.loading-spinner {
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner-border {
+    width: 2rem;
+    height: 2rem;
+}
+
+.profile-link {
+    position: relative;
+}
+.profile-link .btn-text {
+    transition: opacity 0.2s;
+}
+.profile-link.loading .btn-text {
+    opacity: 0;
+}
+.profile-link.loading .spinner-border {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: inline-block !important;
+}
+
+.skeleton-loader {
+    padding: 10px;
+    direction: rtl;
+}
+.skeleton-line {
+    height: 12px;
+    background: #f0f0f0;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Arabic number and month mappings
+    const arabicNumbers = {
+        '0':'٠', '1':'١', '2':'٢', '3':'٣', '4':'٤', '5':'٥', '6':'٦', '7':'٧', '8':'٨', '9':'٩',
+        'AM': 'ص', 'PM': 'م',
+        'Jan': 'يناير', 'Feb': 'فبراير', 'Mar': 'مارس', 'Apr': 'أبريل', 'May': 'مايو', 'Jun': 'يونيو',
+        'Jul': 'يوليو', 'Aug': 'أغسطس', 'Sep': 'سبتمبر', 'Oct': 'أكتوبر', 'Nov': 'نوفمبر', 'Dec': 'ديسمبر'
+    };
+
+    // Convert English to Arabic
+    function toArabic(text) {
+        return text.replace(/[0-9AMPMJanFebMarAprMayJunJulAugSepOctNovDec]+/g, 
+            match => arabicNumbers[match] || match.split('').map(c => arabicNumbers[c] || c).join(''));
+    }
+
+    // Load availability for similar doctors
+    function loadSimilarDoctorsAvailability() {
+        const doctorCards = document.querySelectorAll('.similar-doctors-container .doctor-card');
+        
+        doctorCards.forEach((card, index) => {
+            const doctorId = card.querySelector('.dr-calendar').id.replace('doctor-availability-', '');
+            
+            // Set timeout with increasing delay
+            setTimeout(() => {
+                fetchAvailability(doctorId);
+            }, index * 500);
+        });
+    }
+
+    // Fetch availability data
+    function fetchAvailability(doctorId) {
+        const container = document.getElementById('doctor-availability-' + doctorId);
+        
+        // Show skeleton loader
+        container.innerHTML = `
+            <div class="skeleton-loader">
+                <div class="skeleton-line" style="width: 80%"></div>
+                <div class="skeleton-line" style="width: 60%"></div>
+                <div class="skeleton-line" style="width: 70%"></div>
+            </div>
+        `;
+        
+        fetch(window.location.href, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-OCTOBER-REQUEST-HANDLER': 'onSimilarDoctorsAvailability',
+                'X-OCTOBER-REQUEST-PARTIALS': ''
+            },
+            body: JSON.stringify({
+                doctor_id: doctorId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.availableDates) {
+                const date = new Date(data.availableDates.latest_date.date);
+                const time = data.availableDates.latest_time;
+                
+                // Format time to 12-hour format
+                const timeParts = time.split(':');
+                let hours = parseInt(timeParts[0]);
+                const minutes = timeParts[1];
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+                const formattedTime = hours + ':' + minutes + ' ' + ampm;
+                
+                // Format date in Arabic
+                const formattedDate = date.toLocaleDateString('ar-EG', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                });
+                
+                container.innerHTML = `
+                    <div class="dr-calendar-text text-center">
+                        <p><strong>أقرب موعد متاح</strong></p>
+                        <p style="font-size: 12px;"><strong>${data.availableDates.company_name}</strong></p>
+                    </div>
+                    <div class="dr-calendar-flex">
+                        <a class="dr-cale">${formattedDate}</a>
+                        <a class="dr-cale">${toArabic(formattedTime)}</a>
+                    </div>
+                `;
+                
+                // Update buttons container
+                const buttonsContainer = container.closest('.doctor-card').querySelector('.d-flex.justify-content-around');
+                buttonsContainer.innerHTML = `
+                    <div>
+                    <a href="${data.bookingLink}" class="btn btn-dr-card-2 rtl-button">
+                        <span class="button-text">احجز الآن</span> 
+                        
+                        <svg width="28" height="27" viewBox="0 0 28 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <ellipse cx="13.7306" cy="13.7772" rx="13.4181" ry="13.1913" fill="white" />
+                        <path class="arr-cl" d="M14.9238 10.2812L18.565 13.781L14.9238 17.2807M12.8722 13.781H18.463M8.36719 13.781H14.7408" stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </a>
+                    </div>
+                    <div>
+                        <a href="/ar/doctor-detail/${doctorId}" class="btn btn-light btn-dr-card profile-link">
+                            <span class="btn-text">الحساب التعريفي</span>
+                            <span class="spinner-border spinner-border-sm d-none" role="status"></span>
+                        </a>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = '<p class="text-center py-3"></p>';
+                const buttonsContainer = container.closest('.doctor-card').querySelector('.d-flex.justify-content-around');
+                buttonsContainer.innerHTML = `
+                    <div class="w-100 mt-50">
+                        <a href="/ar/doctor-detail/${doctorId}" class="btn btn-light btn-dr-card w-100 profile-link">
+                            
+                            <span class="btn-text">الحساب التعريفي</span>
+                            <span class="spinner-border spinner-border-sm d-none" role="status"></span>
+                        </a>
+                    </div>
+                `;
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching availability:', error);
+            container.innerHTML = '<p class="text-center py-3">خطأ في تحميل البيانات</p>';
+        });
+    }
+
+    // Add loading state for profile links
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.profile-link')) {
+            e.target.closest('.profile-link').classList.add('loading');
+        }
+    });
+
+    // Start loading similar doctors availability
+    loadSimilarDoctorsAvailability();
+
+    // Prefetch data on hover
+    document.querySelectorAll('.doctor-card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            const doctorId = this.querySelector('.dr-calendar').id.replace('doctor-availability-', '');
+            if (!this.dataset.prefetched) {
+                fetchAvailability(doctorId);
+                this.dataset.prefetched = true;
+            }
+        });
+    });
+});
+</script>

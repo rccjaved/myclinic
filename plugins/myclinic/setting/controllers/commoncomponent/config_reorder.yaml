@@ -1,0 +1,4 @@
+title: CommonComponent
+modelClass: MyClinic\Setting\Models\CommonComponent
+toolbar:
+    buttons: reorder_toolbar

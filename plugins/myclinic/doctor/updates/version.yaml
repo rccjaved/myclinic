@@ -1,0 +1,119 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created table myclinic_doctor_specialities'
+    - builder_table_create_myclinic_doctor_specialities.php
+1.0.3:
+    - 'Created table myclinic_doctor_health_concerns'
+    - builder_table_create_myclinic_doctor_health_concerns.php
+1.0.4:
+    - 'Drop table myclinic_doctor_specialities'
+    - builder_table_delete_myclinic_doctor_specialities.php
+1.0.9:
+    - 'Created table myclinic_doctor_doctors'
+    - builder_table_create_myclinic_doctor_doctors.php
+1.0.10:
+    - 'Updated table myclinic_doctor_doctors'
+    - builder_table_update_myclinic_doctor_doctors.php
+1.0.11:
+    - 'Updated table myclinic_doctor_doctors'
+    - builder_table_update_myclinic_doctor_doctors_2.php
+1.0.12:
+    - 'Updated table myclinic_doctor_doctors'
+    - builder_table_update_myclinic_doctor_doctors_3.php
+1.0.13:
+    - 'Updated table myclinic_doctor_doctors'
+    - builder_table_update_myclinic_doctor_doctors_4.php
+1.0.14:
+    - 'Updated table myclinic_doctor_doctors'
+    - builder_table_update_myclinic_doctor_doctors_5.php
+1.0.15:
+    - 'Created table myclinic_doctor_specialty_location'
+    - builder_table_create_myclinic_doctor_specialty_location.php
+1.0.16:
+    - 'Updated table myclinic_doctor_doctors'
+    - builder_table_update_myclinic_doctor_doctors_6.php
+1.0.17:
+    - 'Created table myclinic_doctor_doctor_specialty'
+    - builder_table_create_myclinic_doctor_doctor_specialty.php
+1.0.18:
+    - 'Updated table myclinic_doctor_doctors'
+    - builder_table_update_myclinic_doctor_doctors_7.php
+1.0.19:
+    - 'Created table myclinic_doctor_doctor_location'
+    - builder_table_create_myclinic_doctor_doctor_location.php
+1.0.20:
+    - 'Updated table myclinic_doctor_doctors'
+    - builder_table_update_myclinic_doctor_doctors_8.php
+1.0.21:
+    - 'Updated table myclinic_doctor_specialties'
+    - builder_table_update_myclinic_doctor_specialties_2.php
+1.0.22:
+    - 'Updated table myclinic_doctor_specialties'
+    - builder_table_update_myclinic_doctor_specialties_3.php
+1.0.23:
+    - 'Updated table myclinic_doctor_specialties'
+    - builder_table_update_myclinic_doctor_specialties_4.php
+1.0.24:
+    - 'Updated table myclinic_doctor_specialties'
+    - builder_table_update_myclinic_doctor_specialties_5.php
+1.0.25:
+    - 'Updated table myclinic_doctor_specialties'
+    - builder_table_update_myclinic_doctor_specialties_6.php
+1.0.26:
+    - 'Updated table myclinic_doctor_specialties'
+    - builder_table_update_myclinic_doctor_specialties_7.php
+1.0.27:
+    - 'Updated table myclinic_doctor_doctors'
+    - builder_table_update_myclinic_doctor_doctors_9.php
+1.0.28:
+    - 'Updated table myclinic_doctor_specialties'
+    - builder_table_update_myclinic_doctor_specialties_8.php
+1.0.29:
+    - 'Updated table myclinic_doctor_specialties'
+    - builder_table_update_myclinic_doctor_specialties_9.php
+1.0.30:
+    - 'Updated table myclinic_doctor_doctors'
+    - builder_table_update_myclinic_doctor_doctors_10.php
+1.0.31:
+    - 'Updated table myclinic_doctor_doctors'
+    - builder_table_update_myclinic_doctor_doctors_11.php
+1.0.32:
+    - 'Updated table myclinic_doctor_specialties'
+    - builder_table_update_myclinic_doctor_specialties_10.php
+1.0.33:
+    - 'Updated table myclinic_doctor_doctors'
+    - builder_table_update_myclinic_doctor_doctors_12.php
+1.0.34:
+    - 'Updated table myclinic_doctor_doctors'
+    - builder_table_update_myclinic_doctor_doctors_13.php
+1.0.35:
+    - 'Created table myclinic_doctor_doctor_language'
+    - builder_table_create_myclinic_doctor_doctor_language.php
+1.0.36:
+    - 'Updated table myclinic_doctor_doctor_language'
+    - builder_table_update_myclinic_doctor_doctor_language.php
+1.0.37:
+    - 'Updated table myclinic_doctor_doctors'
+    - builder_table_update_myclinic_doctor_doctors_14.php
+1.0.38:
+    - 'Created table myclinic_doctor_specialty_sliders'
+    - builder_table_create_myclinic_doctor_specialty_sliders.php
+1.0.39:
+    - 'Created table myclinic_doctor_'
+    - builder_table_create_myclinic_doctor_.php
+1.0.40:
+    - 'Updated table myclinic_doctor_doctors'
+    - builder_table_update_myclinic_doctor_doctors_16.php
+1.0.41:
+    - 'Updated table myclinic_doctor_doctors'
+    - builder_table_update_myclinic_doctor_doctors_17.php
+1.0.42:
+    - 'Updated table myclinic_doctor_doctors'
+    - builder_table_update_myclinic_doctor_doctors_18.php
+1.0.43:
+    - 'Updated table myclinic_doctor_doctor_specialty'
+    - builder_table_update_myclinic_doctor_doctor_specialty.php
+1.0.44:
+    - 'Created table myclinic_doctor_doctors_hod'
+    - builder_table_create_myclinic_doctor_doctors_hod.php

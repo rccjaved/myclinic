@@ -1,0 +1,7 @@
+columns:
+    title:
+        label: Title
+        type: text
+    service_type:
+        label: 'Service Type'
+        type: text

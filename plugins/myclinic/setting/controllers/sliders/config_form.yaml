@@ -1,0 +1,10 @@
+name: Sliders
+form: $/myclinic/setting/models/slider/fields.yaml
+modelClass: MyClinic\Setting\Models\Slider
+defaultRedirect: myclinic/setting/sliders
+create:
+    redirect: 'myclinic/setting/sliders/update/:id'
+    redirectClose: myclinic/setting/sliders
+update:
+    redirect: myclinic/setting/sliders
+    redirectClose: myclinic/setting/sliders

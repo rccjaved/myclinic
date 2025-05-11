@@ -1,0 +1,18 @@
+fields:
+    full_name:
+        label: 'Full Name'
+        span: auto
+        type: text
+    email:
+        label: Email
+        span: auto
+        type: text
+    phone:
+        label: Phone
+        span: auto
+        type: text
+    message:
+        label: Message
+        size: small
+        span: auto
+        type: textarea

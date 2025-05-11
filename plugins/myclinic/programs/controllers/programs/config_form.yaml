@@ -1,0 +1,10 @@
+name: Programs
+form: $/myclinic/programs/models/program/fields.yaml
+modelClass: MyClinic\Programs\Models\Program
+defaultRedirect: myclinic/programs/programs
+create:
+    redirect: 'myclinic/programs/programs/update/:id'
+    redirectClose: myclinic/programs/programs
+update:
+    redirect: myclinic/programs/programs
+    redirectClose: myclinic/programs/programs

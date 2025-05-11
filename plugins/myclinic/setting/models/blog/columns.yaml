@@ -1,0 +1,7 @@
+columns:
+    author_name:
+        label: 'Author Name'
+        type: text
+    description:
+        label: Description
+        type: text

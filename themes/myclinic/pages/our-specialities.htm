@@ -1,0 +1,120 @@
+url = "/our-specialities"
+layout = "master"
+title = "Our Specialities"
+meta_title = "Our Specialties"
+
+[resources]
+less[] = "pages/index.less"
+==
+<?php
+use MyClinic\Doctor\Models\Specialty;
+use MyClinic\Setting\Models\Testimonial;
+use MyClinic\Setting\Models\Location;
+use MyClinic\Setting\Models\Slider;
+use MyClinic\Setting\Models\PageContent;
+
+function onStart()
+{
+    $testimonials=Testimonial::where('category','specialty')->orderBy('name')->get();
+    $this['testimonials'] = $testimonials;
+    $sliders = Slider::where('type','our_specialty')->get();
+    $this['sliders'] = $sliders;
+    $this['overview']=PageContent::where('page','our-specialty')->where('section','our-specialty-overview')->first();
+    $fromMobile = Agent::isMobile();
+    $this['fromMobile']= $fromMobile;
+  
+}
+?>
+==
+<div class="swiper-container resize-slider">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+        <!-- Slider -->
+        {% for item in sliders %}
+        <div class="swiper-slide">
+            <img src="{{item.slider_image_mobile.path}}" class="slidemc" alt="specialties">
+            <img src="{{item.slider_image.path}}" class="slidemc slidemc-m-home" alt="specialties">
+            <div class="slide-text">
+                <h1 class="mb-3">{{item.title|raw}}</h1>
+                <p class="mb-3 mb-sm-5">{{item.tag_line}}</p>
+                {% if item.link_value %}
+                <a href="{{item.link_value}}" class="btn btn-primary slide-s btn-mc-01 mb-6"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none"
+                        style="margin-right: 20px;">
+                        <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                        <path d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M27.048 19.5984H18.7148H12"
+                            stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>{{item.link_name}}</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- If we need pagination -->
+    <div class="swiper-pagination"></div>
+
+    <!-- If we need navigation buttons -->
+    <div class="swiper-button-prev"><span></span></div>
+    <div class="swiper-button-next"><span></span></div>
+
+
+
+
+</div>
+
+
+
+{% if overview %}
+<section class="mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="">{{overview.title|raw}}</h1>
+                <p class="overview text-justy">{{overview.description|raw}}</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% partial 'components/specialtiesViewAll' %}
+
+{% partial 'components/testimonial' testimonials=testimonials %}
+
+
+{% partial 'components/appDownload' %}
+
+
+<script>
+
+    // ------------- New Slider ----------
+
+    // swiper    
+    var mySwiper = new Swiper('.swiper-container', {
+        effect: '',
+        loop: false,
+        speed: 1000,
+        slidesPerView: 1,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            type: 'bullets',
+            clickable: 'true'
+        },
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+
+
+
+    });
+
+
+
+</script>

@@ -1,0 +1,315 @@
+url = "/privacy-policy"
+layout = "master"
+title = "Privacy Policy"
+meta_title = "Privacy Policy"
+meta_description = "At My Clinic, we are dedicated to enhancing your well-being through a wide spectrum of healthcare
+services. Our expertise spans from preventive care to specialized treatments, all designed to address your unique health needs. My Clinic, Best Medical Healthcare Programs, Healthcare Services, Best Dental Center"
+
+[resources]
+less[] = "pages/privacy.less"
+==
+<?php
+use MyClinic\Setting\Models\Location;
+use MyClinic\Setting\Models\Privacy;
+use MyClinic\Setting\Models\Slider;
+
+function onStart()
+{
+    $sliders = Slider::where('type','privacy')->get();
+    $this['sliders'] = $sliders;
+    $this['locations']=Location::orderBy('id')->get(); 
+    $this['ComplianceSection']=Privacy::where('slug','compliance-section')->first();
+    $this['CollectionSection']=Privacy::where('slug','collection-section')->first();
+
+  
+    $privacy=Privacy::orderBy('id')->get();
+    $this['privacy'] = $privacy;
+}
+?>
+==
+<section class="section-py-100">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-xl-10 text-center">
+        <h1>Privacy and Personal Data Protection</h1>
+      </div>
+      <div class="col-12">
+        <div class="container my-2">
+          <div class="row justify-content-center">
+            <div class="col">
+
+              {% for priv in privacy %}
+              <div>
+                <h2>{{ priv.title }}</h2>
+                <p>{{ priv.description | raw }}</p>
+
+              </div>
+              {% endfor %}
+
+
+
+              <!-- <div>
+                <h2>Data Collection and Use </h2>
+                <p>We may collect, process and retain the following types of information about you (referred to as Data
+                  in this Privacy Policy) from our platforms including:</p>
+                <ul>
+                  <li>Information capable of identifying you personally which you may provide at the time of voluntary
+                    registration for services we provide, or which is collected through your use of our websites
+                    (including when you make enquiries through the our platform (Personal Information)), and this may
+                    include name, address, email address, date of birth, mobile phone number, national ID number,
+                    Medical Record Number (MRN) username etc.</li>
+                  <li>Financial information (e.g. credit card details, banking details).</li>
+                  <li>Information relating to your use of the website (e.g. domain name, IP address, cookies, location
+                    data).</li>
+                  <li>Information relating to your purchase of or access to a product or service (e.g. purchase records,
+                    delivery details, payment receipts etc.).</li>
+                  <li>Any feedback or comments you provide online.</li>
+                  <li>Information which we consider to be sensitive personal information relating to your health,
+                    including or related to it, and may include information:</li>
+                  <li>About your individual health, including your medical history.</li>
+                  <li>your vital signs, such as weight, height, blood pressure, etc.</li>
+                  <li>any disabilities you may have or have had.</li>
+                  <li>any health care services that are being provided to you or have been provided to you</li>
+                  <li>Information about you that is collected before or during the provision of any health care
+                    services, and incidentally.</li>
+                  <li>information relating to your medical insurance coverage, if you choose to provide it for direct
+                    billing purposes</li>
+                  <li>any other information that you voluntarily choose to provide us through the platforms from time to
+                    time (for example, if you fill out an inquiry form, register for a promotion, or participate in a
+                    support chat service).</li>
+                  <li>The platform will record and track your use of the website using cookies and other monitoring
+                    tools and devices, among other things. You may choose to turn off cookies in your browser and you
+                    may delete them from your hard drive. You do not need to have cookies turned on to use the website,
+                    but you will need them to use and access some parts of the Sites and to access personalized or
+                    secure content on the website. Some web pages on the website may not function properly if cookies
+                    are turned off.</li>
+                </ul>
+                <p>We will only collect, use, or process your Sensitive Personal Information (such as medical history,
+                  health conditions, or treatment details) after obtaining your explicit consent. You have the right to
+                  withdraw your consent at any time, without affecting the services provided to you or the legality of
+                  any processing done based on prior consent. Your registration, and use of the services provided
+                  through our website constitutes your express consent to these terms and conditions regarding the
+                  collection, processing and retention of your sensitive personal data.</p>
+              </div>
+              <div>
+                <h2>How we use your information </h2>
+                <p>We use your personal information when necessary to provide you with services (such as scheduling
+                  appointments, maintaining medical records, analyzing your data, etc.), to process transactions you
+                  have requested, or to operate the websites. This may include our analysis of patient medical records
+                  and analytics including, but not limited to, diagnoses, prescriptions, lab results, etc. and to
+                  communicate with your insurance provider.</p>
+                <p>We may also use this personal information to:</p>
+                <ul>
+                  <li>track traffic patterns to and from the website (which may include keeping details of your IP
+                    address, operating system, browser, domain, and other user information (such as your username))</li>
+                  <li>notify you of marketing promotions that are displayed</li>
+                  <li>ensure that the content of the website is presented in the most effective manner for you and the
+                    device you are using to access the website</li>
+                  <li>review, develop, facilitate, or improve our provision of the website and the services available on
+                    it</li>
+                  <li>simplify the entry of your personal information into certain online forms</li>
+                  <li>enable you to log in to the website and access and use certain services provided through it </li>
+                  <li>contact you for follow-up purposes if a consultation session ends due to a technical failure or
+                    for an unknown reason.</li>
+                  <li>Respond to any inquiries, requests or comments you have submitted.</li>
+                  <li>Review, develop and improve the services we provide</li>
+                  <li>Notify you of changes to the platforms or our services, where applicable</li>
+                  <li>Protect the safety of members of the public and users of our services</li>
+                  <li>For non-personal information only, with advertisers and other service providers for marketing
+                    purposes</li>
+                  <li>With vendors, administrative service providers, technology providers and carefully selected
+                    business partners for data validation, enhancement, verification and anonymization services</li>
+                  <li>For any other purpose to which the user consents; and</li>
+                  <li>As necessary to comply with legal and regulatory obligations, including record keeping and, if
+                    necessary, in the exercise or defense of legal claims.</li>
+                  <li>We use Sensitive Personal Information to ensure that we can provide the services you have
+                    requested and/or have provided to you to the best of our ability. </li>
+                  <li>We will use Sensitive Personal Information to help provide you with information about your health
+                    or medical records and to provide our Services, including considering your Sensitive Personal
+                    Information to make recommendations and diagnoses and store sensitive personal information in your
+                    medical records in accordance with prevailing medical field practices in the Kingdom and in
+                    accordance with our legal obligations.</li>
+                </ul>
+              </div>
+
+              <div>
+                <h2>Marketing </h2>
+                <ul>
+                  <li>We may use your personal information to contact you directly to provide you with information about
+                    services you have requested from us or which we think may be of interest to you. You may opt out of
+                    receiving such communications at any time.</li>
+                  <li>By continuing to access our Services and agreeing to this Privacy Policy, you hereby expressly
+                    consent to the use of your personal information for marketing purposes.</li>
+                  <li>To opt out, please contact us at: 920022811</li>
+                </ul>
+              </div>
+
+              <div>
+                <h2>Sharing your information </h2>
+                <p>We will not disclose your personal information to third parties except as set forth in this Privacy
+                  Policy or as otherwise permitted or required by law or any court of competent jurisdiction. </p>
+                <p>By using our Services, you consent to our disclosure of information as described in this Privacy
+                  Policy. You understand that if you request us to obtain authorization for payment from your insurance
+                  company, we may need to disclose sensitive medical information to your insurance company, including
+                  details of treatment or products requested, and you consent to such disclosure. You understand that
+                  your personal information may be transferred outside the area in which you reside for processing by
+                  us, and you consent to such transfer.</p>
+                <p>Your personal data may be transferred outside the Kingdom of Saudi Arabia only in accordance with the
+                  Saudi Personal Data Protection Law. </p>
+                <p>We may disclose Personal Information, which may include Sensitive Personal Information:</p>
+                <ul>
+                  <li>To IT service providers, who are mostly members of the company, however, third-party cloud service
+                    providers may be used to store and process video consultations or the like</li>
+                  <li>To members of our company.</li>
+                  <li>To competent regulatory, governmental or judicial authorities in response to a legally binding
+                    request or legal compliance obligation or in pursuit of significant public interests such as the
+                    identification and control of infectious diseases</li>
+                  <li>To emergency services or other specialist intervention providers, if we believe you or other
+                    members of the public may be in imminent danger</li>
+                  <li>To your medical insurance provider, if you have directed us to do so for billing purposes and we
+                    provide direct billing at that time</li>
+                  <li>To third parties who maintain databases against which we need to compare your information.</li>
+                  <li>To another healthcare professional for the purposes of ensuring the provision and improvement of
+                    ongoing medical treatment, healthcare services or the provision of medicines.</li>
+                  <li>To communicate with patients about their care or welfare.</li>
+                  <li>To communicate with family members and others involved in the patient’s care</li>
+                  <li>To conduct anonymize retrospective medical research</li>
+                  <li>For public health purposes</li>
+                  <li>In accordance with customary and recognized professional practice in the circumstances and
+                    permitted by law; or</li>
+                  <li>If such information is already publicly known through lawful disclosure by you or your legal
+                    representatives.</li>
+                  <li>Any third party acting as a supplier or subcontractor to us will be under a legally binding duty
+                    of confidentiality and we will secure commitments from such third parties to keep your information
+                    secure and not to use it for any purpose other than the purpose for which we contracted with such
+                    third party (such as providing hosting services).</li>
+                </ul>
+              </div>
+
+              <div>
+                <h2>Aggregated non-personal data</h2>
+                <p>We may share anonymized data or derivatives of such data with third parties for research, statistical
+                  or epidemiological purposes in accordance with applicable law and/or regulations or courts. We will
+                  ensure that you cannot be identified from any such data before it is shared.</p>
+
+              </div>
+
+              <div>
+                <h2>Proper Provision of medical services </h2>
+                <p>If you use our medical services, such as telehealth services, you must ensure that you provide
+                  complete and accurate information as prompted by the data entry fields on our sites and the consulting
+                  physician. </p>
+                <p>Our physicians rely on the information you provide to inform their assessment of you. If you provide
+                  inaccurate or incomplete information, the assessment you receive may be based on an incorrect
+                  understanding of your circumstances and this may result in adverse health care outcomes. We are not
+                  responsible for acting on information you provide that is incomplete or inaccurate.</p>
+              </div>
+
+              <div>
+                <h2>Minors</h2>
+                <ul>
+                  <li>We are committed to protecting the privacy needs of children and encourage parents and guardians
+                    to take an active role in their children’s online activities and interests. However, given the
+                    nature of medical services, our Services may be beneficial to children and the ability to access
+                    certain Services online may be more convenient and less stressful than accessing Services in a
+                    face-to-face setting. </li>
+                </ul>
+              </div>
+
+              <div>
+                <h2>Security</h2>
+                <ul>
+                  <li>We are committed to protecting the information you provide to us. We have implemented security
+                    policies, rules and technical measures to protect the personal information we have under our
+                    control, in accordance with applicable data protection laws. Our security measures are designed to
+                    prevent unauthorized access, improper use, disclosure, unauthorized modification, unlawful
+                    destruction or accidental loss. </li>
+                  <li>In addition, we limit access to your personal information to those employees, agents, contractors
+                    and other third parties who have a business need to know. They will only process your personal
+                    information on our instructions, and they are subject to a duty of confidentiality.</li>
+                </ul>
+              </div>
+
+              <div>
+                <h2>Data Retention </h2>
+                <ul>
+                  <li>We will only retain your data for as long as is necessary to fulfill the purposes for which it was
+                    collected, to respond to any queries or complaints, to improve the services we provide to you, to
+                    comply with any legal obligations to which we may be subject, and to comply with medical best
+                    practice and regulatory requirements regarding the retention of medical records.</li>
+                  <li>To determine the appropriate retention period for personal information, we consider the amount,
+                    nature and sensitivity of the personal information, the potential risk of harm from unauthorized use
+                    or disclosure of your personal information, the purposes for which we process your personal
+                    information and whether we can achieve those purposes through other means, and applicable legal
+                    requirements.</li>
+                  <li>When your personal information is no longer required, we will ensure that it is securely deleted
+                    or made inaccessible.</li>
+                  <li>If you are based in Saudi Arabia and have ordered physical goods from us, such as through our
+                    online pharmacy, we will only retain personal data relating to the transaction for as long as is
+                    necessary, considering the nature of the transaction, unless we are required to retain the data for
+                    a longer period by law.</li>
+                </ul>
+                <p>Once your personal data is no longer required, we will securely retain, delete or anonymize it
+                  ensuring full compliance with legal obligations prescribed under the PDPL.</p>
+              </div>
+
+              <div>
+                <h2>Third-party Websites</h2>
+                <p></p>
+                <ul>
+                  <li>Our Sites may provide links to third-party websites for your convenience. If you access these
+                    links, you will leave our Sites. We do not control third-party websites or their privacy practices,
+                    which may differ from ours. We do not endorse or make any representations about third-party
+                    websites. </li>
+                  <li>This Privacy Policy does not cover personal information you choose to provide to unrelated third
+                    parties. We encourage you to review the privacy policy of any company before providing your personal
+                    information. Some third-party companies may choose to share their personal information with us; such
+                    sharing is subject to the privacy policy of that third-party company.</li>
+                </ul>
+              </div>
+
+              <div>
+                <h2>Inquiries and Complaints </h2>
+                <p>You have the following rights regarding your personal data:</p>
+                <ul>
+                  <li>Right to access your personal data at any time.</li>
+                  <li>Right to request correction or deletion of inaccurate or outdated data.</li>
+                  <li>Right to restrict or object to the processing of your personal data.</li>
+                  <li>Right to withdraw consent for data processing where it is based on your prior consent.</li>
+                </ul>
+                <p>To exercise these rights, please contact us at 920022811</p>
+              </div>
+
+
+              <div>
+                <h2>Transfer on merger, sale, or similar event </h2>
+                <p>In the event that the company is acquired by a third party, merged with, sold, or otherwise
+                  transferred to a third party of all or substantially all of its assets, or in the event of a change in
+                  control of the company, bankruptcy, insolvency, reorganization, receivership, assignment for the
+                  benefit of creditors, or the application of laws or equitable principles that generally affect the
+                  rights of creditors in the company, information collected by the company from users may be transferred
+                  or assigned as part of such merger, acquisition, sale, change of control, or other specified event,
+                  but to the extent permitted by applicable law, the obligations of this Privacy Policy will continue to
+                  be binding on the company’s successors and assigns.</p>
+              </div>
+
+              <div>
+                <h2>Overall law</h2>
+                <p>By providing information to the company, each User</p>
+                <ol>
+                  <li>acknowledges that the company operates in the Kingdom of Saudi Arabia,</li>
+                  <li>agrees to allow us to transfer and use such User’s information wherever necessary, including
+                    across international borders, to improve the services and transactions provided by the company
+                    and/or its advertisers and other third-party service providers, and</li>
+                  <li>agrees that such use by us will be subject to the terms and conditions set forth in this document
+                    and the applicable laws of the Kingdom of Saudi Arabia.</li>
+                </ol>
+              </div> -->
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

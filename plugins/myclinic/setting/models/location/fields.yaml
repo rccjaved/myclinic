@@ -1,0 +1,73 @@
+fields:
+    name:
+        label: Name
+        span: auto
+        type: text
+    name_ar:
+        label: 'Arabic Name'
+        span: auto
+        type: text
+    title:
+        label: Title
+        span: auto
+        type: text
+    title_ar:
+        label: 'Arabic Title'
+        span: auto
+        type: text
+    description:
+        label: Description
+        size: ''
+        span: auto
+        type: textarea
+    description_ar:
+        label: 'Arabic Description'
+        size: ''
+        span: auto
+        type: textarea
+    location_image:
+        label: 'File upload'
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload
+    google_address_link:
+        label: 'Google Address Link'
+        size: tiny
+        span: auto
+        type: textarea
+    address:
+        label: 'Address Text'
+        size: small
+        span: auto
+        type: textarea
+    address_ar:
+        label: 'Arabic Address Text'
+        size: small
+        span: auto
+        type: textarea
+    timings_description:
+        label: 'Timing Description'
+        size: small
+        span: auto
+        type: textarea
+    timings_description_ar:
+        label: 'Arabic Timing Description'
+        size: small
+        span: auto
+        type: textarea
+    phone:
+        label: Phone
+        span: auto
+        type: text
+    email:
+        label: Email
+        span: auto
+        type: text
+    whatsapp:
+        label: Whatsapp
+        span: auto
+        type: text

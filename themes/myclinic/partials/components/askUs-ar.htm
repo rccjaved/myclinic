@@ -1,0 +1,155 @@
+==
+<?php
+use MyClinic\Setting\Models\CommonComponent;
+function onStart()
+{
+$this['commonComponent']=CommonComponent::where('slug','ask-us')->first();
+}
+?>
+==
+<!-- ======= ASK US START ======= -->
+<section class="section-bg section-py-100 ">
+    <div class="container bg-white section-py-120 askus-img-bg">
+        <!-- <img src="{{'assets/imgs/ask-us.png'|theme}}" class="ask-img img-fluid" alt=""> -->
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="mc-block text-end">
+                    <h1>{{commonComponent.title_ar|raw}}</h1>
+                    <p class="text-justy">{{commonComponent.description_ar|raw}}</p>
+
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 block-pe block-ps">
+                <div id="submit-message">
+
+                </div>
+                <form id="ask-us-form">
+                    <div class="row gy-3">
+                        <div class="col-12">
+                            <input type="text" class="form-control form-control-lg select-mc" placeholder="الاسم الكامل"
+                                aria-label="First name" id="full_name" required>
+                            <span class="error-message" id="error-full_name" style="color: red;"></span>
+                        </div>
+                        <div class="col-12">
+                            <input type="email" class="form-control form-control-lg select-mc"
+                                placeholder="عنوان البريد الإلكتروني" aria-label="Last name" id="email" required>
+                            <span class="error-message" id="error-email" style="color: red;"></span>
+                        </div>
+                        <div class="col-12">
+                                <input type="tel" class="form-control form-control-lg select-mc" placeholder="رقم الهاتف"
+                                aria-label="Last name" id="phone" maxlength="15" required>
+                            <span class="error-message" id="error-phone" style="color: red;"></span>
+                        </div>
+                        <div class="col-12">
+                            <textarea class="form-control form-control-lg select-mc mb-3" placeholder="اكتب رسالتك"
+                                rows="3" id="message" required></textarea>
+                            <span class="error-message" id="error-message" style="color: red;"></span>
+                        </div>
+
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-mc-01 mx-auto no-click float-end">
+                        <svg class="ms-3" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"
+                            fill="none">
+                            <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white"></ellipse>
+                            <path d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M27.048 19.5984H18.7148H12"
+                                stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                stroke-linejoin="round"></path>
+                        </svg>
+                        إرسال
+                    </button>
+                </form>
+
+                <!-- Success message container -->
+                <div id="submit-message" style="color: green; font-weight: bold;"></div>
+
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ======= ASK US END ======= -->
+
+
+<script>
+    document.getElementById('ask-us-form').addEventListener('submit', function (e) {
+    e.preventDefault();  // Prevent the default form submission
+
+    // Clear previous error messages and success message
+    document.querySelectorAll('.error-message').forEach(el => el.innerText = '');
+    document.getElementById('submit-message').innerText = '';
+
+    // Get the user's input
+    const full_name = document.getElementById('full_name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const message = document.getElementById('message').value;
+
+    // Validation for Arabic, English letters and spaces for name, and Arabic/English letters, numbers, and punctuation for message
+    const nameRegex = /^[\u0600-\u06FFa-zA-Z\s]*$/;  // Allows Arabic and English letters and spaces
+    const messageRegex = /^[\u0600-\u06FFa-zA-Z0-9\s.,!?]*$/;  // Allows Arabic/English letters, numbers, spaces, punctuation
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+        document.getElementById('error-email').innerText = "يرجى إدخال عنوان بريد إلكتروني صالح.";
+        isValid = false;
+    }
+
+    let isValid = true;
+
+    // Validate full name
+    // Full Name Error
+    if (!nameRegex.test(full_name)) {
+        document.getElementById('error-full_name').innerText = "يجب أن يحتوي الاسم الكامل على حروف وأرقام فقط.";
+        isValid = false;
+    }
+
+    // Email Error
+    if (!emailRegex.test(email)) {
+        document.getElementById('error-email').innerText = "يرجى إدخال عنوان بريد إلكتروني صالح.";
+        isValid = false;
+    }
+
+    // Phone Error
+    if (!/^\d{1,15}$/.test(phone)) {
+        document.getElementById('error-phone').innerText = "يجب أن يكون رقم الهاتف مكوناً من أرقام فقط ويحتوي على ما يصل إلى 15 رقمًا.";
+        isValid = false;
+    }
+
+    // Message Error
+    if (!messageRegex.test(message)) {
+        document.getElementById('error-message').innerText = "يجب ألا تحتوي الرسالة على أحرف خاصة.";
+        isValid = false;
+    }
+    // If any validation failed, prevent form submission
+    if (!isValid) return;
+
+    const postData = {
+        full_name: full_name,
+        email: email,
+        phone: phone,
+        message: message,
+        language: 'ar'
+    };
+
+    $.ajax({
+        url: '/ask-us-submit',
+        type: 'POST',
+        dataType: 'json',
+        data: postData,
+        success: function (data) {
+            document.getElementById('submit-message').innerText = data.message;
+            document.getElementById('submit-message').style.color = 'green'; // Style success message
+            document.getElementById('full_name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('message').value = '';
+        },
+        error: function (jqXHR) {
+            document.getElementById('submit-message').innerText = jqXHR.responseJSON.message;
+            document.getElementById('submit-message').style.color = 'red'; // Style error message
+        }
+    });
+});
+
+
+
+</script>

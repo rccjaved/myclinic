@@ -1,0 +1,10 @@
+name: ProgramEnrollment
+form: $/myclinic/hr/models/programenrollment/fields.yaml
+modelClass: MyClinic\Hr\Models\ProgramEnrollment
+defaultRedirect: myclinic/hr/programenrollment
+create:
+    redirect: 'myclinic/hr/programenrollment/update/:id'
+    redirectClose: myclinic/hr/programenrollment
+update:
+    redirect: myclinic/hr/programenrollment
+    redirectClose: myclinic/hr/programenrollment

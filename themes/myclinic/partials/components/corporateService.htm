@@ -1,0 +1,72 @@
+[builderList]
+modelClass = "MyClinic\Services\Models\Service"
+scope = "-"
+scopeValue = "{{ :scope }}"
+displayColumn = "name"
+noRecordsMessage = "No records found"
+detailsPage = "-"
+detailsUrlParameter = "id"
+recordsPerPage = 10
+pageNumber = "{{ :page }}"
+==
+{% set records = builderList.records %}
+
+
+<section id="corporate" class="block section-bg">
+    <div class="container">
+        <div class="row align-items-center">
+
+            <div class="col-12 ">
+                <h1 class="text-center text-sm-start text-navy mt-4 mt-sm-0">Corporate Services</h1>
+                <p class="text-center text-sm-start">We understand the significance of a healthy workforce, and our
+                    Corporate Services are tailored to enhance the well-being of your team. From onsite health
+                    screenings to wellness workshops, we offer a comprehensive suite of solutions that prioritize
+                    preventive care and foster a culture of health within your organization. </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+{% for item in records %}
+{% if item.service_type == 'corporate' %}
+
+{% if loop.index is even %}
+
+<section class="section-bg pt-0">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+
+            <div class="col-12 col-sm-6 col-lg-6 block-pe block-ps">
+                <h1 class="text-center text-sm-start text-navy mt-4 mt-sm-0">{{item.title}}</h1>
+                <p>{{item.description|raw}}</p>
+
+            </div>
+            <div class="col-12 col-sm-6 pe-0">
+                <img src="{{item.service_image.path}}" class="img-fluid" alt="service">
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+{% else %}
+
+<section class="section-bg section-padding-y">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-sm-6 ps-0">
+                <img src="{{item.service_image.path}}" class="img-fluid" alt="service">
+            </div>
+            <div class="col-12 col-sm-6 col-lg-6 block-pe block-ps">
+                <h1 class="text-center text-sm-start text-navy mt-4 mt-sm-0">{{item.title}}</h1>
+                <p>{{item.description|raw}}</p>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endif %}
+
+{% endfor %}

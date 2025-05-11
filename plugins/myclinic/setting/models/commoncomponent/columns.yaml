@@ -1,0 +1,13 @@
+columns:
+    title:
+        label: Title
+        type: text
+    description:
+        label: Desciption
+        type: text
+    link_name:
+        label: 'Link Name'
+        type: text
+    link_value:
+        label: 'Link Value'
+        type: text

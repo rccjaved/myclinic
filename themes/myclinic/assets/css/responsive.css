@@ -1,0 +1,363 @@
+
+
+
+/* --------------------- components ---------------- */
+@media only screen and (max-width: 1679px) {
+  .full-container{
+  max-width: 100%;
+  margin: 0px 30px;
+}
+}
+
+@media only screen and (max-width: 1199px) {
+    .upload-position {
+      position: absolute;
+      right: -140px;
+      left:unset !important;
+  }
+  
+  .blog-container.blog-group {
+      grid-template-columns: repeat(1, 100%);
+  }
+  .content.g-reverse{
+    grid-column: 1/2;
+    grid-row-start: 1;
+    margin-right: 20px;
+  }
+  
+  .aside.g-reverse {
+    grid-row-start: 2;
+    text-align: right;
+}
+}
+
+@media only screen and (max-width: 768px) {
+  .text-justy{
+    text-align: center; 
+  }
+
+  .margin-0-auto{
+    margin:0 auto;
+  }
+
+  .container {
+    max-width: 100%;
+}
+  .btn-dr-card{
+    width: 8.56044rem;
+  }
+
+  .btn-dr-card-2{
+    width: 8.56044rem;
+  }
+  .services-box{
+    max-width: 100%;
+  }
+  
+  .btn-mc-services-group{
+    min-height: auto;
+  }
+
+  .contact-list li{
+    display: inline-flex;
+  }
+
+  .contact-list-ar li{
+    display: unset !important;
+  }
+  
+  .slidemc-m-home{
+    left: -1074px;
+  }
+
+  .plan-list-ar{
+    justify-content: flex-end;
+  }
+
+  .location-img{
+    height: 550px;
+  }
+
+  .list-unstyled-dynamic li{
+    margin-right: 20px;
+    width: 100%;
+  }
+
+  .tele-box .services-body{
+    min-height: auto !important;
+  }
+
+  .search-resulte-bg{
+    padding-right: 20px;
+  }
+
+  .next-link-arrow{
+    display: none;
+  }
+  .search-resulte-bg a{
+    font-size: 20px;
+  }
+  .search-resulte-bg-ar{
+    padding-left: 20px;
+  }
+  .img-doc-background-tec{
+    display: none;
+  }
+  
+}
+
+@media screen and (max-width: 576px) {
+  .slidemc-m-home{
+    left: -1250px;
+  }
+  .location-img{
+    height: 350px;
+  }
+  .search-resulte-bg{
+    display: block;
+  }
+}
+
+
+/* --------------------- components end---------------- */
+
+
+
+/* --------------------- Header ---------------- */
+
+@media (max-width: 360px) {
+  .navbar-brand {
+    max-width: 50%;
+  }
+}
+
+/* --------------------- Header end ---------------- */
+
+
+
+/* --------------------- slider ---------------- */
+
+
+@media only screen and (max-width: 991px) {
+  .swiper-slide{
+    align-items: center;
+    /* padding-left: 15%; */
+    
+  }
+  
+} 
+
+@media screen and (max-width: 768px) {
+  .swiper-container {
+    height: 625px;
+  }
+  .swiper-button-prev, .swiper-button-next {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .swiper-container.about-swiper, .swiper-container.resize-slider {
+    height: 250px;
+  }
+  .resize-slidemc{
+    background-size: cover;
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+  }
+ 
+}
+
+
+
+/* --------------------- slider end---------------- */
+
+
+@media (min-width: 769px) and (max-width: 991px) {
+
+  .btn-dr-card{
+    width: 7.56044rem;
+  }
+
+  .btn-dr-card-2{
+    width: 8.56044rem;
+  }
+
+}
+
+
+/* --------------------- Location---------------- */
+
+
+@media (min-width: 576px) and (max-width: 767px) {
+  .btn-mc-city-group {
+    grid-template-columns: auto auto;
+  }
+}
+
+@media (min-width: 300px) and (max-width: 575px) {
+  .btn-mc-city-group, .btn-mc-services-group {
+    grid-template-columns: 50% 50%;
+    gap: .75rem;
+    font-size: .700rem;
+  }
+  .btn-mc-services-group {
+    gap: 0;
+  }
+  .btn-mc-city, .btn-mc-services, .btn-mc-oppening {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+  }
+  .btn-city, .btn-ser{
+    padding: .75rem;
+    background-color: #EBEEF1;
+  }
+  .btn-ser{
+    background-color: #FFF;
+  }
+  .mc-hide{
+    display: none;
+  }
+}
+
+
+/* --------------------- Location end---------------- */
+
+
+/* --------------------- Testimonials---------------- */
+
+@media only screen and (max-width: 991px) {
+  .testimonial_box-top{
+    height: 270px;
+    background: #F8F9F9;
+    border-radius: 80px;
+    padding: 10px !important;
+    position: relative;
+    box-shadow: 0px 0px 10px #b7b7b7;
+    
+  }
+
+  .testimonial_box-top::after{
+    content: '';
+    position: absolute;
+    width: 72px;
+    height: 63px;
+    right: 35px;
+    bottom: -50px;
+    z-index: 999;
+    background: url("../../assets/imgs/downarrow.svg");
+    background-repeat: no-repeat;
+  }
+
+  .testimonial_box-text p{
+    font-size: 14px !important;
+    line-height: 20px !important;
+  }
+
+  
+} 
+/* --------------------- Testimonials end---------------- */
+
+
+
+
+/* --------------------- Location Doctor---------------- */
+
+@media only screen and (max-width: 768px) {
+  .dr-search-form{
+    position: absolute;
+    bottom: 0;
+    max-width: 80%;
+  }
+
+}
+
+@media  (max-width: 576px) {
+  .dr-search-form{
+    bottom: 0;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  .dr-search-form{
+    bottom: 0!important;
+    max-width: 100%;
+  }
+}
+
+/* --------------------- Location Doctor end---------------- */
+
+
+
+/* --------------------- FAQs---------------- */
+@media screen and  (max-width: 768px)  {
+
+  #banner-faq,#banner-contact{
+    height: 15.625rem;
+    background-position: 45%;
+  }
+}
+/* --------------------- FAQs end---------------- */
+
+
+/* --------------------- ********************---------------- */
+/* --------------------- Responsive in Arabic---------------- */
+/* --------------------- ********************---------------- */
+
+
+
+/* --------------------- Navbar---------------- */
+
+@media only screen and (max-width: 1199px) {
+.navbar-ar{
+  flex-direction: column !important;
+}
+.offcanvas-header-ar{
+  flex-direction: row-reverse;
+}
+.navbar-brand{
+  margin-right:0px;
+}
+}
+
+@media only screen and (max-width: 768px) {
+}
+
+/* --------------------- Navbar end---------------- */
+
+
+/* --------------------- HOME arabic---------------- */
+@media only screen and (max-width: 992px) {
+    .slide-text-ar{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  @media (min-width: 300px) and (max-width: 575px){
+    .btn-mc-city-group.revers{
+      flex-wrap: wrap;
+    }
+
+    .btn-mc-city-group.revers .showLocation{
+      width: 48%;
+    }
+    
+  }
+
+  @media (min-width: 300px) and (max-width: 400px){
+    .btn-mc-city-group.revers .showLocation{
+      width: auto;
+      flex:auto;
+    }
+  }
+/* --------------------- home arabic end---------------- */
+
+
+
+
+

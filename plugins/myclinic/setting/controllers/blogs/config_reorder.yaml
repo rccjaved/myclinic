@@ -1,0 +1,4 @@
+title: Blogs
+modelClass: MyClinic\Setting\Models\Blog
+toolbar:
+    buttons: reorder_toolbar

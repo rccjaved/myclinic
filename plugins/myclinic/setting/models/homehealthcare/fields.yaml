@@ -1,0 +1,40 @@
+fields:
+    title:
+        label: Title
+        span: auto
+        type: text
+    link_name:
+        label: 'Link Name'
+        span: auto
+        type: text
+    link_value:
+        label: 'Link Value'
+        span: auto
+        type: text
+    homecare_image:
+        label: 'Section Image'
+        mode: image
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload
+    description:
+        label: Description
+        size: small
+        span: left
+        type: richeditor
+    title_ar:
+        label: 'Arabic Title'
+        span: auto
+        type: text
+    link_name_ar:
+        label: 'Arabic Link Name'
+        span: auto
+        type: text
+    description_ar:
+        label: 'Arabic Description'
+        size: small
+        span: auto
+        type: richeditor

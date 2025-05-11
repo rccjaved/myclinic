@@ -1,0 +1,90 @@
+<!-- Bootstrap JavaScript Libraries -->
+
+<script src="{{'assets/vendors/bootstrap/js/bootstrap.js'|theme}}"></script>
+<script src="{{'assets/vendors/bootstrap/js/bootstrap.min.js'|theme}}"></script>
+<script src="{{'assets/vendors/bootstrap/js/bootstrap.bundle.min.js'|theme}}"></script>
+<script src="{{'assets/vendors/slick/slick.js'|theme}}"></script>
+<script src="{{'assets/js/custom.js'|theme}}"></script>
+<script src="{{'assets/vendors/select2/select2.js'|theme}}"></script>
+
+<script>
+    var btn = $('#topbutton');
+
+    $(window).scroll(function () {
+        if ($(window).scrollTop() > 300) {
+            btn.addClass('show');
+        } else {
+            btn.removeClass('show');
+        }
+    });
+
+    btn.on('click', function (e) {
+        e.preventDefault();
+        $('html, body').animate({ scrollTop: 0 }, '300');
+    });
+</script>
+
+<script>
+$(document).ready(function() {
+  var topOfDivScroll = $(".grecaptcha-badge").offset().top - $(window).height();
+
+  $(window).scroll(function() {
+    if ($(window).scrollTop() > topOfDivScroll) {
+      $(".grecaptcha-badge").hide();
+    } else $(".grecaptcha-badge").show();
+  });
+});
+</script>
+
+<script>
+$(document).ready(function() {
+  var topOfDivScroll = $(".mxg-launcher-btn").offset().top - $(window).height();
+
+  $(window).scroll(function() {
+    if ($(window).scrollTop() > topOfDivScroll) {
+      $(".mxg-launcher-btn").hide();
+    } else $(".mxg-launcher-btn").show();
+  });
+});
+</script>
+
+
+
+<script>
+
+    window.onload = function () {
+        mybuttons.style.display = "none";
+    }
+    // Get the button
+    var mybuttons = document.getElementById("floatmenu");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () { scrollFunction() };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+            mybuttons.style.display = "block";
+        } else {
+            mybuttons.style.display = "none";
+        }
+    }
+
+</script>
+<script>
+    $(document).ready(function () {
+        $(".js-example-basic-multiple").select2();
+    });
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VPTGK9K2TQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-VPTGK9K2TQ');
+</script>
+
+{% framework extras %}
+{% scripts %}

@@ -1,0 +1,12 @@
+list: $/myclinic/doctor/models/hoddoctor/columns.yaml
+modelClass: MyClinic\Doctor\Models\HodDoctor
+title: HodDoctor
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+recordsPerPage: 20
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordUrl: 'myclinic/doctor/hoddoctor/update/:id'

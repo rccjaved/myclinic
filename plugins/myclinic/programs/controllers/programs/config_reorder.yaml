@@ -1,0 +1,4 @@
+title: Programs
+modelClass: MyClinic\Programs\Models\Program
+toolbar:
+    buttons: reorder_toolbar

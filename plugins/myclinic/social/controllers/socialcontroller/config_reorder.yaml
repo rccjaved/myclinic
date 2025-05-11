@@ -1,0 +1,4 @@
+title: SocialController
+modelClass: MyClinic\Social\Models\Social
+toolbar:
+    buttons: reorder_toolbar

@@ -1,0 +1,10 @@
+name: CommonComponent
+form: $/myclinic/setting/models/commoncomponent/fields.yaml
+modelClass: MyClinic\Setting\Models\CommonComponent
+defaultRedirect: myclinic/setting/commoncomponent
+create:
+    redirect: 'myclinic/setting/commoncomponent/update/:id'
+    redirectClose: myclinic/setting/commoncomponent
+update:
+    redirect: myclinic/setting/commoncomponent
+    redirectClose: myclinic/setting/commoncomponent

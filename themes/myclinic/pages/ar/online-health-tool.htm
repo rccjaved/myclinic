@@ -1,0 +1,369 @@
+url = "/ar/online-health-tool"
+layout = "master-ar"
+title = "online Health Tool"
+
+[resources]
+less[] = "pages/online-health-tool.less"
+==
+<?php
+use MyClinic\Setting\Models\Slider;
+use MyClinic\Setting\Models\PageContent;
+
+function onStart()
+{
+  $sliders = Slider::where('type','online-health-tools')->get();
+  $this['sliders'] = $sliders;
+  $this['bmi']=PageContent::where('page','oht')->where('section','oht-bmi')->first();
+  $this['pregnancy']=PageContent::where('page','oht')->where('section','oht-pregnancy-calculator')->first();
+  $this['protein']=PageContent::where('page','oht')->where('section','oht-protein-intake')->first();
+  $this['water']=PageContent::where('page','oht')->where('section','oht-water-intake')->first();
+  $fromMobile = Agent::isMobile();
+  $this['fromMobile']= $fromMobile;
+}
+?>
+==
+<div class="swiper-container resize-slider">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+        <!-- Slider -->
+        {% for item in sliders %}
+        <div class="swiper-slide swiper-slide-ar">
+            <img src="{{item.slider_image_ar_mobile.path}}" class="slidemc" alt="">
+            <img src="{{item.slider_image_ar.path}}" class="slidemc slidemc-m-home" alt="">
+                  <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="slide-text w-100 text-end position-relative">
+                            <h1 class="mb-3 p-0">{{item.title_ar|raw}}</h1>
+                            <p class="mb-3 mb-sm-5 p-0">{{item.tag_line_ar|raw}}</p>
+                            {% if item.link_value %}
+                            <a href="/ar/{{item.link_value}}"
+                                class="btn btn-primary slide-s btn-mc-01 mb-6"><svg xmlns="http://www.w3.org/2000/svg"
+                                    width="40" height="40" viewBox="0 0 40 40" fill="none" style="margin-right: 20px;">
+                                    <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                                    <path d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M27.048 19.5984H18.7148H12"
+                                        stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>{{item.link_name_ar}}</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- If we need pagination -->
+    <div class="swiper-pagination"></div>
+
+    <!-- If we need navigation buttons -->
+    <div class="swiper-button-prev"><span></span></div>
+    <div class="swiper-button-next"><span></span></div>
+
+
+
+
+</div>
+
+
+<section class="section-py-100">
+    <div class="container section-bg">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6 px-0 order-1 order-lg-0">
+                <img src="{{bmi.section_image.path}}" class="img-fluid" alt="">
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="mc-block-3 text-center text-lg-end">
+                    <h1>{{bmi.title_ar|raw}}</h1>
+                    <p>{{bmi.description_ar|raw}}</p>
+                    <div class="mb-lg-4">
+                        <form action="#">
+                            <div class="radio-buttons-container flex-row-reverse">
+                                <span>جنس</span>
+                                <div class="radio-button">
+                                    <input name="radio-group" id="radio2" class="radio-button__input" type="radio">
+                                    <label for="radio2" class="radio-button__label">
+                                        <span class="radio-button__custom"></span>
+                                        ذكر
+                                    </label>
+                                </div>
+                                <div class="radio-button">
+                                    <input name="radio-group" id="radio1" class="radio-button__input" type="radio">
+                                    <label for="radio1" class="radio-button__label">
+                                        <span class="radio-button__custom"></span>
+                                        أنثى
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row g-3 flex-row-reverse">
+                                <div class="col-md-6 mb-3">
+                                    <!-- <label for="your-name" class="form-label">First Name</label> -->
+                                    <input type="text" class="form-control form-control-lg select-mc" id="your-name"
+                                        name="your-name" placeholder="أدخل الارتفاع" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <!-- <label for="your-surname" class="form-label">Last Name</label> -->
+                                    <input type="text" class="form-control form-control-lg select-mc" id="your-surname"
+                                        name="your-surname" placeholder="أدخل الوزن" required>
+                                </div>
+                                <div class="col-12">
+                                    <a href="#" class="btn btn-primary btn-mc-01 mx-auto float-end">
+                                        <svg class="ms-3" xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                                            viewBox="0 0 40 40" fill="none">
+                                            <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                                            <path
+                                                d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                                stroke="#003868" stroke-width="2" stroke-miterlimit="10"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>تأكد الان</a>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-bg section-py-100">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+
+            <div class="col-12 col-lg-6">
+                <div class="mc-block-3 text-center text-lg-end">
+                    <h1>{{water.title_ar|raw}}</h1>
+                    <p>{{water.description_ar|raw}}</p>
+                    <div class="mb-lg-4">
+                        <form class="row gy-2 align-items-center mb-sm-4 flex-row-reverse">
+                            <div class="col-xl col-12">
+                                <input type="text" class="form-control form-control-lg select-mc"
+                                    placeholder="أدخل الارتفاع" aria-label="e">
+                            </div>
+                            <div class="col-xl col-12">
+                                <input type="text" class="form-control form-control-lg select-mc"
+                                    placeholder="أدخل الوزن" aria-label="">
+                            </div>
+                            <div class="col-xl col-12 position-relative arrow-icon-left">
+                                <span class="select2-selection__arrow" role="presentation"><b
+                                        role="presentation"></b></span>
+                                <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+                                <select class="form-select form-select-lg select-mc" id="autoSizingSelect">
+                                    <option selected>مستوى النشاط</option>
+                                    <option value="1">واحد</option>
+                                    <option value="2">اثنين</option>
+                                    <option value="3">ثلاثة</option>
+                                </select>
+                            </div>
+                            <div class="col-12 mt-3">
+                                <a href="#" class="btn btn-primary btn-mc-01 mx-auto  float-end">
+
+                                    <svg class="ms-3" xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                                        viewBox="0 0 40 40" fill="none">
+                                        <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                                        <path
+                                            d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                            stroke="#003868" stroke-width="2" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>تأكد الان</a>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 px-0">
+                <img src="{{water.section_image.path}}" class="img-fluid" alt="">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-py-100">
+    <div class="container section-bg">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6 px-0 order-1 order-lg-0">
+                <img src="{{protein.section_image.path}}" class="img-fluid" alt="">
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="mc-block-3 text-center text-lg-end">
+                    <h1>{{protein.title_ar|raw}}</h1>
+                    <p>{{protein.description_ar|raw}}</p>
+                    <div class="mb-lg-4">
+                        <form action="#">
+                            <div class="mb-lg-4">
+                                <div class="radio-buttons-container flex-row-reverse">
+                                    <span>جنس</span>
+                                    <div class="radio-button">
+                                        <input name="radio-group" id="radio2" class="radio-button__input" type="radio">
+                                        <label for="radio2" class="radio-button__label">
+                                            <span class="radio-button__custom"></span>
+                                            ذكر
+                                        </label>
+                                    </div>
+                                    <div class="radio-button">
+                                        <input name="radio-group" id="radio1" class="radio-button__input" type="radio">
+                                        <label for="radio1" class="radio-button__label">
+                                            <span class="radio-button__custom"></span>
+                                            أنثى
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row flex-row-reverse">
+                                    <div class="col-md-6 mb-2">
+                                        <!-- <label for="your-name" class="form-label">First Name</label> -->
+                                        <input type="text" class="form-control form-control-lg select-mc" id="your-name"
+                                            name="your-name" placeholder="عمر" required>
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <!-- <label for="your-surname" class="form-label">Last Name</label> -->
+                                        <input type="text" class="form-control form-control-lg select-mc"
+                                            id="your-surname" name="your-surname" placeholder="أدخل الارتفاع" required>
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" class="form-control form-control-lg select-mc"
+                                            placeholder="أدخل الوزن" aria-label="">
+                                    </div>
+                                    <div class="col position-relative arrow-icon-left">
+                                        <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+                                        <span class="select2-selection__arrow" role="presentation"><b
+                                                role="presentation"></b></span>
+                                        <select class="form-select form-select-lg select-mc" id="autoSizingSelect">
+                                            <option selected>مستوى النشاط</option>
+                                            <option value="1">واحد</option>
+                                            <option value="2">اثنين</option>
+                                            <option value="3">ثلاثة</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 mt-3">
+                                        <a href="#" class="btn btn-primary btn-mc-01 mx-auto  float-end"><svg
+                                                class="ms-3" xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                                                viewBox="0 0 40 40" fill="none">
+                                                <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                                                <path
+                                                    d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                                    stroke="#003868" stroke-width="2" stroke-miterlimit="10"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>تأكد الان</a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-bg section-py-100">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+
+            <div class="col-12 col-lg-7">
+                <div class="mc-block-3 text-center text-lg-end">
+                    <h1>{{pregnancy.title_ar}}</h1>
+                    <p>{{pregnancy.description_ar|raw}}</p>
+                    <div class="mb-lg-4">
+                        <form class="row gy-2 align-items-center mb-sm-4 flex-row-reverse">
+                            <div class="col-xl col-12 position-relative arrow-icon-left">
+                                <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+                                <span class="select2-selection__arrow" role="presentation"><b
+                                        role="presentation"></b></span>
+                                <select class="form-select form-select-lg select-mc" id="autoSizingSelect">
+                                    <option selected>طريقة حساب</option>
+                                    <option value="1">واحد</option>
+                                    <option value="2">اثنين</option>
+                                    <option value="3">ثلاثة</option>
+                                </select>
+                            </div>
+                            <div class="col-xl col-12 position-relative arrow-icon-left">
+                                <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+                                <span class="select2-selection__arrow" role="presentation"><b
+                                        role="presentation"></b></span>
+                                <select class="form-select form-select-lg select-mc" id="autoSizingSelect">
+                                    <option selected>بداية الفترة الأخيرة</option>
+                                    <option value="1">واحد</option>
+                                    <option value="2">اثنين</option>
+                                    <option value="3">ثلاثة</option>
+                                </select>
+                            </div>
+                            <div class="col-xl col-12 position-relative arrow-icon-left">
+                                <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+                                <span class="select2-selection__arrow" role="presentation"><b
+                                        role="presentation"></b></span>
+                                <select class="form-select form-select-lg select-mc" id="autoSizingSelect">
+                                    <option selected>طول دورة</option>
+                                    <option value="1">واحد</option>
+                                    <option value="2">اثنين</option>
+                                    <option value="3">ثلاثة</option>
+                                </select>
+                            </div>
+                            <div class="col-12 mt-3">
+                                <a href="#" class="btn btn-primary btn-mc-01 w-auto  float-end">
+                                    <svg class="ms-3" xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                                        viewBox="0 0 40 40" fill="none">
+                                        <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                                        <path
+                                            d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                            stroke="#003868" stroke-width="2" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>حساب تاريخ الاستحقاق الخاص بي</a>
+                            </div>
+
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-5 px-0">
+                <img src="{{pregnancy.section_image.path}}" class="img-fluid" alt="">
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% partial 'components/appDownload-ar' %}
+
+
+{% put scripts %}
+
+<script>
+
+    // ------------- New Slider ----------
+
+    // swiper    
+    var mySwiper = new Swiper('.swiper-container', {
+        effect: '',
+        loop: false,
+        speed: 1000,
+        slidesPerView: 1,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            type: 'bullets',
+            clickable: 'true'
+        },
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+
+
+
+    });
+
+
+
+</script>
+
+{% endput %}

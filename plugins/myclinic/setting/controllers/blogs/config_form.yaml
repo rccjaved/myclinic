@@ -1,0 +1,10 @@
+name: Blogs
+form: $/myclinic/setting/models/blog/fields.yaml
+modelClass: MyClinic\Setting\Models\Blog
+defaultRedirect: myclinic/setting/blogs
+create:
+    redirect: 'myclinic/setting/blogs/update/:id'
+    redirectClose: myclinic/setting/blogs
+update:
+    redirect: myclinic/setting/blogs
+    redirectClose: myclinic/setting/blogs

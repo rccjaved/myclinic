@@ -1,0 +1,75 @@
+[builderList]
+modelClass = "MyClinic\Services\Models\Service"
+scope = "-"
+scopeValue = "{{ :scope }}"
+displayColumn = "name"
+noRecordsMessage = "No records found"
+detailsPage = "-"
+detailsUrlParameter = "id"
+recordsPerPage = 10
+pageNumber = "{{ :page }}"
+==
+{% set records = builderList.records %}
+
+
+
+<section id="onsite" class="block section-bg">
+    <div class="container">
+        <div class="row align-items-center">
+
+            <div class="col-12 ">
+                <h1 class="text-center text-sm-start text-navy mt-4 mt-sm-0">On-Site Services</h1>
+                <p class="text-center text-sm-start">Bringing healthcare to your convenience, our On-Site Services
+                    ensure you receive top-quality care without leaving your location. Our skilled medical team
+                    delivers a range of essential medical procedures and consultations right at your doorstep.
+                    Whether it's vaccinations, health screenings, or medical advice, you can trust our professionals
+                    to provide personalized and reliable care. With our On-Site Services, your health remains our
+                    priority, wherever you are.</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+{% for item in records %}
+{% if item.service_type == 'on-site' %}
+
+{% if loop.index is even %}
+
+<section class="section-bg pt-0">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+
+            <div class="col-12 col-sm-6 col-lg-6 block-pe block-ps">
+                <h1 class="text-center text-sm-start text-navy mt-4 mt-sm-0">{{item.title}}</h1>
+                <p>{{item.description|raw}}</p>
+
+            </div>
+            <div class="col-12 col-sm-6 pe-0">
+                <img src="{{item.service_image.path}}" class="img-fluid" alt="service">
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+{% else %}
+
+<section class="section-bg section-padding-y">
+    <div class="container bg-white">
+        <div class="row align-items-center">
+            <div class="col-12 col-sm-6 ps-0">
+                <img src="{{item.service_image.path}}" class="img-fluid" alt="service">
+            </div>
+            <div class="col-12 col-sm-6 col-lg-6 block-pe block-ps">
+                <h1 class="text-center text-sm-start text-navy mt-4 mt-sm-0">{{item.title}}</h1>
+                <p>{{item.description|raw}}</p>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endif %}
+
+{% endfor %}

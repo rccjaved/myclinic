@@ -1,0 +1,4 @@
+title: HealthConcerns
+modelClass: MyClinic\Doctor\Models\HealthConcern
+toolbar:
+    buttons: reorder_toolbar
