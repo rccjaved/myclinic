@@ -279,6 +279,15 @@ private function generateBookingLink($slotData)
                                     stroke-linejoin="round" />
                             </svg>احجز الآن
                         </a>
+                        {% else %}
+                        <a href="https://bamc.myclinic.com.sa:8443"class="btn btn-primary btn-mc-01 float-end">
+                            <svg class="ms-3" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                                <path d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                    stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>احجز الآن
+                        </a>
                         {% endif %}
                         {% else %}
                         <a href="/ar/contact-us" class="btn btn-primary btn-mc-01 float-end">
