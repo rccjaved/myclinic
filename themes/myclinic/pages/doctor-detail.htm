@@ -60,9 +60,7 @@ function onStart()
         if($item->slug=='Dental' || $item->slug=='er' || $item->slug=='physiotherapy'){
             $isBookNow=false;
         }
-        if($item->slug=='er'){
-            $isButtonVisible=false;
-        }
+        
         $specialty_ids[]=$item->id;
     }
 
@@ -103,20 +101,49 @@ private function fetchDoctorAvailability($doctor_app_id)
         return Cache::get($cacheKey);
     }
 
-    $companyMapping = [
+  
+    $companyIdMap = [
+        1 => 'nc01',
+        2 => 'safa',
+        3 => 'prc',
+        4 => 'ryd1',
+    ];
+
+
+    $companyNameMap = [
         'nc01' => 'Jeddah Al Mohammadiyah',
         'safa' => 'Jeddah Al Safa',
-        'prc' => 'Jeddah Al Khalidiyyah Dental Center',
+        'prc' => 'Jeddah Al Khalidiyah',
         'ryd1' => 'Riyadh Al Sahafa',
     ];
 
-    $response = Http::post('https://bamc.myclinic.com.sa/OS.WebAPI.External/api/OSExternal/ApptGetEarlistSlots', [
-        "SecurityToken" => "e236d058-fa14-44e1-aa07-5415d8f062c2",
-        "DoctorId" => $doctor_app_id,
-        "IsTelemedicine" => false,
-        "PreferredTime" => "0",
-        "IsFollowUp" => false
-    ]);
+
+    $doctor   = Doctor::where('doctor_app_id', $doctor_app_id)
+                      ->with('locations')
+                      ->first();
+
+  
+    $firstLocation = $doctor && $doctor->locations->isNotEmpty()
+                     ? $doctor->locations->first()
+                     : null;
+
+  
+    $companyId = $firstLocation
+               ? ($companyIdMap[$firstLocation->id] ?? null)
+               : null;
+
+
+    $response = Http::post(
+        'https://bamc.myclinic.com.sa/OS.WebAPI.External/api/OSExternal/ApptGetEarlistSlots',
+        [
+            "SecurityToken"  => "e236d058-fa14-44e1-aa07-5415d8f062c2",
+            "DoctorId"       => $doctor_app_id,
+            "CompanyId"      => $companyId,      
+            "IsTelemedicine" => false,
+            "PreferredTime"  => "0",
+            "IsFollowUp"     => false,
+        ]
+    );
 
     $isAvailable = false;
     $availableDates = [];
@@ -133,7 +160,7 @@ private function fetchDoctorAvailability($doctor_app_id)
                 $slotDate = $doctorData['SlotDate'] ? new DateTime($doctorData['SlotDate']) : null;
                 $slotTime = $doctorData['SlotTime'] ? new DateTime($doctorData['SlotTime']) : null;
                 $companyId = (string)$doctorData['Company'];
-                $companyName = $companyMapping[$companyId] ?? $companyId; 
+                 $companyName = $companyNameMap[$companyId] ?? $companyId;
                 $doctorAppId = (int)$doctorData['DoctorId'];
 
                 if ($slotDate && $slotTime) {
@@ -235,19 +262,7 @@ public function onSimilarDoctorsAvailability()
                                 stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
                                 stroke-linejoin="round" />
                         </svg>Book Now</a>
-                        {% else %}
-                                <a href="https://bamc.myclinic.com.sa:8443"
-                                     class="btn btn-primary btn-mc-01">
-                                    <svg width="28" height="27" viewBox="0 0 28 27" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <ellipse cx="13.7306" cy="13.7772" rx="13.4181" ry="13.1913" fill="white" />
-                                        <path class="arr-cl"
-                                            d="M14.9238 10.2812L18.565 13.781L14.9238 17.2807M12.8722 13.781H18.463M8.36719 13.781H14.7408"
-                                            stroke="#003868" stroke-width="2" stroke-miterlimit="10"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    Book Now
-                                </a>
+                        
                         {% endif %}
                         {% else %}
                         <a href="/contact-us" class="btn btn-primary btn-mc-01"><svg
@@ -260,6 +275,33 @@ public function onSimilarDoctorsAvailability()
                         </svg>Ask Us</a>
                         {% endif %}
                     {% endif %}
+
+                    <!-- {% if isButtonVisible and bookingLinks[doctor.doctor_app_id] %}
+                        {% if isBookNow %}
+                            <a href="{{ bookingLinks[doctor.doctor_app_id] }}" class="btn btn-primary btn-mc-01">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                    <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                                    <path
+                                        d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                        stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                                Book Now
+                            </a>
+                        {% else %}
+                            <a href="/contact-us" class="btn btn-primary btn-mc-01">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                    <ellipse cx="20" cy="19.6" rx="20" ry="19.6" fill="white" />
+                                    <path
+                                        d="M21.7727 14.3984L27.2 19.5984L21.7727 24.7984M18.7148 19.5984H27.048M12 19.5984H21.5"
+                                        stroke="#003868" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                                Ask Us
+                            </a>
+                        {% endif %}
+                    {% endif %} -->
+
                 </div>
             </div>
         </div>

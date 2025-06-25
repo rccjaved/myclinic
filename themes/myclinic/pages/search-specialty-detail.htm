@@ -18,9 +18,13 @@ function onStart()
     $this['slug'] = $slug;
     $specialty = Specialty::where('slug', $slug)->first();
     $isMobile = false;
-    if($slug=='physiotherapy' ||$slug=='Dental' ){
-        $this['isMobile']= true;
+
+   $isMobile = false;
+    if ($slug === 'physiotherapy' || $slug === 'Dental' || $slug === 'er' ) {
+        $isMobile = true;
     }
+    $this['isMobile'] = $isMobile;
+
     $this['specialty']=$specialty;
     $this['locations']=Location::all();
     $hodExist=HodDoctor::where('location_id',$location->id)->where('specialty_id',$specialty->id)->whereIn('doctor_id', $mergedDoctors)->get();
@@ -42,9 +46,7 @@ function onStart()
     $this['healthConcerns']=HealthConcern::all();
     $this['bookingLink']='https://bamc.myclinic.com.sa:8443/';
     $this['canBook']= true;
-    if($slug=='er'){
-        $this['canBook']= false;
-    }
+    
 
 }
 ?>
@@ -326,6 +328,7 @@ function onStart()
 
             $.ajax({
                 url: '/specialty-doctors/' + countryId,
+                headers:{'language':'en'},
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
@@ -353,6 +356,7 @@ function onStart()
 
             $.ajax({
                 url: '/location-specialties/' + countryId,
+                headers:{'language':'en'},
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {

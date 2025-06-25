@@ -29,7 +29,7 @@ function onStart()
     $this['slug'] = $slug;
 
     $isMobile = false;
-    if ($slug === 'physiotherapy' || $slug === 'Dental') {
+    if ($slug === 'physiotherapy' || $slug === 'Dental' || $slug === 'er' ) {
         $isMobile = true;
     }
     $this['isMobile'] = $isMobile;
@@ -192,9 +192,7 @@ function onStart()
 
     $this['healthConcerns'] = HealthConcern::all();
     $this['canBook']= true;
-    if($slug=='er'){
-        $this['canBook']= false;
-    }
+    
 }
 
 ?>
@@ -368,19 +366,7 @@ function onStart()
                                     </svg>
                                     Book Now
                                 </button>
-                                {% else %}
-                                <a href="https://bamc.myclinic.com.sa:8443"
-                                     class="btn btn-dr-card-2 {% if not bookingLinks[hod.id] %}mt-40{% endif %}">
-                                    <svg width="28" height="27" viewBox="0 0 28 27" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <ellipse cx="13.7306" cy="13.7772" rx="13.4181" ry="13.1913" fill="white" />
-                                        <path class="arr-cl"
-                                            d="M14.9238 10.2812L18.565 13.781L14.9238 17.2807M12.8722 13.781H18.463M8.36719 13.781H14.7408"
-                                            stroke="#003868" stroke-width="2" stroke-miterlimit="10"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    Book Now
-                                </a>
+                                
                                 {% endif %}
                                 {% endif %}
                             </div>
@@ -442,15 +428,16 @@ function onStart()
                             <div class="{% if not bookingLinks[item.id] %}w-100 mt-40{% endif %}">
                                 <button href="javascript:void(0)"
                                     onclick="GoLinks(event,'/doctor-detail/'+'{{item.id}}')"
-                                    class="btn btn-light btn-dr-card ">
+                                    class="btn btn-light btn-dr-card {% if not bookingLinks[item.id] %}w-100 {% endif %}">
                                     Profile
                                 </button>
                             </div>
                             &nbsp;
+
                             {% if canBook %}
                             <div>
                                 {% if isMobile %}
-                                
+
                                 <a href="/contact-us"
                                     class="btn btn-dr-card-2 {% if not bookingLinks[item.id] %}mt-40{% endif %}">
                                     <svg width="28" height="27" viewBox="0 0 28 27" fill="none"
@@ -477,23 +464,14 @@ function onStart()
                                     </svg>
                                     Book Now
                                 </button>
-                                {% else %}
-                                <a href="https://bamc.myclinic.com.sa:8443"
-                                     class="btn btn-dr-card-2 {% if not bookingLinks[item.id] %}mt-40{% endif %}">
-                                    <svg width="28" height="27" viewBox="0 0 28 27" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <ellipse cx="13.7306" cy="13.7772" rx="13.4181" ry="13.1913" fill="white" />
-                                        <path class="arr-cl"
-                                            d="M14.9238 10.2812L18.565 13.781L14.9238 17.2807M12.8722 13.781H18.463M8.36719 13.781H14.7408"
-                                            stroke="#003868" stroke-width="2" stroke-miterlimit="10"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    Book Now
-                                </a>
+                                
                                 {% endif %}
                                 {% endif %}
                             </div>
                             {% endif %}
+
+
+                           
                         </div>
 
                     </div>

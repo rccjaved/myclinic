@@ -18,9 +18,13 @@ function onStart()
     $this['slug'] = $slug;
     $specialty = Specialty::where('slug', $slug)->first();
     $isMobile = false;
-    if($slug=='physiotherapy' || $slug=='Dental' ){
-        $this['isMobile']= true;
+
+   $isMobile = false;
+    if ($slug === 'physiotherapy' || $slug === 'Dental' || $slug === 'er' ) {
+        $isMobile = true;
     }
+    $this['isMobile'] = $isMobile;
+
     $this['specialty']=$specialty;
     $this['locations']=Location::all();
     $hodExist=HodDoctor::where('location_id',$location->id)->where('specialty_id',$specialty->id)->whereIn('doctor_id', $mergedDoctors)->get();
@@ -36,15 +40,14 @@ function onStart()
     }else{
         $this['doctors']=$specialty->doctors()->whereIn('doctor_id', $mergedDoctors)->orderBy('name')->get();
     }
-    $this['optionDoctorList']=$specialty->doctors()->whereIn('doctor_id', $mergedDoctors)->orderBy('name_ar')->get();
+
 
     $this['specialties']=Specialty::orderBy('name')->get();
     $this['healthConcerns']=HealthConcern::all();
     $this['bookingLink']='https://bamc.myclinic.com.sa:8443/';
     $this['canBook']= true;
-    if($slug=='er'){
-        $this['canBook']= false;
-    }
+    
+
 }
 ?>
 ==
